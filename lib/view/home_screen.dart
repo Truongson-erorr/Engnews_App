@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:caonientruongson/view/home_tab.dart';
+import '/view/search_tab.dart';
+import '/view/category_tab.dart';
+import '/view/support_tab.dart';
+import '/view/profile_tab.dart';
 
-/// Màn hình Home sau khi đăng nhập với BottomNavigationBar
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -11,27 +15,36 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _pages = <Widget>[
-    Center(child: Text("Trang chủ", style: TextStyle(fontSize: 20))),
-    Center(child: Text("Thể thao", style: TextStyle(fontSize: 20))),
-    Center(child: Text("Giải trí", style: TextStyle(fontSize: 20))),
-    Center(child: Text("Cá nhân", style: TextStyle(fontSize: 20))),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  final List<Widget> _pages = const [
+    HomeTab(),
+    SearchTab(),
+    CategoryTab(),
+    SupportTab(),
+    ProfileTab(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Tin tức trong ngày"),
+        title: const Text(
+          "EngNews - Diễn đàn quốc tế",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
-        automaticallyImplyLeading: true, 
+        automaticallyImplyLeading: false,
+        backgroundColor: Color.fromARGB(255, 30, 30, 255),
+        foregroundColor: Colors.white,
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -41,22 +54,11 @@ class _HomeScreenState extends State<HomeScreen> {
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.sports_soccer),
-            label: "Thể thao",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.movie),
-            label: "Giải trí",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Cá nhân",
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Trang chủ"),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Tìm kiếm"),
+          BottomNavigationBarItem(icon: Icon(Icons.category), label: "Danh mục"),
+          BottomNavigationBarItem(icon: Icon(Icons.help_outline), label: "Hỗ trợ"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Tôi"),
         ],
       ),
     );
