@@ -44,6 +44,7 @@ class _CategoryTabState extends State<CategoryTab> {
           itemBuilder: (context, index) {
             final category = categories[index];
             return Card(
+              color: Colors.white,
               child: ListTile(
                 leading: const Icon(Icons.label_outline, color: Colors.blue),
                 title: Text(

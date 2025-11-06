@@ -43,6 +43,7 @@ class _HomeTabState extends State<HomeTab> {
           itemBuilder: (context, index) {
             final article = articles[index];
             return Card(
+              color: Colors.white,
               margin: const EdgeInsets.only(bottom: 20),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               elevation: 3,

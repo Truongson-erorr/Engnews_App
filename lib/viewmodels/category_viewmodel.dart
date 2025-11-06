@@ -4,7 +4,6 @@ import '../model/category_model.dart';
 class CategoryViewModel {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// Lấy tất cả danh mục từ Firestore
   Future<List<CategoryModel>> fetchCategories() async {
   try {
     final snapshot = await _firestore.collection('categories').get();
