@@ -77,38 +77,5 @@ Trong tương lai, EngNews hướng tới việc trở thành **nền tảng đ�
 - **Gemini / ChatGPT API** – AI phân tích, tóm tắt và gợi ý bài báo liên quan.  
 - **RESTful API** – Lấy dữ liệu bài báo từ các nguồn tiếng Anh thực tế.  
 
----
 
-## 📁 Cấu trúc dự án
-
-Cấu trúc theo hướng **Clean Architecture + MVVM**, đảm bảo dễ phát triển, mở rộng và bảo trì:
-
-lib/
-├── core/ <-- Chứa các thành phần dùng chung 
-│ ├── config/ <-- Cấu hình chung (AppConfig, API keys, Env)
-│ ├── utils/ <-- Hàm tiện ích, xử lý chuỗi, format dữ liệu
-│ ├── services/ <-- Các dịch vụ chung: API, Firebase, AI, Storage...
-│ ├── theme/ <-- Màu sắc, typography, chủ đề giao diện
-│
-├── features/ <-- Các tính năng độc lập của ứng dụng
-│ ├── article/ <-- Chức năng đọc báo, xem chi tiết, tóm tắt
-│ │ ├── data/
-│ │ │ ├── models/ <-- Data Models (DTOs)
-│ │ │ └── datasources/ <-- Nguồn dữ liệu (API / Local)
-│ │ ├── view/ <-- Giao diện hiển thị (UI Screens, Widgets)
-│ │ └── viewmodel/ <-- Xử lý logic, quản lý trạng thái (ViewModel / Bloc)
-│ │
-│ ├── authentication/ <-- Đăng nhập, đăng ký, xác thực người dùng
-│ │ ├── data/
-│ │ │ ├── models/
-│ │ │ └── datasources/
-│ │ ├── view/ <-- Màn hình Login, Register, Forgot Password...
-│ │ └── viewmodel/ <-- Quản lý trạng thái đăng nhập, xác thực
-│ │
-│ └── profile/ <-- Hồ sơ, thông tin cá nhân, cài đặt người dùng
-│ ├── data/
-│ ├── view/
-│ └── viewmodel/
-│
-└── main.dart <-- Điểm khởi động ứng dụng
 
