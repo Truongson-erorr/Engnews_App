@@ -15,7 +15,7 @@ class UserModel {
     this.createdAt,
   });
 
-  // Chuyển UserModel -> Map để lưu Firestore
+  // 👉 Chuyển UserModel → Map để lưu lên Firestore
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
@@ -26,7 +26,7 @@ class UserModel {
     };
   }
 
-  // Tạo UserModel từ Map Firestore
+  // 👉 Tạo UserModel từ Map (Firestore trả về)
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       uid: map['uid'] ?? '',

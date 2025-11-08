@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../viewmodels/category_viewmodel.dart';
+import '../viewmodel/category_viewmodel.dart';
 import '../model/category_model.dart';
 
 class CategoryTab extends StatefulWidget {

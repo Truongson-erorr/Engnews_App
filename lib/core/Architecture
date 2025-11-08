@@ -1,0 +1,48 @@
+; lib/
+; ├── core/                 <-- Nền tảng dùng chung (Config, Utils, Widgets, Base Classes, DI setup)
+; │   └── base/             // Base ViewModel, Base Service Interface, etc.
+; │
+; ├── features/             <-- Các tính năng độc lập
+; │   ├── home/             <-- Trang chủ (hiển thị danh sách bài viết, gợi ý, vv.)
+; │   │   ├── models/          
+; │   │   ├── services/        
+; │   │   ├── view/          // UI: HomeScreen, HomePage, v.v.
+; │   │   └── viewmodel/       
+; │   │
+; │   ├── article/          <-- Chi tiết bài báo, danh mục, vv.
+; │   │   ├── models/
+; │   │   ├── services/
+; │   │   ├── view/
+; │   │   └── viewmodel/
+; │   │
+; │   ├── category/         <-- Quản lý danh mục
+; │   │   ├── models/
+; │   │   ├── services/
+; │   │   ├── view/
+; │   │   └── viewmodel/
+; │   │
+; │   ├── search/           <-- Chức năng tìm kiếm
+; │   │   ├── models/
+; │   │   ├── services/
+; │   │   ├── view/
+; │   │   └── viewmodel/
+; │   │
+; │   ├── support/          <-- Hỗ trợ, FAQ, liên hệ
+; │   │   ├── models/
+; │   │   ├── services/
+; │   │   ├── view/
+; │   │   └── viewmodel/
+; │   │
+; │   ├── authentication/   <-- Đăng nhập/đăng ký
+; │   │   ├── models/
+; │   │   ├── services/
+; │   │   ├── view/
+; │   │   └── viewmodel/
+; │   │
+; │   └── profile/          <-- Hồ sơ người dùng
+; │       ├── models/
+; │       ├── services/
+; │       ├── view/
+; │       └── viewmodel/
+; │
+; └── main.dart

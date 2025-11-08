@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'register_screen.dart';
-import 'package:caonientruongson/navigation/animation.dart';
+import 'package:caonientruongson/core/animation.dart';
 import 'forgot_password_screen.dart';
-import 'home_screen.dart';
+import '../../article/view/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text.trim(),
       );
 
-      // ✅ Nếu đăng nhập thành công → vào Home
+      // đăng nhập thành công → vào Home
       Navigator.of(context).pushReplacement(createSlideRoute(const HomeScreen()));
     } on FirebaseAuthException catch (e) {
       String message = "Đăng nhập thất bại";
@@ -126,7 +126,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 60),
 
-            // NÚT ĐĂNG NHẬP
             SizedBox(
               width: double.infinity,
               height: 50,

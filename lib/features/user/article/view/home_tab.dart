@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../model/article_model.dart';
-import '../viewmodels/article_viewmodel.dart';
+import '../viewmodel/article_viewmodel.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
