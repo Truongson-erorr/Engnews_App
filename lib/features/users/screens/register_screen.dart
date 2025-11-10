@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../viewmodel/authen_viewmodel.dart';
+import '../../viewmodel/authen_viewmodel.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {

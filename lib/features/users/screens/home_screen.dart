@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:caonientruongson/features/user/article/view/home_tab.dart';
-import '../../search/view/search_tab.dart';
-import '../../category/view/category_tab.dart';
-import '../../support/view/support_tab.dart';
-import '../../profile/view/profile_tab.dart';
+import 'package:caonientruongson/features/users/screens/home_tab.dart';
+import 'search_tab.dart';
+import 'category_tab.dart';
+import 'support_tab.dart';
+import 'profile_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

@@ -1,48 +1,42 @@
 ; lib/
-; ├── core/                 <-- Nền tảng dùng chung (Config, Utils, Widgets, Base Classes, DI setup)
-; │   └── base/             // Base ViewModel, Base Service Interface, etc.
+; ├── core/                          # Core layer: Thành phần tái sử dụng toàn app
+; │   ├── readme/
+; │   ├── animation/
+; │   ├── architecture/
+; │   └── usecase/
 ; │
-; ├── features/             <-- Các tính năng độc lập
-; │   ├── home/             <-- Trang chủ (hiển thị danh sách bài viết, gợi ý, vv.)
-; │   │   ├── models/          
-; │   │   ├── services/        
-; │   │   ├── view/          // UI: HomeScreen, HomePage, v.v.
-; │   │   └── viewmodel/       
+; ├── features/                      # Chia module theo từng tính năng
+; │   ├── admin/                      # Chức năng dành cho quản trị
+; │   │   ├── screens/                # Các màn hình admin
+; │   │   │   ├── dashboard_screen.dart
+; │   │   │   ├── manage_articles_screen.dart
+; │   │   │   └── manage_categories_screen.dart
+; │   │   └── services/               # Các service admin (API, Firestore, v.v.)
+; │   │       ├── admin_service.dart
+; │   │       └── article_service.dart
 ; │   │
-; │   ├── article/          <-- Chi tiết bài báo, danh mục, vv.
-; │   │   ├── models/
-; │   │   ├── services/
-; │   │   ├── view/
-; │   │   └── viewmodel/
+; │   ├── users/                      # Chức năng dành cho người dùng
+; │   │   ├── screens/                # Các màn hình user
+; │   │   │   ├── home_screen.dart
+; │   │   │   ├── article_detail_screen.dart
+; │   │   │   └── category_screen.dart
+; │   │   └── services/               # Service riêng cho user
+; │   │       ├── user_service.dart
+; │   │       └── article_service.dart
 ; │   │
-; │   ├── category/         <-- Quản lý danh mục
-; │   │   ├── models/
-; │   │   ├── services/
-; │   │   ├── view/
-; │   │   └── viewmodel/
+; │   ├── models/                     # Tất cả model dùng chung
+; │   │   ├── article_model.dart
+; │   │   ├── category_model.dart
+; │   │   └── profile_model.dart
 ; │   │
-; │   ├── search/           <-- Chức năng tìm kiếm
-; │   │   ├── models/
-; │   │   ├── services/
-; │   │   ├── view/
-; │   │   └── viewmodel/
+; │   ├── viewmodel/                  # ViewModel dùng chung nếu có logic share
+; │   │   ├── profile_vm.dart
+; │   │   └── search_vm.dart
 ; │   │
-; │   ├── support/          <-- Hỗ trợ, FAQ, liên hệ
-; │   │   ├── models/
-; │   │   ├── services/
-; │   │   ├── view/
-; │   │   └── viewmodel/
-; │   │
-; │   ├── authentication/   <-- Đăng nhập/đăng ký
-; │   │   ├── models/
-; │   │   ├── services/
-; │   │   ├── view/
-; │   │   └── viewmodel/
-; │   │
-; │   └── profile/          <-- Hồ sơ người dùng
+; │   └── authentication/            # Đăng nhập / đăng ký / quên mật khẩu
 ; │       ├── models/
 ; │       ├── services/
 ; │       ├── view/
 ; │       └── viewmodel/
 ; │
-; └── main.dart
+; └── main.dart                       # Điểm khởi đầu ứng dụng
