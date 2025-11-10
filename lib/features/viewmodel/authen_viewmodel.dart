@@ -7,8 +7,9 @@ class AuthenViewModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  bool isLoading = false; // Trạng thái đang xử lý
-  String? errorMessage;   // Lưu lỗi khi đăng ký
+  bool isLoading = false;       // Trạng thái đang xử lý
+  String? errorMessage;         // Lưu lỗi khi đăng ký
+  UserModel? currentUser;       // Lưu thông tin người dùng hiện tại
 
   /// Đăng ký tài khoản mới (Firebase Auth + Firestore)
   Future<bool> register({
@@ -33,20 +34,52 @@ class AuthenViewModel extends ChangeNotifier {
         fullName: fullName,
         phone: phone,
         email: email,
+        image: '', 
         createdAt: DateTime.now(),
       );
 
       // Lưu thông tin người dùng vào Firestore
       await _firestore.collection('users').doc(user.uid).set(user.toMap());
 
+      // Cập nhật thông tin user hiện tại
+      currentUser = user;
+
       isLoading = false;
       notifyListeners();
-      return true; // Đăng ký thành công
+      return true;
     } on FirebaseAuthException catch (e) {
-      errorMessage = e.message; // Ghi lại lỗi từ Firebase
+      errorMessage = e.message;
       isLoading = false;
       notifyListeners();
-      return false; // Đăng ký thất bại
+      return false;
     }
+  }
+
+  /// Lấy thông tin người dùng hiện tại từ Firebase
+  Future<void> fetchCurrentUser() async {
+    final uid = _auth.currentUser?.uid;
+    if (uid != null) {
+      isLoading = true;
+      notifyListeners();
+
+      try {
+        final doc = await _firestore.collection('users').doc(uid).get();
+        if (doc.exists) {
+          currentUser = UserModel.fromMap(doc.data()!); // lấy cả image từ Firestore
+        }
+      } catch (e) {
+        errorMessage = 'Không thể lấy thông tin người dùng: $e';
+      }
+
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Logout
+  Future<void> signOut() async {
+    await _auth.signOut();
+    currentUser = null;
+    notifyListeners();
   }
 }

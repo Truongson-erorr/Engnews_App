@@ -6,6 +6,7 @@ class UserModel {
   final String fullName;
   final String phone;
   final String email;
+  final String image;
   final DateTime? createdAt;
 
   UserModel({
@@ -13,6 +14,7 @@ class UserModel {
     required this.fullName,
     required this.phone,
     required this.email,
+    required this.image,
     this.createdAt,
   });
 
@@ -34,6 +36,7 @@ class UserModel {
       fullName: map['fullName'] ?? '',
       phone: map['phone'] ?? '',
       email: map['email'] ?? '',
+      image: map['image'] ?? '',
       createdAt: map['createdAt'] != null
           ? (map['createdAt'] as Timestamp).toDate()
           : null,
