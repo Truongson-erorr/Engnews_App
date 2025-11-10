@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Model đại diện cho người dùng (User)
 class UserModel {
   final String uid;
   final String fullName;
@@ -15,7 +16,7 @@ class UserModel {
     this.createdAt,
   });
 
-  // 👉 Chuyển UserModel → Map để lưu lên Firestore
+  /// Chuyển UserModel → Map để lưu lên Firestore
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
@@ -26,7 +27,7 @@ class UserModel {
     };
   }
 
-  // 👉 Tạo UserModel từ Map (Firestore trả về)
+  /// Tạo UserModel từ Map (Firestore trả về)
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       uid: map['uid'] ?? '',

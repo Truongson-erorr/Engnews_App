@@ -1,0 +1,59 @@
+DANH SÁCH USE CASES CỦA ỨNG DỤNG
+
+1. Nhóm User (Người dùng thông thường)
+1.1 Authentication (Xác thực người dùng)
+- Đăng ký tài khoản (Sign Up)
+- Đăng nhập (Sign In)
+- Đăng xuất (Sign Out)
+- Quên mật khẩu / Đặt lại mật khẩu (Forgot Password / Reset Password)
+
+1.2 Article (Bài viết)
+- Xem danh sách tất cả bài viết (Get All Articles)
+- Xem chi tiết bài viết (Get Article Detail)
+- Lưu bài viết yêu thích (Save Favorite Article)
+- Xóa bài yêu thích (Remove Favorite Article)
+- Đọc tóm tắt bài viết (Read Article Summary)
+- Xem bài viết gợi ý liên quan (Get Suggested Articles)
+
+1.3 Category (Danh mục bài viết)
+- Lấy danh sách danh mục (Get All Categories)
+- Xem bài viết theo danh mục (Get Articles by Category)
+
+1.4 Search (Tìm kiếm)
+- Tìm kiếm bài viết theo từ khóa (Search Articles)
+- Hiển thị gợi ý khi nhập từ khóa (Get Search Suggestions)
+
+1.5 Profile (Hồ sơ người dùng)
+- Xem thông tin hồ sơ cá nhân (Get User Profile)
+- Cập nhật thông tin hồ sơ (Update Profile Info)
+- Thay đổi ảnh đại diện (Upload / Change Avatar)
+- Xem danh sách bài yêu thích (Get Favorite Articles)
+- Xem lịch sử đã đọc (Get Reading History)
+
+1.6 Support / Feedback (Hỗ trợ người dùng)
+- Gửi phản hồi / liên hệ (Send Feedback or Contact)
+- Xem danh sách câu hỏi thường gặp (View FAQ)
+
+2. Nhóm Admin (Quản trị viên)
+2.1 Quản lý bài viết
+- Tạo bài viết mới (Create Article)
+- Cập nhật nội dung bài viết (Update Article)
+- Xóa bài viết (Delete Article)
+- Duyệt bài viết trước khi xuất bản (Approve Article)
+- Quản lý hình ảnh bài viết (Manage Article Media)
+
+2.2 Quản lý danh mục
+- Tạo danh mục mới (Create Category)
+- Cập nhật danh mục (Update Category)
+- Xóa danh mục (Delete Category)
+
+2.3 Quản lý người dùng
+- Xem danh sách người dùng (Get All Users)
+- Xem chi tiết người dùng (View User Detail)
+- Xóa người dùng (Delete User)
+
+2.4 Dashboard / Báo cáo thống kê
+- Xem tổng số bài viết, người dùng, và danh mục (Get App Stats)
+- Xem bài viết được xem nhiều nhất (Get Most Viewed Articles)
+- Xem bài viết được yêu thích nhiều nhất (Get Most Liked Articles)
+- Xem hoạt động người dùng gần đây (Get Recent User Activity)

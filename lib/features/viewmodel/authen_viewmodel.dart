@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../model/user_model.dart';
+import '../models/user_model.dart';
 
 class AuthenViewModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  bool isLoading = false;
-  String? errorMessage;
+  bool isLoading = false; // Trạng thái đang xử lý
+  String? errorMessage;   // Lưu lỗi khi đăng ký
 
+  /// Đăng ký tài khoản mới (Firebase Auth + Firestore)
   Future<bool> register({
     required String fullName,
     required String email,
@@ -20,13 +21,13 @@ class AuthenViewModel extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-      // Tạo user trên Firebase Auth
+      // Tạo user trên Firebase Authentication
       UserCredential cred = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Tạo model user
+      // Tạo model người dùng để lưu vào Firestore
       final user = UserModel(
         uid: cred.user!.uid,
         fullName: fullName,
@@ -35,17 +36,17 @@ class AuthenViewModel extends ChangeNotifier {
         createdAt: DateTime.now(),
       );
 
-      // Lưu Firestore
+      // Lưu thông tin người dùng vào Firestore
       await _firestore.collection('users').doc(user.uid).set(user.toMap());
 
       isLoading = false;
       notifyListeners();
-      return true;
+      return true; // Đăng ký thành công
     } on FirebaseAuthException catch (e) {
-      errorMessage = e.message;
+      errorMessage = e.message; // Ghi lại lỗi từ Firebase
       isLoading = false;
       notifyListeners();
-      return false;
+      return false; // Đăng ký thất bại
     }
   }
 }
