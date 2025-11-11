@@ -4,6 +4,8 @@ import 'register_screen.dart';
 import 'package:caonientruongson/core/animation.dart';
 import 'forgot_password_screen.dart';
 import 'home_screen.dart';
+import 'package:provider/provider.dart';
+import '../../viewmodel/authen_viewmodel.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text.trim(),
       );
 
-      // đăng nhập thành công → vào Home
+      // Đăng nhập thành công → vào Home
       Navigator.of(context).pushReplacement(createSlideRoute(const HomeScreen()));
     } on FirebaseAuthException catch (e) {
       String message = "Đăng nhập thất bại";
@@ -44,6 +46,18 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    final authVM = Provider.of<AuthenViewModel>(context, listen: false);
+    bool success = await authVM.signInWithGoogle();
+    if (success) {
+      Navigator.of(context).pushReplacement(createSlideRoute(const HomeScreen()));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Đăng nhập Google thất bại")),
+      );
     }
   }
 
@@ -86,7 +100,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 40),
 
-            // EMAIL
             TextField(
               controller: _emailController,
               decoration: InputDecoration(
@@ -98,7 +111,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 16),
 
-            // PASSWORD
             TextField(
               controller: _passwordController,
               obscureText: true,
@@ -124,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 60),
+            const SizedBox(height: 50),
 
             SizedBox(
               width: double.infinity,
@@ -149,8 +161,31 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
               ),
             ),
+            const SizedBox(height: 20),
 
+            Center(
+              child: TextButton.icon(
+                onPressed: _signInWithGoogle,
+                icon: Image.network(
+                  'https://developers.google.com/identity/images/g-logo.png',
+                  height: 24,
+                ),
+                label: const Text(
+                  "Đăng nhập bằng Google",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.black87,
+                ),
+              ),
+            ),
             const SizedBox(height: 30),
+
             Center(
               child: TextButton(
                 onPressed: () {
