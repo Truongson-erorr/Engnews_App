@@ -30,20 +30,19 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-        widget.categoryTitle, 
-        style: const TextStyle(
-          color: Colors.white,  
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
+          widget.categoryTitle,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
-      backgroundColor: const Color.fromARGB(255, 30, 30, 255),
-      centerTitle: true,
-      iconTheme: const IconThemeData(
-        color: Colors.white, 
-      ),
+        backgroundColor: const Color.fromARGB(255, 30, 30, 255),
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder<List<ArticleModel>>(
         future: _futureArticles,
@@ -53,105 +52,87 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Lỗi: ${snapshot.error}'));
           }
 
           final articles = snapshot.data ?? [];
 
           if (articles.isEmpty) {
-            return const Center(child: Text('No articles in this category.'));
+            return const Center(
+              child: Text(
+                'Không có bài viết nào trong danh mục này.',
+                style: TextStyle(color: Colors.black54),
+              ),
+            );
           }
 
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          return ListView.separated(
+            padding: const EdgeInsets.all(16),
             itemCount: articles.length,
+            separatorBuilder: (_, __) => const Divider(height: 24),
             itemBuilder: (context, index) {
               final article = articles[index];
-              return Card(
-                color: Colors.white,
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                margin: const EdgeInsets.only(bottom: 16),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(12),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ArticleDetail(article: article),
-                      ),
-                    );
-                  },
-                  child: SizedBox(
-                    height: 120, 
-                    child: Row(
-                      children: [
-                        if (article.image.isNotEmpty)
-                          ClipRRect(
-                            borderRadius: const BorderRadius.horizontal(left: Radius.circular(12)),
-                            child: Image.network(
-                              article.image,
-                              width: 110,
-                              height: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        else
-                          Container(
-                            width: 110,
-                            height: double.infinity,
-                            decoration: const BoxDecoration(
-                              color: Colors.blueAccent,
-                              borderRadius: BorderRadius.horizontal(left: Radius.circular(12)),
-                            ),
-                            child: const Icon(Icons.article_outlined, color: Colors.white, size: 30),
-                          ),
-
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    article.title,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Flexible(
-                                  child: Text(
-                                    article.description,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontSize: 12, 
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Published: ${article.date.toLocal().toString().split(' ')[0]}',
-                                  style: const TextStyle(fontSize: 11, color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+              return InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ArticleDetail(article: article),
                     ),
-                  ),
+                  );
+                },
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: article.image.isNotEmpty
+                          ? Image.network(
+                              article.image,
+                              width: 100,
+                              height: 80,
+                              fit: BoxFit.cover,
+                            )
+                          : Container(
+                              width: 100,
+                              height: 80,
+                              color: Colors.grey[300],
+                              child: const Icon(Icons.article_outlined, color: Colors.grey),
+                            ),
+                    ),
+                    const SizedBox(width: 12),
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            article.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 0, 0, 0),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            article.description,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(color: Colors.black54, fontSize: 13),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Ngày đăng: ${article.date.toLocal().toString().split(' ')[0]}',
+                            style: const TextStyle(fontSize: 11, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               );
             },

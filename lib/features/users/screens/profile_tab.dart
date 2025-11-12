@@ -10,6 +10,7 @@ class ProfileTab extends StatelessWidget {
     final userVM = Provider.of<AuthenViewModel>(context);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: userVM.isLoading
           ? const Center(child: CircularProgressIndicator())
           : userVM.currentUser == null
@@ -19,31 +20,56 @@ class ProfileTab extends StatelessWidget {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        CircleAvatar(
-                          radius: 60,
-                          backgroundColor: Colors.blue.shade200,
-                          backgroundImage: userVM.currentUser!.image.isNotEmpty
-                              ? NetworkImage(userVM.currentUser!.image)
-                              : null,
-                          child: userVM.currentUser!.image.isEmpty
-                              ? Text(
-                                  userVM.currentUser!.fullName.isNotEmpty
-                                      ? userVM.currentUser!.fullName[0].toUpperCase()
-                                      : '?',
-                                  style: const TextStyle(
-                                    fontSize: 40,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                        Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 60,
+                              backgroundColor: const Color.fromARGB(255, 20, 63, 255),
+                              backgroundImage: userVM.currentUser!.image.isNotEmpty
+                                  ? NetworkImage(userVM.currentUser!.image)
+                                  : null,
+                              child: userVM.currentUser!.image.isEmpty
+                                  ? Text(
+                                      userVM.currentUser!.fullName.isNotEmpty
+                                          ? userVM.currentUser!.fullName[0].toUpperCase()
+                                          : '?',
+                                      style: const TextStyle(
+                                        fontSize: 40,
+                                        color: Color.fromARGB(255, 41, 59, 255),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  : null,
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(255, 169, 169, 169),
+                                    shape: BoxShape.circle,
                                   ),
-                                )
-                              : null,
+                                  padding: const EdgeInsets.all(4),
+                                  child: const Icon(
+                                    Icons.edit,
+                                    size: 20,
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 12),
 
                         Text(
                           userVM.currentUser!.fullName,
                           style: const TextStyle(
-                            fontSize: 32,
+                            fontSize: 25,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
                           ),

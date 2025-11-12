@@ -17,4 +17,29 @@ class ArticleViewModel {
       return [];
     }
   }
+
+  Future<List<ArticleModel>> searchArticlesByTitle(String keyword) async {
+    try {
+      // Chuyển từ khóa về chữ thường để tìm chính xác hơn
+      final lowerKeyword = keyword.toLowerCase();
+
+      // Lấy tất cả bài viết trước rồi lọc bằng Dart (client-side)
+      final snapshot = await _firestore.collection('articles').get();
+
+      final allArticles = snapshot.docs
+          .map((doc) => ArticleModel.fromFirestore(doc))
+          .toList();
+
+      // Lọc theo tiêu đề có chứa từ khóa (không phân biệt hoa thường)
+      final results = allArticles.where((article) {
+        return article.title.toLowerCase().contains(lowerKeyword);
+      }).toList();
+
+      return results;
+    } catch (e) {
+      print('Lỗi khi tìm bài viết: $e');
+      return [];
+    }
+  }
+
 }
