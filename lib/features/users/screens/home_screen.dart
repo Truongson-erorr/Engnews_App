@@ -43,23 +43,60 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         centerTitle: true,
         automaticallyImplyLeading: false,
-        backgroundColor: Color.fromARGB(255, 30, 30, 255),
+        backgroundColor: const Color.fromARGB(255, 30, 30, 255),
         foregroundColor: Colors.white,
       ),
       body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        selectedItemColor: Color.fromARGB(255, 30, 30, 255),
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Trang chủ"),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Tìm kiếm"),
-          BottomNavigationBarItem(icon: Icon(Icons.category), label: "Danh mục"),
-          BottomNavigationBarItem(icon: Icon(Icons.help_outline), label: "Hỗ trợ"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Tôi"),
-        ],
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          splashColor: Colors.transparent,      
+          highlightColor: Colors.transparent, 
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _selectedIndex,
+          backgroundColor: Colors.grey[850],
+          selectedItemColor: const Color.fromARGB(255, 29, 55, 255),
+          unselectedItemColor: Colors.grey,
+          onTap: _onItemTapped,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                size: _selectedIndex == 0 ? 25 : 22,
+              ),
+              label: "Trang chủ",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.search,
+                size: _selectedIndex == 1 ? 25 : 22,
+              ),
+              label: "Tìm kiếm",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.category,
+                size: _selectedIndex == 2 ? 25 : 22,
+              ),
+              label: "Danh mục",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.help_outline,
+                size: _selectedIndex == 3 ? 25 : 22,
+              ),
+              label: "Hỗ trợ",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person,
+                size: _selectedIndex == 4 ? 25 : 22,
+              ),
+              label: "Tôi",
+            ),
+          ],
+        ),
       ),
     );
   }
