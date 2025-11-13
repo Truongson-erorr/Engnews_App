@@ -84,6 +84,32 @@ class AuthenViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Đăng nhập bằng email và password
+  Future<bool> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      isLoading = true;
+      notifyListeners();
+
+      // Đăng nhập Firebase Auth
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+
+      // Lấy thông tin người dùng từ Firestore
+      await fetchCurrentUser();
+
+      isLoading = false;
+      notifyListeners();
+      return true;
+    } on FirebaseAuthException catch (e) {
+      errorMessage = e.message;
+      isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   /// đăng nhập với google
   Future<bool> signInWithGoogle() async {
     try {
@@ -142,4 +168,39 @@ class AuthenViewModel extends ChangeNotifier {
       return false;
     }
   }
+
+  /// Cập nhật thông tin người dùng
+  Future<void> updateUserProfile({
+    required String fullName,
+    required String phone,
+  }) async {
+    try {
+      final uid = _auth.currentUser?.uid;
+      if (uid == null) return;
+
+      // Cập nhật dữ liệu trong Firestore
+      await _firestore.collection('users').doc(uid).update({
+        'fullName': fullName,
+        'phone': phone,
+      });
+
+      // Cập nhật lại bản sao trong ViewModel
+      if (currentUser != null) {
+        currentUser = UserModel(
+          uid: currentUser!.uid,
+          fullName: fullName,
+          phone: phone,
+          email: currentUser!.email,
+          image: currentUser!.image,
+          createdAt: currentUser!.createdAt,
+        );
+      }
+
+      notifyListeners();
+    } catch (e) {
+      errorMessage = 'Lỗi khi cập nhật thông tin: $e';
+      notifyListeners();
+    }
+  }
+
 }

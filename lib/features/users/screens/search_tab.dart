@@ -54,12 +54,21 @@ class _SearchTabState extends State<SearchTab> {
               hintText: 'Nhập từ khóa bài báo...',
               filled: true,
               fillColor: Colors.grey[200],
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.search, color: Colors.blueAccent),
-                onPressed: _searchArticles,
-              ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+              suffixIcon: _searchController.text.isEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.search, color: Colors.blueAccent),
+                      onPressed: _searchArticles,
+                    )
+                  : IconButton(
+                      icon: const Icon(Icons.close, color: Colors.grey),
+                      onPressed: () {
+                        _searchController.clear(); 
+                        setState(() {
+                          _results = []; 
+                        });
+                      },
+                    ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
                 borderSide: BorderSide.none,
@@ -69,10 +78,11 @@ class _SearchTabState extends State<SearchTab> {
                 borderSide: BorderSide.none,
               ),
             ),
+            onChanged: (value) => setState(() {}), 
             onSubmitted: (_) => _searchArticles(),
           ),
-          const SizedBox(height: 20),
 
+          const SizedBox(height: 20),
           if (_searchController.text.isEmpty)
             Expanded(
               child: Column(
@@ -82,7 +92,7 @@ class _SearchTabState extends State<SearchTab> {
                     'Có thể bạn sẽ thích',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 18,
                         color: Colors.black87),
                   ),
                   const SizedBox(height: 12),
@@ -97,7 +107,7 @@ class _SearchTabState extends State<SearchTab> {
                           title: Text(
                             keyword,
                               style: const TextStyle(
-                              fontSize: 13,      
+                              fontSize: 15,      
                               color: Color.fromARGB(221, 39, 39, 39),
                             ),
                             ),

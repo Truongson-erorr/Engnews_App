@@ -4,6 +4,7 @@ import '../../viewmodel/article_viewmodel.dart';
 import '../../viewmodel/category_viewmodel.dart';
 import '../../models/category_model.dart';
 import 'article_detail.dart';
+import '../../../core/animation.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -120,9 +121,7 @@ class _HomeTabState extends State<HomeTab> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => ArticleDetail(article: article),
-                        ),
+                        createSlideRoute(ArticleDetail(article: article)),
                       );
                     },
                     child: Column(

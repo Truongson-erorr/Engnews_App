@@ -2,20 +2,28 @@ import 'package:flutter/material.dart';
 
 Route createSlideRoute(Widget page) {
   return PageRouteBuilder(
-    transitionDuration: const Duration(milliseconds: 400), 
-    reverseTransitionDuration: const Duration(milliseconds: 400), 
+    transitionDuration: const Duration(milliseconds: 400),
+    reverseTransitionDuration: const Duration(milliseconds: 400),
     pageBuilder: (context, animation, secondaryAnimation) => page,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(1.0, 0.0); 
-      const end = Offset.zero; 
-      const curve = Curves.easeInOut; 
+      // Trang mới trượt từ phải sang
+      final offsetAnimation = Tween<Offset>(
+        begin: const Offset(1.0, 0.0),
+        end: Offset.zero,
+      ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut));
 
-      final tween = Tween(begin: begin, end: end)
-          .chain(CurveTween(curve: curve)); 
+      // Trang cũ trượt nhẹ sang trái khi forward
+      final secondaryOffsetAnimation = Tween<Offset>(
+        begin: Offset.zero,
+        end: const Offset(-0.3, 0.0),
+      ).animate(CurvedAnimation(parent: secondaryAnimation, curve: Curves.easeInOut));
 
       return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
+        position: secondaryOffsetAnimation,
+        child: SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        ),
       );
     },
   );

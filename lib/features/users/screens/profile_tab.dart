@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodel/authen_viewmodel.dart';
 import '../screens/login_screen.dart';
+import '../screens/edit_profile_screen.dart';
+import '../../../core/animation.dart';
 
 class ProfileTab extends StatelessWidget {
   const ProfileTab({super.key});
@@ -94,7 +96,10 @@ class ProfileTab extends StatelessWidget {
                     icon: Icons.person_outline,
                     title: 'Chỉnh sửa thông tin cá nhân',
                     onTap: () {
-                      
+                      Navigator.push(
+                        context,
+                        createSlideRoute(const EditProfileScreen()),
+                      );
                     },
                   ),
                   _buildMenuItem(
