@@ -45,6 +45,14 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(255, 30, 30, 255),
         foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: () {
+              
+            },
+          ),
+        ],
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: Theme(
@@ -76,10 +84,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.category,
+                Icons.trending_up,
                 size: _selectedIndex == 2 ? 25 : 22,
               ),
-              label: "Danh mục",
+              label: "Xu hướng",
             ),
             BottomNavigationBarItem(
               icon: Icon(
