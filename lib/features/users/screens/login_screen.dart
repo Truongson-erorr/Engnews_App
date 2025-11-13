@@ -20,33 +20,23 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
 
   Future<void> _signIn() async {
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
+    final authVM = Provider.of<AuthenViewModel>(context, listen: false);
 
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
+    final success = await authVM.login(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
 
-      // Đăng nhập thành công → vào Home
+    if (success) {
       Navigator.of(context).pushReplacement(createSlideRoute(const HomeScreen()));
-    } on FirebaseAuthException catch (e) {
-      String message = "Đăng nhập thất bại";
-      if (e.code == 'user-not-found') {
-        message = "Không tìm thấy người dùng với email này.";
-      } else if (e.code == 'wrong-password') {
-        message = "Sai mật khẩu. Vui lòng thử lại.";
-      }
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
+        SnackBar(content: Text(authVM.errorMessage ?? "Đăng nhập thất bại")),
       );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
+
+    setState(() => _isLoading = false);
   }
 
   Future<void> _signInWithGoogle() async {

@@ -84,17 +84,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.trending_up,
+                Icons.category_outlined,
                 size: _selectedIndex == 2 ? 25 : 22,
               ),
-              label: "Xu hướng",
+              label: "Chủ đề",
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.help_outline,
+                Icons.lightbulb_outline,
                 size: _selectedIndex == 3 ? 25 : 22,
               ),
-              label: "Hỗ trợ",
+              label: "Tiện ích",
             ),
             BottomNavigationBarItem(
               icon: Icon(
