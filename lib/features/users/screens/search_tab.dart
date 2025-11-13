@@ -86,6 +86,7 @@ class _SearchTabState extends State<SearchTab> {
                         color: Colors.black87),
                   ),
                   const SizedBox(height: 12),
+                  
                   Expanded(
                     child: ListView.separated(
                       itemCount: _suggestions.length,
@@ -96,8 +97,8 @@ class _SearchTabState extends State<SearchTab> {
                           title: Text(
                             keyword,
                               style: const TextStyle(
-                              fontSize: 14,      
-                              color: Color.fromARGB(221, 57, 57, 57),
+                              fontSize: 13,      
+                              color: Color.fromARGB(221, 39, 39, 39),
                             ),
                             ),
                           leading: const Icon(Icons.search, color: Colors.grey),
