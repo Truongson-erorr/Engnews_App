@@ -80,8 +80,8 @@ class _HomeTabState extends State<HomeTab> {
                           category.title,
                           style: TextStyle(
                             fontSize: 14,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                            color: isSelected ? const Color.fromARGB(255, 41, 48, 255) : Colors.black87,
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.bold,
+                            color: isSelected ? const Color(0xFFD0021B) : Colors.black87,
                           ),
                         ),
                       ),

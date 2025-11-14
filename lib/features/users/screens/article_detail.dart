@@ -4,6 +4,7 @@ import '../../models/article_model.dart';
 import '../../models/comment_model.dart';
 import '../../viewmodel/comment_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../viewmodel/favorite_viewmodel.dart';
 
 class ArticleDetail extends StatefulWidget {
   final ArticleModel article;
@@ -16,7 +17,8 @@ class ArticleDetail extends StatefulWidget {
 class _ArticleDetailState extends State<ArticleDetail> {
   final CommentViewModel _commentVM = CommentViewModel();
   final TextEditingController _commentController = TextEditingController();
-
+  final FavoriteViewModel _favoriteVM = FavoriteViewModel();
+  
   @override
   Widget build(BuildContext context) {
     final article = widget.article;
@@ -24,7 +26,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 30, 30, 255),
+        backgroundColor:  const Color(0xFFD0021B),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
@@ -62,7 +64,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
               children: [
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
+                    backgroundColor: const Color.fromARGB(255, 163, 163, 163),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                   ),
@@ -81,15 +83,27 @@ class _ArticleDetailState extends State<ArticleDetail> {
                 
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 29, 36, 255),
+                    backgroundColor: Color(0xFFD0021B),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    final user = FirebaseAuth.instance.currentUser;
+
+                    if (user == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Vui lòng đăng nhập để lưu bài.")),
+                      );
+                      return;
+                    }
+
+                    await _favoriteVM.saveFavorite(user.uid, article.id);
+
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Article saved to favorites!")),
+                      const SnackBar(content: Text("Đã lưu bài viết!")),
                     );
                   },
+
                   icon: const Icon(Icons.bookmark_add_outlined, color: Colors.white),
                   label: const Text(
                     "Lưu bài",

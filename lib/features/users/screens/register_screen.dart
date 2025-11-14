@@ -151,7 +151,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 42, 42, 252),
+                          backgroundColor: Color(0xFFD0021B),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -177,7 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: const Text(
                     "Đã có tài khoản? Đăng nhập",
                     style: TextStyle(
-                      color: Color.fromARGB(255, 30, 30, 255),
+                      color: Color(0xFFD0021B),
                       fontSize: 15,
                     ),
                   ),
