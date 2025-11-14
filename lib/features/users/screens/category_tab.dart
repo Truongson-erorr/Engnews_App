@@ -41,15 +41,15 @@ class _CategoryTabState extends State<CategoryTab> {
         }
 
         return ListView.separated(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
           itemCount: categories.length,
           separatorBuilder: (_, __) => const Divider(height: 1),
           itemBuilder: (context, index) {
             final category = categories[index];
 
             return ListTile(
-              contentPadding: const EdgeInsets.symmetric(vertical: 12),
-              leading: const Icon(Icons.label_outline, color: Colors.blue),
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
+              leading: const Icon(Icons.label_outline, color: Color(0xFFD0021B)),
               title: Text(
                 category.title,
                 style: const TextStyle(

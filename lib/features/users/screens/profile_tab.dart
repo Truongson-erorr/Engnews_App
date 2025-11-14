@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodel/authen_viewmodel.dart';
 import '../screens/login_screen.dart';
+import '../screens/saved_articles_screen.dart';
 import '../screens/edit_profile_screen.dart';
 import '../../../core/animation';
 
@@ -46,7 +47,7 @@ class ProfileTab extends StatelessWidget {
                               style: const TextStyle(
                                 fontSize: 36,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF2B3AFF),
+                                color: Color(0xFFD0021B),
                               ),
                             )
                           : null,
@@ -98,7 +99,7 @@ class ProfileTab extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        createSlideRoute(const EditProfileScreen()),
+                        createSlideRoute(EditProfileScreen()),
                       );
                     },
                   ),
@@ -113,7 +114,10 @@ class ProfileTab extends StatelessWidget {
                     icon: Icons.bookmark_outline,
                     title: 'Bài viết đã lưu',
                     onTap: () {
-                      
+                      Navigator.push(
+                        context,
+                        createSlideRoute(SavedArticlesScreen()),
+                      );
                     },
                   ),
                   _buildMenuItem(

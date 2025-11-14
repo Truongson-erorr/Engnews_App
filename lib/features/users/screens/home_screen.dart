@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:caonientruongson/features/users/screens/home_tab.dart';
+import 'home_tab.dart';
 import 'search_tab.dart';
 import 'category_tab.dart';
 import 'support_tab.dart';
@@ -15,12 +15,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   final List<Widget> _pages = const [
     HomeTab(),
     SearchTab(),
@@ -29,82 +23,101 @@ class _HomeScreenState extends State<HomeScreen> {
     ProfileTab(),
   ];
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+
       appBar: AppBar(
+        backgroundColor: const Color(0xFFD0021B),
+        elevation: 0.8,
+        foregroundColor: Colors.black87,
+        centerTitle: true,
         title: const Text(
-          "EngNews - Diễn đàn quốc tế",
+          "EngNews",
           style: TextStyle(
-            fontSize: 20,
             fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+            letterSpacing: 1.2,
           ),
         ),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromARGB(255, 30, 30, 255),
-        foregroundColor: Colors.white,
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {
-              
-            },
+            color: Colors.white,
+            icon: const Icon(Icons.notifications_none),
+            onPressed: () {},
           ),
         ],
       ),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-          splashColor: Colors.transparent,      
-          highlightColor: Colors.transparent, 
+
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        transitionBuilder: (child, animation) =>
+            FadeTransition(opacity: animation, child: child),
+        child: _pages[_selectedIndex],
+      ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        elevation: 0,
+
+        currentIndex: _selectedIndex,
+        selectedItemColor: const Color(0xFFD0021B),
+        unselectedItemColor: Colors.black45,
+
+        selectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 12,
         ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _selectedIndex,
-          backgroundColor: Colors.grey[850],
-          selectedItemColor: const Color.fromARGB(255, 29, 55, 255),
-          unselectedItemColor: Colors.grey,
-          onTap: _onItemTapped,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-                size: _selectedIndex == 0 ? 25 : 22,
-              ),
-              label: "Trang chủ",
+        unselectedLabelStyle: const TextStyle(fontSize: 12),
+
+        onTap: _onItemTapped,
+
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.article_outlined,
+              size: _selectedIndex == 0 ? 26 : 22,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.search,
-                size: _selectedIndex == 1 ? 25 : 22,
-              ),
-              label: "Tìm kiếm",
+            label: "Tin mới",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+              size: _selectedIndex == 1 ? 26 : 22,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.category_outlined,
-                size: _selectedIndex == 2 ? 25 : 22,
-              ),
-              label: "Chủ đề",
+            label: "Tìm kiếm",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.grid_view_outlined,
+              size: _selectedIndex == 2 ? 26 : 22,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.lightbulb_outline,
-                size: _selectedIndex == 3 ? 25 : 22,
-              ),
-              label: "Tiện ích",
+            label: "Chuyên mục",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.podcasts_outlined,
+              size: _selectedIndex == 3 ? 26 : 22,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person,
-                size: _selectedIndex == 4 ? 25 : 22,
-              ),
-              label: "Tôi",
+            label: "Podcast",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person_outline,
+              size: _selectedIndex == 4 ? 26 : 22,
             ),
-          ],
-        ),
+            label: "Tài khoản",
+          ),
+        ],
       ),
     );
   }

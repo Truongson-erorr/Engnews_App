@@ -57,11 +57,15 @@ class _SearchTabState extends State<SearchTab> {
               contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               suffixIcon: _searchController.text.isEmpty
                   ? IconButton(
-                      icon: const Icon(Icons.search, color: Colors.blueAccent),
+                      icon: const Icon(
+                        Icons.search, 
+                        color: Color(0xFFD0021B)), 
                       onPressed: _searchArticles,
                     )
                   : IconButton(
-                      icon: const Icon(Icons.close, color: Colors.grey),
+                      icon: const Icon(
+                        Icons.close, 
+                        color: Colors.grey),
                       onPressed: () {
                         _searchController.clear(); 
                         setState(() {

@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(
                   fontSize: 42,
                   fontWeight: FontWeight.bold,
-                  color: const Color.fromARGB(255, 30, 30, 255),
+                  color: Color(0xFFD0021B),
                   letterSpacing: 1.2,
                 ),
               ),
@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: const Text(
                   "Quên mật khẩu?",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 30, 30, 255),
+                    color: Color(0xFFD0021B),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: ElevatedButton(
                 onPressed: _isLoading ? null : _signIn,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 42, 42, 252),
+                  backgroundColor: Color(0xFFD0021B),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(3),
                   ),
@@ -184,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: const Text(
                   "Chưa có tài khoản? Đăng ký ngay",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 30, 30, 255),
+                    color: Color(0xFFD0021B),
                     fontSize: 15,
                   ),
                 ),

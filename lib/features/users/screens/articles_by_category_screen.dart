@@ -40,7 +40,7 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 30, 30, 255),
+        backgroundColor:  const Color(0xFFD0021B),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
