@@ -4,7 +4,7 @@ import '../../viewmodel/article_viewmodel.dart';
 import '../../viewmodel/category_viewmodel.dart';
 import '../../models/category_model.dart';
 import 'article_detail.dart';
-import '../../../core/animation.dart';
+import '../../../core/animation';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});

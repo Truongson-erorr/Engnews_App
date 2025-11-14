@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../viewmodel/category_viewmodel.dart';
 import '../../models/category_model.dart';
 import 'articles_by_category_screen.dart';
-import '../../../core/animation.dart';
+import '../../../core/animation';
 
 class CategoryTab extends StatefulWidget {
   const CategoryTab({super.key});

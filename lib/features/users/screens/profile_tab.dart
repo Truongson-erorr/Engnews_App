@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../../viewmodel/authen_viewmodel.dart';
 import '../screens/login_screen.dart';
 import '../screens/edit_profile_screen.dart';
-import '../../../core/animation.dart';
+import '../../../core/animation';
 
 class ProfileTab extends StatelessWidget {
   const ProfileTab({super.key});
