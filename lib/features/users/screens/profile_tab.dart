@@ -65,7 +65,7 @@ class ProfileTab extends StatelessWidget {
                             shape: BoxShape.circle,
                           ),
                           padding: const EdgeInsets.all(6),
-                          child: const Icon(Icons.edit, color: Colors.white, size: 18),
+                          child: const Icon(Icons.schedule, color: Colors.white, size: 18),
                         ),
                       ),
                     ),
