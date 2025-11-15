@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/article_model.dart';
 import '../../models/comment_model.dart';
 import '../../viewmodel/comment_viewmodel.dart';
