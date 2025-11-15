@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'register_screen.dart';
 import 'package:caonientruongson/core/animation';
 import 'forgot_password_screen.dart';
