@@ -11,6 +11,6 @@ class DefaultFirebaseOptions {
       messagingSenderId: "361187784178", // Messaging sender ID
       projectId: "chatapp-6b57b", // Firebase project ID
       storageBucket: "chatapp-6b57b.firebasestorage.app", // Cloud storage bucket
-    );
+    ); 
   }
 }
