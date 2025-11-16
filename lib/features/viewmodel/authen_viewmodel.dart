@@ -8,11 +8,11 @@ class AuthenViewModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  bool isLoading = false;       // Trạng thái đang xử lý
-  String? errorMessage;         // Lưu lỗi khi đăng ký
-  UserModel? currentUser;       // Lưu thông tin người dùng hiện tại
+  bool isLoading = false;       // Loading state
+  String? errorMessage;         // Store error message
+  UserModel? currentUser;       // Current user info
 
-  /// Đăng ký tài khoản mới (Firebase Auth + Firestore)
+  /// Register a new account (Firebase Auth + Firestore)
   Future<bool> register({
     required String fullName,
     required String email,
@@ -23,13 +23,13 @@ class AuthenViewModel extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-      // Tạo user trên Firebase Authentication
+      // Create user in Firebase Authentication
       UserCredential cred = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Tạo model người dùng để lưu vào Firestore
+      // Create UserModel to store in Firestore
       final user = UserModel(
         uid: cred.user!.uid,
         fullName: fullName,
@@ -39,10 +39,10 @@ class AuthenViewModel extends ChangeNotifier {
         createdAt: DateTime.now(),
       );
 
-      // Lưu thông tin người dùng vào Firestore
+      // Save user info to Firestore
       await _firestore.collection('users').doc(user.uid).set(user.toMap());
 
-      // Cập nhật thông tin user hiện tại
+      // Update current user
       currentUser = user;
 
       isLoading = false;
@@ -56,7 +56,7 @@ class AuthenViewModel extends ChangeNotifier {
     }
   }
 
-  /// Lấy thông tin người dùng hiện tại từ Firebase
+  /// Fetch current user info from Firebase
   Future<void> fetchCurrentUser() async {
     final uid = _auth.currentUser?.uid;
     if (uid != null) {
@@ -66,10 +66,10 @@ class AuthenViewModel extends ChangeNotifier {
       try {
         final doc = await _firestore.collection('users').doc(uid).get();
         if (doc.exists) {
-          currentUser = UserModel.fromMap(doc.data()!); // lấy cả image từ Firestore
+          currentUser = UserModel.fromMap(doc.data()!); 
         }
       } catch (e) {
-        errorMessage = 'Không thể lấy thông tin người dùng: $e';
+        errorMessage = 'Không thể lấy thông tin người dùng: $e'; 
       }
 
       isLoading = false;
@@ -84,7 +84,7 @@ class AuthenViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Đăng nhập bằng email và password
+  /// Login with email and password
   Future<bool> login({
     required String email,
     required String password,
@@ -93,10 +93,10 @@ class AuthenViewModel extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-      // Đăng nhập Firebase Auth
+      // Firebase Auth login
       await _auth.signInWithEmailAndPassword(email: email, password: password);
 
-      // Lấy thông tin người dùng từ Firestore
+      // Fetch user info from Firestore
       await fetchCurrentUser();
 
       isLoading = false;
@@ -110,7 +110,7 @@ class AuthenViewModel extends ChangeNotifier {
     }
   }
 
-  /// đăng nhập với google
+  /// Sign in with Google
   Future<bool> signInWithGoogle() async {
     try {
       isLoading = true;
@@ -118,15 +118,15 @@ class AuthenViewModel extends ChangeNotifier {
 
       final googleSignIn = GoogleSignIn();
 
-      // Force sign out để luôn chọn account mới
+      // Force sign out to always select a new account
       await googleSignIn.signOut();
 
-      // Bắt đầu quá trình đăng nhập
+      // Start sign-in process
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser == null) {
         isLoading = false;
         notifyListeners();
-        return false; // người dùng hủy đăng nhập
+        return false; // user cancelled
       }
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -139,12 +139,12 @@ class AuthenViewModel extends ChangeNotifier {
       UserCredential userCredential = await _auth.signInWithCredential(credential);
       final user = userCredential.user!;
 
-      // Kiểm tra Firestore
+      // Check Firestore
       final doc = await _firestore.collection('users').doc(user.uid).get();
       if (!doc.exists) {
         final newUser = UserModel(
           uid: user.uid,
-          fullName: user.displayName ?? 'Người dùng Google',
+          fullName: user.displayName ?? 'Người dùng Google', // keep Vietnamese
           phone: user.phoneNumber ?? '',
           email: user.email ?? '',
           image: user.photoURL ?? '',
@@ -161,15 +161,15 @@ class AuthenViewModel extends ChangeNotifier {
       return true;
       
     } catch (e) {
-      print('🔥 Lỗi đăng nhập Google: $e');
-      errorMessage = 'Đăng nhập Google thất bại: $e';
+      print('🔥 Lỗi đăng nhập Google: $e'); // keep Vietnamese
+      errorMessage = 'Đăng nhập Google thất bại: $e'; // keep Vietnamese
       isLoading = false;
       notifyListeners();
       return false;
     }
   }
 
-  /// Cập nhật thông tin người dùng
+  /// Update user profile info
   Future<void> updateUserProfile({
     required String fullName,
     required String phone,
@@ -178,13 +178,13 @@ class AuthenViewModel extends ChangeNotifier {
       final uid = _auth.currentUser?.uid;
       if (uid == null) return;
 
-      // Cập nhật dữ liệu trong Firestore
+      // Update Firestore
       await _firestore.collection('users').doc(uid).update({
         'fullName': fullName,
         'phone': phone,
       });
 
-      // Cập nhật lại bản sao trong ViewModel
+      // Update local copy
       if (currentUser != null) {
         currentUser = UserModel(
           uid: currentUser!.uid,
@@ -198,9 +198,8 @@ class AuthenViewModel extends ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
-      errorMessage = 'Lỗi khi cập nhật thông tin: $e';
+      errorMessage = 'Lỗi khi cập nhật thông tin: $e'; // keep Vietnamese
       notifyListeners();
     }
   }
-
 }
