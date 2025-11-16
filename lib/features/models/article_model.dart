@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Model đại diện cho một bài viết (Article)
+/// Model represents an article (Article)
 class ArticleModel {
   final String id;
   final String title;
@@ -24,7 +24,7 @@ class ArticleModel {
     required this.date,
   });
 
-  /// Chuyển dữ liệu từ Firestore thành ArticleModel
+  /// Convert data from Firestore to ArticleModel
   factory ArticleModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return ArticleModel(
