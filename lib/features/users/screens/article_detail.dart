@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../models/article_model.dart';
 import '../../models/comment_model.dart';
 import '../../viewmodel/comment_viewmodel.dart';
+import '../../viewmodel/reading_history_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../viewmodel/favorite_viewmodel.dart';
 
@@ -19,6 +20,26 @@ class _ArticleDetailState extends State<ArticleDetail> {
   final FavoriteViewModel _favoriteVM = FavoriteViewModel();
   
   @override
+  void initState() {
+    super.initState();
+    _saveReadingHistory();
+  }
+
+  // Hàm lưu lịch sử đọc
+  void _saveReadingHistory() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await ReadingHistoryViewModel().addToHistoryOnce(
+        userId: user.uid,
+        articleId: widget.article.id,
+        title: widget.article.title,
+        description: widget.article.description,
+        image: widget.article.image,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final article = widget.article;
 
@@ -29,7 +50,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
-          "Article Detail",
+          "EngNews",
           style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
