@@ -6,9 +6,14 @@ import '../../viewmodel/favorite_viewmodel.dart';
 import '../../viewmodel/article_viewmodel.dart';
 import 'article_detail.dart';
 
-class SavedArticlesScreen extends StatelessWidget {
-  SavedArticlesScreen({super.key});
+class SavedArticlesScreen extends StatefulWidget {
+  const SavedArticlesScreen({super.key});
 
+  @override
+  State<SavedArticlesScreen> createState() => _SavedArticlesScreenState();
+}
+
+class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
   final FavoriteViewModel _favoriteVM = FavoriteViewModel();
   final ArticleViewModel _articleVM = ArticleViewModel();
 
@@ -24,19 +29,6 @@ class SavedArticlesScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          "Bài viết đã lưu",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: const Color(0xFFD0021B),
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
       body: StreamBuilder<List<String>>(
         stream: _favoriteVM.getFavorites(user.uid),
         builder: (context, favSnap) {
@@ -78,74 +70,127 @@ class SavedArticlesScreen extends StatelessWidget {
               return ListView.separated(
                 padding: const EdgeInsets.all(16),
                 itemCount: savedArticles.length,
-                separatorBuilder: (_, __) => const Divider(height: 24),
+                separatorBuilder: (_, __) => Divider(
+                  height: 16,
+                  color: Colors.grey[300],
+                  thickness: 1,
+                ),
                 itemBuilder: (context, index) {
                   final article = savedArticles[index];
 
-                  return InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ArticleDetail(article: article),
-                        ),
+                  return Dismissible(
+                    key: ValueKey(article.id),
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (_) async {
+                      await _favoriteVM.removeFavorite(user.uid, article.id);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Đã xóa bài viết')),
                       );
                     },
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: article.image.isNotEmpty
-                              ? Image.network(
-                                  article.image,
-                                  width: 100,
-                                  height: 80,
-                                  fit: BoxFit.cover,
-                                )
-                              : Container(
-                                  width: 100,
-                                  height: 80,
-                                  color: Colors.grey[300],
-                                  child: const Icon(Icons.article_outlined,
-                                      color: Colors.grey),
-                                ),
-                        ),
-                        const SizedBox(width: 12),
-
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                article.title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                article.description,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    color: Colors.black54, fontSize: 13),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                'Ngày lưu: ${article.date.toLocal().toString().split(' ')[0]}',
-                                style: const TextStyle(
-                                    fontSize: 11, color: Colors.grey),
-                              ),
-                            ],
+                    background: Container(
+                      padding: const EdgeInsets.only(right: 20),
+                      alignment: Alignment.centerRight,
+                      color: Colors.redAccent,
+                      child: const Icon(Icons.delete, color: Colors.white),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ArticleDetail(article: article),
                           ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: article.image.isNotEmpty
+                                  ? Image.network(
+                                      article.image,
+                                      width: 100,
+                                      height: 80,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Container(
+                                      width: 100,
+                                      height: 80,
+                                      color: Colors.grey[300],
+                                      child: const Icon(Icons.article_outlined,
+                                          color: Colors.grey),
+                                    ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          article.title,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ),
+                                      PopupMenuTheme(
+                                        data: const PopupMenuThemeData(
+                                          color: Colors.white,
+                                        ),
+                                        child: PopupMenuButton<String>(
+                                          icon: const Icon(
+                                              Icons.more_vert,
+                                              color: Colors.grey),
+                                          onSelected: (value) async {
+                                            if (value == 'delete') {
+                                              await _favoriteVM.removeFavorite(
+                                                  user.uid, article.id);
+                                              
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                    content: Text(
+                                                        'Đã xóa bài viết')),
+                                              );
+                                            }
+                                          },
+                                          itemBuilder: (context) => [
+                                            const PopupMenuItem(
+                                              value: 'delete',
+                                              child:
+                                                  Text('Xóa bài viết đã lưu'),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    article.description,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        color: Colors.black54, fontSize: 13),
+                                  ),                               
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   );
                 },

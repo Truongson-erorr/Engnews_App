@@ -4,6 +4,8 @@ import 'search_tab.dart';
 import 'category_tab.dart';
 import 'support_tab.dart';
 import 'profile_tab.dart';
+import 'saved_articles_screen.dart';
+import '../../../core/animation';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,12 +17,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [
-    HomeTab(),
-    SearchTab(),
-    CategoryTab(),
-    SupportTab(),
-    ProfileTab(),
+  final List<Widget> _pages = [
+    HomeTab(key: ValueKey('home')),           
+    CategoryTab(key: ValueKey('category')),   
+    SupportTab(key: ValueKey('support')),     
+    SavedArticlesScreen(key: ValueKey('saved')), 
+    ProfileTab(key: ValueKey('profile')),     
   ];
 
   void _onItemTapped(int index) {
@@ -33,12 +35,18 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
       appBar: AppBar(
         backgroundColor: const Color(0xFFD0021B),
         elevation: 0.8,
-        foregroundColor: Colors.black87,
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.tv_rounded), 
+          color: const Color.fromARGB(255, 255, 255, 255),
+          onPressed: () {
+            
+          },
+          tooltip: "Bài đã đọc",
+        ),
         title: const Text(
           "EngNews",
           style: TextStyle(
@@ -51,8 +59,20 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             color: Colors.white,
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              Navigator.push(
+                context,
+                createSlideRoute(const SearchScreen()),
+              );
+            },
+            tooltip: "Tìm kiếm",
+          ),
+          IconButton(
+            color: Colors.white,
             icon: const Icon(Icons.notifications_none),
             onPressed: () {},
+            tooltip: "Thông báo",
           ),
         ],
       ),
@@ -68,19 +88,15 @@ class _HomeScreenState extends State<HomeScreen> {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         elevation: 0,
-
         currentIndex: _selectedIndex,
         selectedItemColor: const Color(0xFFD0021B),
         unselectedItemColor: Colors.black45,
-
         selectedLabelStyle: const TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 12,
         ),
         unselectedLabelStyle: const TextStyle(fontSize: 12),
-
         onTap: _onItemTapped,
-
         items: [
           BottomNavigationBarItem(
             icon: Icon(
@@ -91,31 +107,31 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.search,
-              size: _selectedIndex == 1 ? 26 : 22,
-            ),
-            label: "Tìm kiếm",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
               Icons.grid_view_outlined,
-              size: _selectedIndex == 2 ? 26 : 22,
+              size: _selectedIndex == 1 ? 26 : 22,
             ),
             label: "Chuyên mục",
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.podcasts_outlined,
-              size: _selectedIndex == 3 ? 26 : 22,
+              size: _selectedIndex == 2 ? 26 : 22,
             ),
             label: "Podcast",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.bookmark_outline,
+              size: _selectedIndex == 3 ? 26 : 22,
+            ),
+            label: "Đã lưu",
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person_outline,
               size: _selectedIndex == 4 ? 26 : 22,
             ),
-            label: "Tài khoản",
+            label: "Tôi",
           ),
         ],
       ),
