@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../models/article_model.dart';
 import '../../viewmodel/favorite_viewmodel.dart';
 import '../../viewmodel/article_viewmodel.dart';
 import 'article_detail.dart';
+import '../../../core/animation';
 
 class SavedArticlesScreen extends StatefulWidget {
   const SavedArticlesScreen({super.key});
@@ -28,7 +28,7 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFF2C1A1F),
       body: StreamBuilder<List<String>>(
         stream: _favoriteVM.getFavorites(user.uid),
         builder: (context, favSnap) {
@@ -70,10 +70,10 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
               return ListView.separated(
                 padding: const EdgeInsets.all(16),
                 itemCount: savedArticles.length,
-                separatorBuilder: (_, __) => Divider(
-                  height: 16,
-                  color: Colors.grey[300],
+                separatorBuilder: (_, __) => const Divider(
+                  color: Color(0xFF4A3A3F),
                   thickness: 1,
+                  height: 16,
                 ),
                 itemBuilder: (context, index) {
                   final article = savedArticles[index];
@@ -97,9 +97,7 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (_) => ArticleDetail(article: article),
-                          ),
+                          createSlideRoute(ArticleDetail(article: article)),
                         );
                       },
                       child: Padding(
@@ -141,13 +139,13 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
                                           style: const TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.black87,
+                                            color: Color.fromARGB(221, 255, 255, 255),
                                           ),
                                         ),
                                       ),
                                       PopupMenuTheme(
                                         data: const PopupMenuThemeData(
-                                          color: Colors.white,
+                                          color: Color.fromARGB(255, 201, 201, 201),
                                         ),
                                         child: PopupMenuButton<String>(
                                           icon: const Icon(
@@ -183,7 +181,7 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                        color: Colors.black54, fontSize: 13),
+                                        color: Color.fromARGB(137, 197, 197, 197), fontSize: 13),
                                   ),                               
                                 ],
                               ),

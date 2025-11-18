@@ -10,7 +10,6 @@ class ReadingHistoryScreen extends StatelessWidget {
   final String userId;
   const ReadingHistoryScreen({super.key, required this.userId});
 
-  // Hàm tính thời gian đọc gần đây
   String timeAgo(DateTime date) {
     final diff = DateTime.now().difference(date);
     if (diff.inMinutes < 60) return '${diff.inMinutes} phút trước';
@@ -23,7 +22,7 @@ class ReadingHistoryScreen extends StatelessWidget {
     final historyVM = ReadingHistoryViewModel();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFF2C1A1F),
       appBar: AppBar(
         title: const Text(
           'Bài báo đã đọc gần đây',
@@ -33,7 +32,7 @@ class ReadingHistoryScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color(0xFFD0021B),
+        backgroundColor: const Color.fromARGB(255, 59, 19, 34),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -54,13 +53,12 @@ class ReadingHistoryScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             itemCount: historyList.length,
             separatorBuilder: (_, __) => const Divider(
-              color: Color(0xFFE0E0E0),
-              thickness: 1,
-              height: 16,
+                  color: Color(0xFF4A3A3F),
+                  thickness: 1,
+                  height: 16,
             ),
             itemBuilder: (context, index) {
               final item = historyList[index];
-
               final article = ArticleModel(
                 id: item.articleId,
                 title: item.title,
@@ -111,6 +109,7 @@ class ReadingHistoryScreen extends StatelessWidget {
                             item.title,
                             style: const TextStyle(
                               fontSize: 16,
+                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                             maxLines: 1,
@@ -121,7 +120,7 @@ class ReadingHistoryScreen extends StatelessWidget {
                             item.description,
                             style: const TextStyle(
                               fontSize: 12,
-                              color: Colors.black54,
+                              color: Color.fromARGB(136, 197, 197, 197),
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,

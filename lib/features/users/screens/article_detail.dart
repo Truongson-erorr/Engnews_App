@@ -18,14 +18,13 @@ class _ArticleDetailState extends State<ArticleDetail> {
   final CommentViewModel _commentVM = CommentViewModel();
   final TextEditingController _commentController = TextEditingController();
   final FavoriteViewModel _favoriteVM = FavoriteViewModel();
-  
+
   @override
   void initState() {
     super.initState();
     _saveReadingHistory();
   }
 
-  // Hàm lưu lịch sử đọc
   void _saveReadingHistory() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -44,9 +43,9 @@ class _ArticleDetailState extends State<ArticleDetail> {
     final article = widget.article;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color(0xFF2C1A1F), 
       appBar: AppBar(
-        backgroundColor:  const Color(0xFFD0021B),
+        backgroundColor: const Color.fromARGB(255, 59, 19, 34),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
@@ -67,16 +66,24 @@ class _ArticleDetailState extends State<ArticleDetail> {
                     width: double.infinity, fit: BoxFit.cover),
               ),
             const SizedBox(height: 20),
-            Text(article.title,
-                style: const TextStyle(
-                    fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87)),
+            Text(
+              article.title,
+              style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
             const SizedBox(height: 8),
-            Text("Published: ${article.date.toLocal().toString().split(' ')[0]}",
-                style: const TextStyle(fontSize: 13, color: Colors.grey)),
+            Text(
+              "Published: ${article.date.toLocal().toString().split(' ')[0]}",
+              style: const TextStyle(fontSize: 13, color: Colors.grey),
+            ),
             const SizedBox(height: 20),
-            Text(article.content.isNotEmpty ? article.content : article.description,
-                textAlign: TextAlign.justify,
-                style: const TextStyle(fontSize: 16, height: 1.6, color: Colors.black87)),
+            Text(
+              article.content.isNotEmpty ? article.content : article.description,
+              textAlign: TextAlign.justify,
+              style: const TextStyle(fontSize: 16, height: 1.6, color: Colors.white70),
+            ),
             const SizedBox(height: 30),
 
             Row(
@@ -99,11 +106,10 @@ class _ArticleDetailState extends State<ArticleDetail> {
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
-                const SizedBox(width: 12), 
-                
+                const SizedBox(width: 12),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFD0021B),
+                    backgroundColor: const Color(0xFFD0021B),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                   ),
@@ -123,7 +129,6 @@ class _ArticleDetailState extends State<ArticleDetail> {
                       const SnackBar(content: Text("Đã lưu bài viết!")),
                     );
                   },
-
                   icon: const Icon(Icons.bookmark_add_outlined, color: Colors.white),
                   label: const Text(
                     "Lưu bài",
@@ -136,7 +141,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
             const Text(
               "Bình luận",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             const SizedBox(height: 10),
 
@@ -144,12 +149,14 @@ class _ArticleDetailState extends State<ArticleDetail> {
               stream: _commentVM.getComments(article.id),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator(color: Colors.white));
                 }
                 final comments = snapshot.data ?? [];
                 if (comments.isEmpty) {
-                  return const Text("Chưa có bình luận nào.",
-                      style: TextStyle(color: Colors.grey));
+                  return const Text(
+                    "Chưa có bình luận nào.",
+                    style: TextStyle(color: Colors.grey),
+                  );
                 }
                 return Column(
                   children: comments.map((comment) {
@@ -167,9 +174,9 @@ class _ArticleDetailState extends State<ArticleDetail> {
                       ),
                       title: Text(
                         comment.user,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                       ),
-                      subtitle: Text(comment.text),
+                      subtitle: Text(comment.text, style: const TextStyle(color: Colors.white70)),
                       trailing: Text(
                         "${comment.date.hour.toString().padLeft(2, '0')}:${comment.date.minute.toString().padLeft(2, '0')}",
                         style: const TextStyle(fontSize: 12, color: Colors.grey),
@@ -186,23 +193,23 @@ class _ArticleDetailState extends State<ArticleDetail> {
                 Expanded(
                   child: TextField(
                     controller: _commentController,
+                    style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: "Nhập bình luận...",
+                      hintStyle: const TextStyle(color: Colors.white54),
                       filled: true,
-                      fillColor: Colors.grey[200], 
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      fillColor: const Color(0xFF2C1A1F),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide.none, 
+                        borderSide: BorderSide.none,
                       ),
                     ),
                   ),
                 ),
-
                 const SizedBox(width: 8),
                 IconButton(
-                  icon: const Icon(Icons.send, color: Color.fromARGB(255, 71, 71, 71)),
+                  icon: const Icon(Icons.send, color: Colors.white),
                   onPressed: () async {
                     final text = _commentController.text.trim();
                     if (text.isEmpty) return;
@@ -220,7 +227,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                       article.id,
                       CommentModel(
                         id: '',
-                        user: user.displayName ?? user.email ?? user.uid, // tên hiển thị
+                        user: user.displayName ?? user.email ?? user.uid,
                         text: text,
                         date: DateTime.now(),
                       ),

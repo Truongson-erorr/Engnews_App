@@ -126,7 +126,7 @@ class AuthenViewModel extends ChangeNotifier {
       if (googleUser == null) {
         isLoading = false;
         notifyListeners();
-        return false; // user cancelled
+        return false; 
       }
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -144,7 +144,7 @@ class AuthenViewModel extends ChangeNotifier {
       if (!doc.exists) {
         final newUser = UserModel(
           uid: user.uid,
-          fullName: user.displayName ?? 'Người dùng Google', // keep Vietnamese
+          fullName: user.displayName ?? 'Người dùng Google',
           phone: user.phoneNumber ?? '',
           email: user.email ?? '',
           image: user.photoURL ?? '',
@@ -161,8 +161,8 @@ class AuthenViewModel extends ChangeNotifier {
       return true;
       
     } catch (e) {
-      print('🔥 Lỗi đăng nhập Google: $e'); // keep Vietnamese
-      errorMessage = 'Đăng nhập Google thất bại: $e'; // keep Vietnamese
+      print('🔥 Lỗi đăng nhập Google: $e'); 
+      errorMessage = 'Đăng nhập Google thất bại: $e'; 
       isLoading = false;
       notifyListeners();
       return false;
@@ -198,7 +198,7 @@ class AuthenViewModel extends ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
-      errorMessage = 'Lỗi khi cập nhật thông tin: $e'; // keep Vietnamese
+      errorMessage = 'Lỗi khi cập nhật thông tin: $e'; 
       notifyListeners();
     }
   }

@@ -26,7 +26,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -36,12 +35,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       );
     } on FirebaseAuthException catch (e) {
       String message = "Đã có lỗi xảy ra. Vui lòng thử lại.";
-
-      if (e.code == 'user-not-found') {
-        message = "Không tìm thấy tài khoản với email này.";
-      } else if (e.code == 'invalid-email') {
-        message = "Địa chỉ email không hợp lệ.";
-      }
+      if (e.code == 'user-not-found') message = "Không tìm thấy tài khoản với email này.";
+      else if (e.code == 'invalid-email') message = "Địa chỉ email không hợp lệ.";
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(message)),
@@ -54,21 +49,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFF1E0B12), 
       appBar: AppBar(
+        backgroundColor: const Color(0xFF1E0B12),
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Quên mật khẩu",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
+        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -77,26 +72,31 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Text(
               "Nhập địa chỉ email của bạn để nhận hướng dẫn đặt lại mật khẩu.",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[700],
-              ),
+              style: TextStyle(color: Colors.grey[300], fontSize: 16),
             ),
             const SizedBox(height: 30),
 
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
+              style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 labelText: "Email",
+                labelStyle: const TextStyle(color: Colors.white70),
                 filled: true,
-                fillColor: Colors.grey[200],
-                border: const OutlineInputBorder(borderSide: BorderSide.none),
+                fillColor: const Color(0xFF2C1A1F),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none,
+                ),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
               ),
             ),
             const SizedBox(height: 30),
@@ -107,9 +107,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               child: ElevatedButton(
                 onPressed: _isLoading ? null : _resetPassword,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFD0021B),
+                  backgroundColor: const Color(0xFF8B0000),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(3),
+                    borderRadius: BorderRadius.circular(15),
                   ),
                 ),
                 child: _isLoading
