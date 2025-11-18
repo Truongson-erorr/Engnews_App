@@ -43,9 +43,8 @@ class _HomeTabState extends State<HomeTab> {
     final articles = await _articleVM.fetchArticles();
     if (articles.isNotEmpty) {
       final random = Random();
-      // chọn ngẫu nhiên 3 bài làm tin nổi bật
       _highlightArticles = List.generate(
-        3,
+        5,
         (_) => articles[random.nextInt(articles.length)],
       );
       setState(() {});
@@ -112,7 +111,7 @@ class _HomeTabState extends State<HomeTab> {
                           createSlideRoute(ArticleDetail(article: article)),
                         );
                       },
-                      child: Stack(
+                      child: Stack( 
                         children: [
                           Image.network(
                             article.image,
@@ -120,6 +119,7 @@ class _HomeTabState extends State<HomeTab> {
                             height: double.infinity,
                             fit: BoxFit.cover,
                           ),
+                          
                           Container(
                             alignment: Alignment.bottomLeft,
                             padding: const EdgeInsets.all(12),
@@ -133,6 +133,26 @@ class _HomeTabState extends State<HomeTab> {
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          
+                          Positioned( 
+                            top: 10, 
+                            left: 10, 
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.red.withOpacity(0.8), 
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: const Text(
+                                "TIN MỚI",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -166,7 +186,7 @@ class _HomeTabState extends State<HomeTab> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                              color: isSelected ? const Color(0xFFD0021B) : Colors.black87,
+                              color: isSelected ? const Color(0xFFD0021B) : const Color.fromARGB(221, 255, 255, 255),
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -191,23 +211,33 @@ class _HomeTabState extends State<HomeTab> {
             future: _futureArticles,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator(color: Colors.white));
               }
 
               if (snapshot.hasError) {
-                return Center(child: Text('Lỗi: ${snapshot.error}'));
+                return Center(
+                  child: Text(
+                    'Lỗi: ${snapshot.error}',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                );
               }
 
               final articles = snapshot.data ?? [];
               if (articles.isEmpty) {
-                return const Center(child: Text('Chưa có bài báo nào.'));
+                return const Center(
+                  child: Text(
+                    'Chưa có bài báo nào.',
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                );
               }
 
               return ListView.separated(
                 padding: const EdgeInsets.all(16),
                 itemCount: articles.length,
                 separatorBuilder: (_, __) => const Divider(
-                  color: Color.fromARGB(255, 224, 224, 224), 
+                  color: Color(0xFF4A3A3F),
                   thickness: 1,
                   height: 16,
                 ),
@@ -221,9 +251,12 @@ class _HomeTabState extends State<HomeTab> {
                       );
                     },
                     child: Container(
-                      height: 110, 
+                      height: 110,
                       padding: const EdgeInsets.all(8),
-                      color: Colors.white,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2C1A1F), 
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: Row(
                         children: [
                           Expanded(
@@ -236,6 +269,7 @@ class _HomeTabState extends State<HomeTab> {
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -243,14 +277,20 @@ class _HomeTabState extends State<HomeTab> {
                                 const SizedBox(height: 4),
                                 Text(
                                   article.description,
-                                  style: const TextStyle(fontSize: 12, color: Colors.black54),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[300], 
+                                  ),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   'Ngày đăng: ${article.date.toLocal().day}/${article.date.toLocal().month}/${article.date.toLocal().year}',
-                                  style: const TextStyle(fontSize: 10, color: Color.fromARGB(255, 109, 109, 109)),
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.grey[500], 
+                                  ),
                                 ),
                               ],
                             ),
@@ -258,7 +298,7 @@ class _HomeTabState extends State<HomeTab> {
                           const SizedBox(width: 8),
                           if (article.image.isNotEmpty)
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(8), // bo tròn 8
+                              borderRadius: BorderRadius.circular(8),
                               child: Image.network(
                                 article.image,
                                 height: 90,
@@ -274,7 +314,7 @@ class _HomeTabState extends State<HomeTab> {
               );
             },
           ),
-        ),
+        )
       ],
     );
   }

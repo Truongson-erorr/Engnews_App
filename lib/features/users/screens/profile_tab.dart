@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../../viewmodel/authen_viewmodel.dart';
 import '../screens/login_screen.dart';
 import '../screens/reading_history_screen.dart';
-import '../screens/saved_articles_screen.dart';
 import '../screens/edit_profile_screen.dart';
 import '../../../core/animation';
 
@@ -24,7 +23,7 @@ class ProfileTab extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
+      backgroundColor: const Color(0xFF2C1A1F),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -78,7 +77,7 @@ class ProfileTab extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Color.fromARGB(221, 255, 255, 255),
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -224,7 +223,7 @@ class ProfileTab extends StatelessWidget {
   Widget _buildMenuItem({
     required IconData icon,
     required String title,
-    Color color = Colors.black87,
+    Color color = const Color.fromARGB(221, 255, 255, 255),
     required VoidCallback onTap,
   }) {
     return ListTile(
