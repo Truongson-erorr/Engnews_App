@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../../models/article_model.dart';
 import 'article_detail.dart';
 import '../../viewmodel/category_viewmodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../../viewmodel/reading_history_viewmodel.dart';
+import '../../../core/animation';
 
 class ArticlesByCategoryScreen extends StatefulWidget {
   final String categoryId;
@@ -20,6 +23,7 @@ class ArticlesByCategoryScreen extends StatefulWidget {
 class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
   final CategoryViewModel _viewModel = CategoryViewModel();
   late Future<List<ArticleModel>> _futureArticles;
+  final String userId = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   void initState() {
@@ -83,14 +87,25 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
               final article = articles[index];
               return InkWell(
                 borderRadius: BorderRadius.circular(12),
-                onTap: () {
+                highlightColor: Colors.transparent, 
+                splashColor: Colors.transparent,    
+                hoverColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                onTap: () async {
+                  await ReadingHistoryViewModel().addOrUpdateHistory(
+                    userId: userId,
+                    articleId: article.id,
+                    title: article.title,
+                    description: article.description,
+                    image: article.image,
+                  );
+
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => ArticleDetail(article: article),
-                    ),
+                    createSlideRoute(ArticleDetail(article: article)),
                   );
                 },
+
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color(0xFF2C1A1F), 
