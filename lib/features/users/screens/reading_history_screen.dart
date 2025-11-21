@@ -12,8 +12,16 @@ class ReadingHistoryScreen extends StatelessWidget {
 
   String timeAgo(DateTime date) {
     final diff = DateTime.now().difference(date);
-    if (diff.inMinutes < 60) return '${diff.inMinutes} phút trước';
-    if (diff.inHours < 24) return '${diff.inHours} giờ trước';
+
+    if (diff.inSeconds < 60) {
+      return '${diff.inSeconds} giây trước';
+    }
+    if (diff.inMinutes < 60) {
+      return '${diff.inMinutes} phút trước';
+    }
+    if (diff.inHours < 24) {
+      return '${diff.inHours} giờ trước';
+    }
     return '${diff.inDays} ngày trước';
   }
 

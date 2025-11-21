@@ -3,9 +3,11 @@ import '../../models/article_model.dart';
 import '../../viewmodel/article_viewmodel.dart';
 import '../../viewmodel/category_viewmodel.dart';
 import '../../models/category_model.dart';
+import '../../viewmodel/reading_history_viewmodel.dart';
 import 'article_detail.dart';
 import '../../../core/animation';
 import 'dart:math';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -18,12 +20,13 @@ class _HomeTabState extends State<HomeTab> {
   final ArticleViewModel _articleVM = ArticleViewModel();
   final CategoryViewModel _categoryVM = CategoryViewModel();
 
+  final String userId = FirebaseAuth.instance.currentUser!.uid;
+
   List<CategoryModel> _categories = [];
   String? _selectedCategoryId;
 
   late Future<List<ArticleModel>> _futureArticles;
 
-  // Tin nổi bật (banner)
   List<ArticleModel> _highlightArticles = [];
   int _currentBannerIndex = 0;
   late PageController _pageController;
@@ -105,7 +108,15 @@ class _HomeTabState extends State<HomeTab> {
                   itemBuilder: (context, index) {
                     final article = _highlightArticles[index];
                     return GestureDetector(
-                      onTap: () {
+                      onTap: () async {
+                        await ReadingHistoryViewModel().addOrUpdateHistory(
+                          userId: userId,
+                          articleId: article.id,
+                          title: article.title,
+                          description: article.description,
+                          image: article.image,
+                        );
+
                         Navigator.push(
                           context,
                           createSlideRoute(ArticleDetail(article: article)),
@@ -136,13 +147,13 @@ class _HomeTabState extends State<HomeTab> {
                             ),
                           ),
                           
-                          Positioned( 
+                          Positioned(
                             top: 10, 
                             left: 10, 
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
-                                color: Colors.red.withOpacity(0.8), 
+                                color: Colors.red.withOpacity(0.8),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: const Text(
@@ -161,6 +172,7 @@ class _HomeTabState extends State<HomeTab> {
                   },
                 ),
         ),
+
         const SizedBox(height: 8),
 
         SizedBox(
@@ -193,7 +205,7 @@ class _HomeTabState extends State<HomeTab> {
                           AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             height: 3,
-                            width: isSelected ? 24 : 0, 
+                            width: isSelected ? 24 : 0,
                             decoration: BoxDecoration(
                               color: isSelected ? const Color(0xFFD0021B) : Colors.transparent,
                               borderRadius: BorderRadius.circular(2),
@@ -244,7 +256,15 @@ class _HomeTabState extends State<HomeTab> {
                 itemBuilder: (context, index) {
                   final article = articles[index];
                   return GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      await ReadingHistoryViewModel().addOrUpdateHistory(
+                        userId: userId,
+                        articleId: article.id,
+                        title: article.title,
+                        description: article.description,
+                        image: article.image,
+                      );
+
                       Navigator.push(
                         context,
                         createSlideRoute(ArticleDetail(article: article)),
@@ -254,7 +274,7 @@ class _HomeTabState extends State<HomeTab> {
                       height: 110,
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF2C1A1F), 
+                        color: const Color(0xFF2C1A1F),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -279,7 +299,7 @@ class _HomeTabState extends State<HomeTab> {
                                   article.description,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey[300], 
+                                    color: Colors.grey[300],
                                   ),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -289,7 +309,7 @@ class _HomeTabState extends State<HomeTab> {
                                   'Ngày đăng: ${article.date.toLocal().day}/${article.date.toLocal().month}/${article.date.toLocal().year}',
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: Colors.grey[500], 
+                                    color: Colors.grey[500],
                                   ),
                                 ),
                               ],
