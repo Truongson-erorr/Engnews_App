@@ -47,7 +47,7 @@ class _HomeTabState extends State<HomeTab> {
     if (articles.isNotEmpty) {
       final random = Random();
       _highlightArticles = List.generate(
-        5,
+        7,
         (_) => articles[random.nextInt(articles.length)],
       );
       setState(() {});

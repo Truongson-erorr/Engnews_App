@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'home_tab.dart';
 import 'search_tab.dart';
 import 'category_tab.dart';
-import 'support_tab.dart';
+import 'podcast_tab.dart';
 import 'profile_tab.dart';
 import 'saved_articles_screen.dart';
 import '../../../core/animation';
@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     HomeTab(key: ValueKey('home')),
     CategoryTab(key: ValueKey('category')),
-    SupportTab(key: ValueKey('support')),
+    PodcastTab(key: ValueKey('podcast')),
     SavedArticlesScreen(key: ValueKey('saved')),
     ProfileTab(key: ValueKey('profile')),
   ];

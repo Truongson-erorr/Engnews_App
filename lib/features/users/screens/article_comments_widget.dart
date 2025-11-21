@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; 
 import '../../models/article_model.dart';
 import '../../models/comment_model.dart';
 import '../../viewmodel/comment_viewmodel.dart';
@@ -16,6 +17,8 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
   final CommentViewModel _commentVM = CommentViewModel();
   final TextEditingController _commentController = TextEditingController();
 
+  final DateFormat _dateFormat = DateFormat('dd/MM/yyyy HH:mm'); 
+
   @override
   Widget build(BuildContext context) {
     final article = widget.article;
@@ -23,7 +26,10 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Bình luận", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+        const Text(
+          "Bình luận",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
         const SizedBox(height: 10),
         StreamBuilder<List<CommentModel>>(
           stream: _commentVM.getComments(article.id),
@@ -41,12 +47,15 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundColor: Colors.blueAccent,
-                    child: Text(firstLetter, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    child: Text(
+                      firstLetter,
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
                   ),
                   title: Text(comment.user, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
                   subtitle: Text(comment.text, style: const TextStyle(color: Colors.white70)),
                   trailing: Text(
-                    "${comment.date.hour.toString().padLeft(2, '0')}:${comment.date.minute.toString().padLeft(2, '0')}",
+                    _dateFormat.format(comment.date), 
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 );
