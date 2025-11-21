@@ -4,8 +4,8 @@ import '../models/reading_history_model.dart';
 class ReadingHistoryViewModel {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// Add an article to reading history (only if it does not exist)
-  Future<void> addToHistoryOnce({
+  /// Add or update reading history 
+  Future<void> addOrUpdateHistory({
     required String userId,
     required String articleId,
     required String title,
@@ -13,7 +13,6 @@ class ReadingHistoryViewModel {
     required String image,
   }) async {
     try {
-      // Check if the article already exists in the user's history
       final query = await _firestore
           .collection('reading_history')
           .where('userId', isEqualTo: userId)
@@ -21,7 +20,7 @@ class ReadingHistoryViewModel {
           .get();
 
       if (query.docs.isEmpty) {
-        // Add the article to the reading history
+        // Add new record
         await _firestore.collection('reading_history').add({
           'userId': userId,
           'articleId': articleId,
@@ -30,9 +29,15 @@ class ReadingHistoryViewModel {
           'image': image,
           'readAt': DateTime.now(),
         });
+      } else {
+        // Update existing record → push it to top
+        final docId = query.docs.first.id;
+        await _firestore.collection('reading_history').doc(docId).update({
+          'readAt': DateTime.now(),
+        });
       }
     } catch (e) {
-      print('Error saving reading history: $e');
+      print('Error updating reading history: $e');
     }
   }
 
