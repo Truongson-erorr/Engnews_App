@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart'; 
 import 'firebase_options.dart'; 
 import 'features/users/screens/login_screen.dart';
 import 'features/viewmodel/authen_viewmodel.dart';
@@ -16,7 +17,7 @@ void main() async {
     ChangeNotifierProvider(
       create: (_) {
         final vm = AuthenViewModel();
-        vm.fetchCurrentUser(); // Load thông tin user khi app khởi tạo
+        vm.fetchCurrentUser(); 
         return vm;
       },
       child: const MyApp(),
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        textTheme: GoogleFonts.interTextTheme(
+          Theme.of(context).textTheme, 
+        ),
       ),
       home: const LoginScreen(), 
     );

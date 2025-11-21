@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FavoriteViewModel {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// Lưu bài viết (tạo document mới trong collection favorites)
+  /// Save an article (create a new document in favorites collection)
   Future<void> saveFavorite(String userId, String articleId) async {
     await _firestore.collection("favorites").add({
       "userId": userId,
@@ -12,7 +12,7 @@ class FavoriteViewModel {
     });
   }
 
-  /// Xoá bài viết đã lưu 
+  /// Remove a saved article
   Future<void> removeFavorite(String userId, String articleId) async {
     final snapshot = await _firestore
         .collection("favorites")
@@ -25,7 +25,7 @@ class FavoriteViewModel {
     }
   }
 
-  /// Kiểm tra xem bài viết này đã được lưu chưa
+  /// Check if an article is saved by the user
   Stream<bool> isFavorite(String userId, String articleId) {
     return _firestore
         .collection("favorites")
@@ -35,7 +35,7 @@ class FavoriteViewModel {
         .map((snap) => snap.docs.isNotEmpty);
   }
 
-  /// Lấy danh sách ID bài viết mà user đã lưu
+  /// Get a list of article IDs saved by the user
   Stream<List<String>> getFavorites(String userId) {
     return _firestore
         .collection("favorites")

@@ -23,61 +23,85 @@ class _CategoryTabState extends State<CategoryTab> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<CategoryModel>>(
-      future: _futureCategories,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return Container(
+      color: const Color(0xFF2C1A1F), 
+      child: FutureBuilder<List<CategoryModel>>(
+        future: _futureCategories,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator(color: Colors.white));
+          }
 
-        if (snapshot.hasError) {
-          return Center(child: Text('Lỗi: ${snapshot.error}'));
-        }
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'Lỗi: ${snapshot.error}',
+                style: const TextStyle(color: Colors.white),
+              ),
+            );
+          }
 
-        final categories = snapshot.data ?? [];
+          final categories = snapshot.data ?? [];
 
-        if (categories.isEmpty) {
-          return const Center(child: Text('Chưa có danh mục nào.'));
-        }
+          if (categories.isEmpty) {
+            return const Center(
+              child: Text(
+                'Chưa có danh mục nào.',
+                style: TextStyle(color: Colors.white70),
+              ),
+            );
+          }
 
-        return ListView.separated(
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
-          itemCount: categories.length,
-          separatorBuilder: (_, __) => const Divider(height: 1),
-          itemBuilder: (context, index) {
-            final category = categories[index];
+          return ListView.separated(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            itemCount: categories.length,
+            separatorBuilder: (_, __) => const Divider(
+                  color: Color(0xFF4A3A3F),
+                  thickness: 1,
+                  height: 16,
+            ),
+            itemBuilder: (context, index) {
+              final category = categories[index];
 
-            return ListTile(
-              contentPadding: const EdgeInsets.symmetric(vertical: 8),
-              leading: const Icon(Icons.label_outline, color: Color(0xFFD0021B)),
-              title: Text(
-                category.title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87,
+              return Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2C1A1F), 
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
-              subtitle: Text(
-                category.description,
-                style: const TextStyle(color: Colors.black54),
-              ),
-              trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  createSlideRoute(
-                    ArticlesByCategoryScreen(
-                      categoryId: category.id,
-                      categoryTitle: category.title,
+                margin: const EdgeInsets.symmetric(vertical: 6),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  leading: const Icon(Icons.label_outline, color: Color(0xFFD0021B)),
+                  title: Text(
+                    category.title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
                     ),
                   ),
-                );
-              },
-            );
-          },
-        );
-      },
+                  subtitle: Text(
+                    category.description,
+                    style: const TextStyle(color: Colors.white70),
+                  ),
+                  trailing: const Icon(Icons.chevron_right, color: Colors.white70),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      createSlideRoute(
+                        ArticlesByCategoryScreen(
+                          categoryId: category.id,
+                          categoryTitle: category.title,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

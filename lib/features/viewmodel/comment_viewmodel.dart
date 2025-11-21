@@ -4,7 +4,7 @@ import '../models/comment_model.dart';
 class CommentViewModel {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Lấy tất cả comment của 1 bài viết
+  // Get all comments for an article
   Stream<List<CommentModel>> getComments(String articleId) {
     return _firestore
         .collection('articles')
@@ -16,7 +16,7 @@ class CommentViewModel {
             snapshot.docs.map((doc) => CommentModel.fromFirestore(doc)).toList());
   }
 
-  // Thêm comment mới
+  // Add a new comment
   Future<void> addComment(String articleId, CommentModel comment) async {
     await _firestore
         .collection('articles')

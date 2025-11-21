@@ -4,42 +4,42 @@ import '../models/article_model.dart';
 class ArticleViewModel {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// Lấy danh sách tất cả bài viết từ Firestore
+  // Fetch all articles
   Future<List<ArticleModel>> fetchArticles() async {
     try {
-      // Lấy toàn bộ tài liệu trong collection 'articles'
       final snapshot = await _firestore.collection('articles').get();
-
-      // Chuyển dữ liệu Firestore thành danh sách ArticleModel
       return snapshot.docs.map((doc) => ArticleModel.fromFirestore(doc)).toList();
     } catch (e) {
-      print('Lỗi khi lấy bài báo: $e');
+      print('Error fetching articles: $e');
       return [];
     }
   }
 
+  // Fetch article by ID
+  Future<ArticleModel?> getArticleById(String articleId) async {
+    try {
+      final doc = await _firestore.collection('articles').doc(articleId).get();
+      if (doc.exists) {
+        return ArticleModel.fromFirestore(doc);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching article by ID: $e');
+      return null;
+    }
+  }
+
+  // Search articles by title (case-insensitive)
   Future<List<ArticleModel>> searchArticlesByTitle(String keyword) async {
     try {
-      // Chuyển từ khóa về chữ thường để tìm chính xác hơn
       final lowerKeyword = keyword.toLowerCase();
-
-      // Lấy tất cả bài viết trước rồi lọc bằng Dart (client-side)
       final snapshot = await _firestore.collection('articles').get();
-
-      final allArticles = snapshot.docs
-          .map((doc) => ArticleModel.fromFirestore(doc))
-          .toList();
-
-      // Lọc theo tiêu đề có chứa từ khóa (không phân biệt hoa thường)
-      final results = allArticles.where((article) {
-        return article.title.toLowerCase().contains(lowerKeyword);
-      }).toList();
-
-      return results;
+      final allArticles = snapshot.docs.map((doc) => ArticleModel.fromFirestore(doc)).toList();
+      return allArticles.where((article) => article.title.toLowerCase().contains(lowerKeyword)).toList();
     } catch (e) {
-      print('Lỗi khi tìm bài viết: $e');
+      print('Error searching articles: $e');
       return [];
     }
   }
-
 }

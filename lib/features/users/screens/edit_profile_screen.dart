@@ -18,6 +18,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   bool _isSaving = false;
 
+  static const Color _darkFieldColor = Color(0xFF3F2B31); 
+  static const Color _darkTextColor = Colors.white70; 
+
   @override
   void initState() {
     super.initState();
@@ -70,14 +73,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4F6),
+      backgroundColor: const Color(0xFF2C1A1F),
       appBar: AppBar(
         title: const Text(
           "Chỉnh sửa thông tin cá nhân",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: const Color.fromARGB(255, 59, 19, 34),
+        foregroundColor: Colors.white,
         elevation: 0.5,
         centerTitle: true,
       ),
@@ -93,6 +96,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 label: "Họ và tên",
                 icon: Icons.person_outline,
                 validator: (v) => v!.isEmpty ? "Vui lòng nhập họ tên" : null,
+                fillColor: _darkFieldColor, 
               ),
               const SizedBox(height: 20),
               _buildTextField(
@@ -101,6 +105,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 icon: Icons.phone_outlined,
                 keyboardType: TextInputType.phone,
                 validator: (v) => v!.isEmpty ? "Vui lòng nhập số điện thoại" : null,
+                fillColor: _darkFieldColor, 
               ),
               const SizedBox(height: 20),
               _buildTextField(
@@ -108,7 +113,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 label: "Email",
                 icon: Icons.email_outlined,
                 readOnly: true,
-                fillColor: const Color(0xFFE5E7EB),
+                fillColor: _darkFieldColor,
               ),
               const SizedBox(height: 40),
               SizedBox(
@@ -117,7 +122,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: ElevatedButton(
                   onPressed: _isSaving ? null : _saveChanges,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFD0021B),
+                    backgroundColor: const Color(0xFFD0021B),
                     elevation: 2,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
@@ -156,22 +161,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       readOnly: readOnly,
       keyboardType: keyboardType,
       validator: validator,
+      style: const TextStyle(color: Colors.white), 
       decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: const Color.fromARGB(255, 97, 97, 97)),
+        prefixIcon: Icon(icon, color: _darkTextColor),
         labelText: label,
-        labelStyle: const TextStyle(fontSize: 14, color: Colors.black87),
+
+        labelStyle: const TextStyle(fontSize: 14, color: _darkTextColor),
+        errorStyle: const TextStyle(color: Color(0xFFFF8A80)), 
         filled: true,
         fillColor: fillColor,
         border: InputBorder.none,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide.none,
         ),
+
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide.none,
         ),
+
       ),
     );
   }
