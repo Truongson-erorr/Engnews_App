@@ -36,8 +36,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
-        textTheme: GoogleFonts.interTextTheme(
-          Theme.of(context).textTheme, 
+        textTheme: GoogleFonts.baloo2TextTheme(
+          Theme.of(context).textTheme,
         ),
       ),
       home: const LoginScreen(), 

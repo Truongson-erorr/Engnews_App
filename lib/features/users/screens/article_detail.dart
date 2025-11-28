@@ -4,6 +4,8 @@ import '../../viewmodel/translateViewModel.dart';
 import '../../viewmodel/favorite_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../screens/article_comments_widget.dart';
+import '../screens/related_articles_widget.dart';
+import '../screens/ramdom_article.dart';
 
 class ArticleDetail extends StatefulWidget {
   final ArticleModel article;
@@ -153,9 +155,15 @@ class _ArticleDetailState extends State<ArticleDetail> {
                           style: const TextStyle(fontSize: 16, height: 1.6, color: Colors.white70)),
                     ],
             ),
-
             const SizedBox(height: 40),
             ArticleCommentsWidget(article: article),
+
+            RelatedArticlesWidget(
+              categoryId: widget.article.categoryId,
+              currentArticleId: widget.article.id,
+            ),
+
+            RandomArticlesWidget()
           ],
         ),
       ),
