@@ -4,7 +4,6 @@ import '../../models/article_model.dart';
 import '../../../core/animation';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../viewmodel/reading_history_viewmodel.dart';
-import '../../models/article_model.dart';
 import 'article_detail.dart';
 
 class SearchScreen extends StatefulWidget {
