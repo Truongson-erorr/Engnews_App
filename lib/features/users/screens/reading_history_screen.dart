@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../models/reading_history_model.dart';
 import '../../models/article_model.dart';
 import '../../viewmodel/reading_history_viewmodel.dart';
-import '../../viewmodel/article_viewmodel.dart';
 import '../../../core/animation';
 import '../screens/article_detail.dart';
 
@@ -80,20 +79,21 @@ class ReadingHistoryScreen extends StatelessWidget {
               );
 
               return GestureDetector(
-                onTap: () async {
-                  final articleVM = ArticleViewModel();
-                  final fullArticle = await articleVM.getArticleById(item.articleId);
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    createSlideRoute(ArticleDetail(article: article)),
+                  );
 
-                  if (fullArticle != null) {
-                    Navigator.push(
-                      context,
-                      createSlideRoute(ArticleDetail(article: fullArticle)),
+                  Future.microtask(() {
+                    ReadingHistoryViewModel().addOrUpdateHistory(
+                      userId: userId,
+                      articleId: article.id,
+                      title: article.title,
+                      description: article.description,
+                      image: article.image,
                     );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Không tìm thấy bài báo.')),
-                    );
-                  }
+                  });
                 },
                 child: Row(
                   children: [

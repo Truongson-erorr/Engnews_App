@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 /// Model representing a Podcast
 class PodcastModel {
   final String title;

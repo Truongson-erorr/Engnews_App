@@ -92,7 +92,7 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
                 hoverColor: Colors.transparent,
                 focusColor: Colors.transparent,
                 onTap: () async {
-                  await ReadingHistoryViewModel().addOrUpdateHistory(
+                  ReadingHistoryViewModel().addOrUpdateHistory(
                     userId: userId,
                     articleId: article.id,
                     title: article.title,

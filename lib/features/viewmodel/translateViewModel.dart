@@ -1,5 +1,4 @@
 import 'package:translator/translator.dart';
-import '../models/article_model.dart';
 
 class TranslateViewModel {
   // Cache to store already translated texts to avoid repeated API calls

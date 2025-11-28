@@ -2,27 +2,42 @@ import 'package:flutter/material.dart';
 
 Route createSlideRoute(Widget page) {
   return PageRouteBuilder(
-    transitionDuration: const Duration(milliseconds: 400),
-    reverseTransitionDuration: const Duration(milliseconds: 400),
+    transitionDuration: const Duration(milliseconds: 400), // hơi chậm, mượt
+    reverseTransitionDuration: const Duration(milliseconds: 350),
     pageBuilder: (context, animation, secondaryAnimation) => page,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      // New page slides from right
-      final offsetAnimation = Tween<Offset>(
+      // Curve tự nhiên
+      final curvedAnimation = CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeInOutCubic,
+      );
+
+      // Slide từ phải sang
+      final slideAnimation = Tween<Offset>(
         begin: const Offset(1.0, 0.0),
         end: Offset.zero,
-      ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut));
+      ).animate(curvedAnimation);
 
-      // The old page slides slightly to the left when forward
-      final secondaryOffsetAnimation = Tween<Offset>(
-        begin: Offset.zero,
-        end: const Offset(-0.3, 0.0),
-      ).animate(CurvedAnimation(parent: secondaryAnimation, curve: Curves.easeInOut));
+      // Scale nhỏ khi xuất hiện
+      final scaleAnimation = Tween<double>(
+        begin: 0.95,
+        end: 1.0,
+      ).animate(curvedAnimation);
+
+      // Fade nhẹ
+      final fadeAnimation = Tween<double>(
+        begin: 0.0,
+        end: 1.0,
+      ).animate(curvedAnimation);
 
       return SlideTransition(
-        position: secondaryOffsetAnimation,
-        child: SlideTransition(
-          position: offsetAnimation,
-          child: child,
+        position: slideAnimation,
+        child: FadeTransition(
+          opacity: fadeAnimation,
+          child: ScaleTransition(
+            scale: scaleAnimation,
+            child: child,
+          ),
         ),
       );
     },
