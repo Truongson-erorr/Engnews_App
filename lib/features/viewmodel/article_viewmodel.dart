@@ -42,4 +42,33 @@ class ArticleViewModel {
       return [];
     }
   }
+
+  // Get up to 5 related posts in the same category, excluding the current post
+  Future<List<ArticleModel>> fetchRelatedArticles(String categoryId, String excludeId) async {
+  final snapshot = await FirebaseFirestore.instance
+      .collection('articles')
+      .where('categoryId', isEqualTo: categoryId)
+      .limit(5)
+      .get();
+
+  return snapshot.docs
+      .map((doc) => ArticleModel.fromFirestore(doc))
+      .where((a) => a.id != excludeId)
+      .toList();
+  }
+
+  // Get 10 random posts form firestore
+  Future<List<ArticleModel>> fetchRandomArticles({int limit = 10}) async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('articles')
+        .get();
+
+    final allArticles = snapshot.docs
+        .map((doc) => ArticleModel.fromFirestore(doc))
+        .toList();
+
+    allArticles.shuffle(); 
+    return allArticles.take(limit).toList();
+  }
+
 }
