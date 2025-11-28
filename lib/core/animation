@@ -6,13 +6,13 @@ Route createSlideRoute(Widget page) {
     reverseTransitionDuration: const Duration(milliseconds: 400),
     pageBuilder: (context, animation, secondaryAnimation) => page,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      // Trang mới trượt từ phải sang
+      // New page slides from right
       final offsetAnimation = Tween<Offset>(
         begin: const Offset(1.0, 0.0),
         end: Offset.zero,
       ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut));
 
-      // Trang cũ trượt nhẹ sang trái khi forward
+      // The old page slides slightly to the left when forward
       final secondaryOffsetAnimation = Tween<Offset>(
         begin: Offset.zero,
         end: const Offset(-0.3, 0.0),

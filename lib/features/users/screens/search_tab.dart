@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import '../../viewmodel/article_viewmodel.dart';
 import '../../models/article_model.dart';
 import '../../../core/animation';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../../viewmodel/reading_history_viewmodel.dart';
+import '../../models/article_model.dart';
+import 'article_detail.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -13,6 +17,8 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final ArticleViewModel _articleVM = ArticleViewModel();
   final TextEditingController _searchController = TextEditingController();
+
+  final String userId = FirebaseAuth.instance.currentUser!.uid;
 
   List<ArticleModel> _results = [];
   bool _isLoading = false;
@@ -159,8 +165,23 @@ class _SearchScreenState extends State<SearchScreen> {
                                 final article = _results[index];
                                 return InkWell(
                                   borderRadius: BorderRadius.circular(12),
-                                  onTap: () {
-                                    // TODO: mở chi tiết bài viết
+                                  highlightColor: Colors.transparent, 
+                                  splashColor: Colors.transparent,    
+                                  hoverColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  onTap: () async {
+                                    await ReadingHistoryViewModel().addOrUpdateHistory(
+                                      userId: userId,
+                                      articleId: article.id,
+                                      title: article.title,
+                                      description: article.description,
+                                      image: article.image,
+                                    );
+
+                                    Navigator.push(
+                                      context,
+                                      createSlideRoute(ArticleDetail(article: article)),
+                                    );
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(8),
