@@ -58,7 +58,7 @@ class ArticleViewModel {
   }
 
   // Get 10 random posts form firestore
-  Future<List<ArticleModel>> fetchRandomArticles({int limit = 10}) async {
+  Future<List<ArticleModel>> fetchRandomArticles({int limit = 15}) async {
     final snapshot = await FirebaseFirestore.instance
         .collection('articles')
         .get();

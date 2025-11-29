@@ -123,7 +123,7 @@ class _HomeTabState extends State<HomeTab> {
                           Text(
                             category.title,
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 18,
                               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                               color: isSelected
                                   ? const Color(0xFFD0021B)
@@ -218,7 +218,7 @@ class _HomeTabState extends State<HomeTab> {
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),
-                                      maxLines: 1,
+                                      maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     const SizedBox(height: 4),
@@ -228,8 +228,16 @@ class _HomeTabState extends State<HomeTab> {
                                         fontSize: 12,
                                         color: Colors.grey[300],
                                       ),
-                                      maxLines: 2,
+                                      maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      "Ngày đăng: ${article.date}",
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: const Color.fromARGB(255, 110, 110, 110),
+                                      ),
                                     ),
                                   ],
                                 ),

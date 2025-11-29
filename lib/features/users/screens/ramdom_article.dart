@@ -19,7 +19,7 @@ class RandomArticlesWidget extends StatelessWidget {
         ),
 
         FutureBuilder<List<ArticleModel>>(
-          future: ArticleViewModel().fetchRandomArticles(limit: 10),
+          future: ArticleViewModel().fetchRandomArticles(limit: 15),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Padding(

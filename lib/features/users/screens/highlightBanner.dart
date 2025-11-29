@@ -52,7 +52,7 @@ class _HighlightBannerState extends State<HighlightBanner> {
     }
 
     return SizedBox(
-      height: 230,
+      height: 160,
       child: PageView.builder(
         controller: _pageController,
         itemCount: widget.articles.length,
