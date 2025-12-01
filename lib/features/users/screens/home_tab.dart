@@ -21,7 +21,7 @@ class _HomeTabState extends State<HomeTab> {
   final ArticleViewModel _articleVM = ArticleViewModel();
   final CategoryViewModel _categoryVM = CategoryViewModel();
 
-  final String userId = FirebaseAuth.instance.currentUser!.uid;
+  String? userId;
 
   List<CategoryModel> _categories = [];
   String? _selectedCategoryId;
@@ -37,6 +37,8 @@ class _HomeTabState extends State<HomeTab> {
     _categoryPageController = PageController();
     _menuScrollController = ScrollController();
 
+    userId = FirebaseAuth.instance.currentUser?.uid;
+
     _loadCategories();
     _loadHighlightArticles();
   }
@@ -50,14 +52,18 @@ class _HomeTabState extends State<HomeTab> {
 
   void _loadCategories() async {
     final cats = await _categoryVM.fetchCategories();
+    if (!mounted) return;
     setState(() {
       _categories = cats;
-      if (_categories.isNotEmpty) _selectedCategoryId = _categories.first.id;
+      if (_categories.isNotEmpty) {
+        _selectedCategoryId = _categories.first.id;
+      }
     });
   }
 
   void _loadHighlightArticles() async {
     final articles = await _articleVM.fetchArticles();
+    if (!mounted) return;
     if (articles.isNotEmpty) {
       final random = Random();
       _highlightArticles = List.generate(
@@ -96,6 +102,9 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
+    if (_categories.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
     return Column(
       children: [
         HighlightBanner(articles: _highlightArticles),
@@ -103,48 +112,46 @@ class _HomeTabState extends State<HomeTab> {
 
         SizedBox(
           height: 50,
-          child: _categories.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : ListView.separated(
-                  controller: _menuScrollController,
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: _categories.length,
-                  separatorBuilder: (_, __) => const SizedBox(width: 16),
-                  itemBuilder: (context, index) {
-                    final category = _categories[index];
-                    final isSelected = category.id == _selectedCategoryId;
+          child: ListView.separated(
+            controller: _menuScrollController,
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: _categories.length,
+            separatorBuilder: (_, __) => const SizedBox(width: 16),
+            itemBuilder: (context, index) {
+              final category = _categories[index];
+              final isSelected = category.id == _selectedCategoryId;
 
-                    return GestureDetector(
-                      onTap: () => _onCategorySelected(category.id, index),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            category.title,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                              color: isSelected
-                                  ? const Color(0xFFD0021B)
-                                  : const Color.fromARGB(221, 255, 255, 255),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            height: 3,
-                            width: isSelected ? 24 : 0,
-                            decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFFD0021B) : Colors.transparent,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                          ),
-                        ],
+              return GestureDetector(
+                onTap: () => _onCategorySelected(category.id, index),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      category.title,
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        color: isSelected
+                            ? const Color(0xFFD0021B)
+                            : const Color.fromARGB(221, 255, 255, 255),
                       ),
-                    );
-                  },
+                    ),
+                    const SizedBox(height: 4),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      height: 3,
+                      width: isSelected ? 24 : 0,
+                      decoration: BoxDecoration(
+                        color: isSelected ? const Color(0xFFD0021B) : Colors.transparent,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ],
                 ),
+              );
+            },
+          ),
         ),
         const SizedBox(height: 8),
 
@@ -152,12 +159,16 @@ class _HomeTabState extends State<HomeTab> {
           child: PageView.builder(
             controller: _categoryPageController,
             onPageChanged: (index) {
-              setState(() => _selectedCategoryId = _categories[index].id);
-              _scrollToCenter(index);
+              if (index < _categories.length) {
+                setState(() => _selectedCategoryId = _categories[index].id);
+                _scrollToCenter(index);
+              }
             },
             itemCount: _categories.length,
             itemBuilder: (context, pageIndex) {
+              if (pageIndex >= _categories.length) return const SizedBox();
               final category = _categories[pageIndex];
+
               return FutureBuilder<List<ArticleModel>>(
                 future: _categoryVM.fetchArticlesByCategory(category.id),
                 builder: (context, snapshot) {
@@ -189,13 +200,16 @@ class _HomeTabState extends State<HomeTab> {
                             context,
                             createSlideRoute(ArticleDetail(article: article)),
                           );
-                          ReadingHistoryViewModel().addOrUpdateHistory(
-                            userId: userId,
-                            articleId: article.id,
-                            title: article.title,
-                            description: article.description,
-                            image: article.image,
-                          );
+
+                          if (userId != null) {
+                            ReadingHistoryViewModel().addOrUpdateHistory(
+                              userId: userId!,
+                              articleId: article.id,
+                              title: article.title,
+                              description: article.description,
+                              image: article.image,
+                            );
+                          }
                         },
                         child: Container(
                           height: 110,
@@ -234,9 +248,9 @@ class _HomeTabState extends State<HomeTab> {
                                     const SizedBox(height: 4),
                                     Text(
                                       "Ngày đăng: ${article.date}",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 11,
-                                        color: const Color.fromARGB(255, 110, 110, 110),
+                                        color: Color.fromARGB(255, 110, 110, 110),
                                       ),
                                     ),
                                   ],

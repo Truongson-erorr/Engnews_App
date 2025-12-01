@@ -16,12 +16,13 @@ class HighlightBanner extends StatefulWidget {
 class _HighlightBannerState extends State<HighlightBanner> {
   late PageController _pageController;
   int _currentIndex = 0;
-  final String userId = FirebaseAuth.instance.currentUser!.uid;
+  String? userId;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
+    userId = FirebaseAuth.instance.currentUser?.uid; // null-safe
     _startAutoScroll();
   }
 
@@ -48,11 +49,14 @@ class _HighlightBannerState extends State<HighlightBanner> {
   @override
   Widget build(BuildContext context) {
     if (widget.articles.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return const SizedBox(
+        height: 180,
+        child: Center(child: CircularProgressIndicator()),
+      );
     }
 
     return SizedBox(
-      height: 160,
+      height: 180,
       child: PageView.builder(
         controller: _pageController,
         itemCount: widget.articles.length,
@@ -60,13 +64,17 @@ class _HighlightBannerState extends State<HighlightBanner> {
           final article = widget.articles[index];
           return GestureDetector(
             onTap: () {
-              ReadingHistoryViewModel().addOrUpdateHistory(
-                userId: userId,
-                articleId: article.id,
-                title: article.title,
-                description: article.description,
-                image: article.image,
-              );
+              // Thêm vào lịch sử chỉ khi userId != null
+              if (userId != null) {
+                ReadingHistoryViewModel().addOrUpdateHistory(
+                  userId: userId!,
+                  articleId: article.id,
+                  title: article.title,
+                  description: article.description,
+                  image: article.image,
+                );
+              }
+
               Navigator.push(
                 context,
                 createSlideRoute(ArticleDetail(article: article)),
@@ -74,12 +82,21 @@ class _HighlightBannerState extends State<HighlightBanner> {
             },
             child: Stack(
               children: [
-                Image.network(
-                  article.image,
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+                if (article.image.isNotEmpty)
+                  Image.network(
+                    article.image,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  )
+                else
+                  Container(
+                    color: Colors.grey[800],
+                    width: double.infinity,
+                    height: double.infinity,
+                    alignment: Alignment.center,
+                    child: const Icon(Icons.image, color: Colors.white54, size: 48),
+                  ),
                 Container(
                   alignment: Alignment.bottomLeft,
                   padding: const EdgeInsets.all(12),
