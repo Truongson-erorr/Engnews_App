@@ -23,7 +23,9 @@ class ArticlesByCategoryScreen extends StatefulWidget {
 class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
   final CategoryViewModel _viewModel = CategoryViewModel();
   late Future<List<ArticleModel>> _futureArticles;
-  final String userId = FirebaseAuth.instance.currentUser!.uid;
+
+  // userId có thể null nếu chưa đăng nhập
+  final String? userId = FirebaseAuth.instance.currentUser?.uid;
 
   @override
   void initState() {
@@ -79,36 +81,38 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
             padding: const EdgeInsets.all(16),
             itemCount: articles.length,
             separatorBuilder: (_, __) => const Divider(
-                  color: Color(0xFF4A3A3F),
-                  thickness: 1,
-                  height: 16,
+              color: Color(0xFF4A3A3F),
+              thickness: 1,
+              height: 16,
             ),
             itemBuilder: (context, index) {
               final article = articles[index];
               return InkWell(
                 borderRadius: BorderRadius.circular(12),
-                highlightColor: Colors.transparent, 
-                splashColor: Colors.transparent,    
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
                 hoverColor: Colors.transparent,
                 focusColor: Colors.transparent,
                 onTap: () async {
-                  ReadingHistoryViewModel().addOrUpdateHistory(
-                    userId: userId,
-                    articleId: article.id,
-                    title: article.title,
-                    description: article.description,
-                    image: article.image,
-                  );
+                  // Chỉ thêm vào lịch sử nếu user đã đăng nhập
+                  if (userId != null) {
+                    ReadingHistoryViewModel().addOrUpdateHistory(
+                      userId: userId!,
+                      articleId: article.id,
+                      title: article.title,
+                      description: article.description,
+                      image: article.image,
+                    );
+                  }
 
                   Navigator.push(
                     context,
                     createSlideRoute(ArticleDetail(article: article)),
                   );
                 },
-
                 child: Container(
                   decoration: BoxDecoration(
-                    color: const Color(0xFF2C1A1F), 
+                    color: const Color(0xFF2C1A1F),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   padding: const EdgeInsets.all(8),
@@ -133,7 +137,6 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
                               ),
                       ),
                       const SizedBox(width: 12),
-
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +148,7 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white, 
+                                color: Colors.white,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -154,7 +157,7 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                color: Colors.white70, 
+                                color: Colors.white70,
                                 fontSize: 13,
                               ),
                             ),

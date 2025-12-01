@@ -17,7 +17,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final ArticleViewModel _articleVM = ArticleViewModel();
   final TextEditingController _searchController = TextEditingController();
 
-  final String userId = FirebaseAuth.instance.currentUser!.uid;
+  String? userId; 
 
   List<ArticleModel> _results = [];
   bool _isLoading = false;
@@ -30,6 +30,12 @@ class _SearchScreenState extends State<SearchScreen> {
     'Education',
     'Technology',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    userId = FirebaseAuth.instance.currentUser?.uid; 
+  }
 
   Future<void> _searchArticles() async {
     final keyword = _searchController.text.trim();
@@ -51,7 +57,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2C1A1F), 
+      backgroundColor: const Color(0xFF2C1A1F),
       appBar: AppBar(
         title: const Text(
           "Tìm kiếm",
@@ -61,8 +67,10 @@ class _SearchScreenState extends State<SearchScreen> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 59, 19, 34), 
-        foregroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 59, 19, 34),
+        iconTheme: const IconThemeData(
+          color: Colors.white, 
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -129,7 +137,6 @@ class _SearchScreenState extends State<SearchScreen> {
                             itemBuilder: (context, index) {
                               final keyword = _suggestions[index];
                               return ListTile(
-                                
                                 leading: const Icon(Icons.search, color: Colors.grey),
                                 title: Text(
                                   keyword,
@@ -164,18 +171,16 @@ class _SearchScreenState extends State<SearchScreen> {
                                 final article = _results[index];
                                 return InkWell(
                                   borderRadius: BorderRadius.circular(12),
-                                  highlightColor: Colors.transparent, 
-                                  splashColor: Colors.transparent,    
-                                  hoverColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  onTap: () async {
-                                    await ReadingHistoryViewModel().addOrUpdateHistory(
-                                      userId: userId,
-                                      articleId: article.id,
-                                      title: article.title,
-                                      description: article.description,
-                                      image: article.image,
-                                    );
+                                  onTap: () {
+                                    if (userId != null) {
+                                      ReadingHistoryViewModel().addOrUpdateHistory(
+                                        userId: userId!,
+                                        articleId: article.id,
+                                        title: article.title,
+                                        description: article.description,
+                                        image: article.image,
+                                      );
+                                    }
 
                                     Navigator.push(
                                       context,
@@ -186,7 +191,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                     padding: const EdgeInsets.all(8),
                                     margin: const EdgeInsets.symmetric(vertical: 4),
                                     decoration: BoxDecoration(
-                                      
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Row(
@@ -252,3 +256,4 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 }
+
