@@ -22,37 +22,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
   List<Map<String, String>>? _translatedParagraphs;
   bool _isTranslating = false;
 
-  void _showLoadingOverlay() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      barrierColor: Colors.black54,
-      builder: (_) => const Center(
-        child: SizedBox(
-          width: 70,
-          height: 70,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(16)),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(15),
-              child: CircularProgressIndicator(strokeWidth: 3),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _hideLoadingOverlay() {
-    Navigator.of(context).pop();
-  }
-
   Future<void> _translateContent() async {
-    _showLoadingOverlay(); 
-
     setState(() => _isTranslating = true);
 
     final content = widget.article.content.isNotEmpty
@@ -65,8 +35,6 @@ class _ArticleDetailState extends State<ArticleDetail> {
       _translatedParagraphs = result;
       _isTranslating = false;
     });
-
-    _hideLoadingOverlay(); 
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Đã dịch bài!")),
@@ -110,7 +78,6 @@ class _ArticleDetailState extends State<ArticleDetail> {
               ),
             ),
             const SizedBox(height: 10),
-
             ListTile(
               leading: _isTranslating
                   ? const SizedBox(
@@ -118,11 +85,9 @@ class _ArticleDetailState extends State<ArticleDetail> {
                       width: 22,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : Icon(Icons.translate, color: Colors.black87),
-              title: Text(
-                _isTranslating ? "Đang dịch..." : "Dịch bài",
-                style: const TextStyle(fontSize: 16),
-              ),
+                  : const Icon(Icons.translate, color: Color.fromARGB(255, 50, 50, 50)),
+              title: Text(_isTranslating ? "Đang dịch..." : "Dịch bài",
+                  style: const TextStyle(fontSize: 16)),
               onTap: _isTranslating
                   ? null
                   : () async {
@@ -130,53 +95,16 @@ class _ArticleDetailState extends State<ArticleDetail> {
                       await _translateContent();
                     },
             ),
-
+            ListTile( leading: Icon(Icons.summarize, color: Colors.black87), title: const Text("Tóm tắt nội dung bằng AI"), onTap: () async { Navigator.pop(ctx); }, ),
+            ListTile( leading: Icon(Icons.analytics_outlined, color: Colors.black87), title: const Text("Phân tích cảm xúc bài viết"), onTap: () async { Navigator.pop(ctx); }, ), ListTile( leading: Icon(Icons.copy_all, color: Colors.black87), title: const Text("Sao chép nội dung"), onTap: () async { Navigator.pop(ctx); }, ), ListTile( leading: Icon(Icons.share, color: Colors.black87), title: const Text("Chia sẻ bài viết"), onTap: () async { Navigator.pop(ctx); }, ),
             ListTile(
-              leading: Icon(Icons.summarize, color: Colors.black87),
-              title: const Text("Tóm tắt nội dung bằng AI"),
-              onTap: () async {
-                Navigator.pop(ctx);
-                
-              },
-            ),
-
-            ListTile(
-              leading: Icon(Icons.analytics_outlined, color: Colors.black87),
-              title: const Text("Phân tích cảm xúc bài viết"),
-              onTap: () async {
-                Navigator.pop(ctx);
-                
-              },
-            ),
-
-            ListTile(
-              leading: Icon(Icons.copy_all, color: Colors.black87),
-              title: const Text("Sao chép nội dung"),
-              onTap: () async {
-                Navigator.pop(ctx);
-                
-              },
-            ),
-
-            ListTile(
-              leading: Icon(Icons.share, color: Colors.black87),
-              title: const Text("Chia sẻ bài viết"),
-              onTap: () async {
-                Navigator.pop(ctx);
-                
-              },
-            ),
-
-            ListTile(
-              leading: Icon(Icons.bookmark_add_outlined, color: Colors.black87),
+              leading: const Icon(Icons.bookmark_add_outlined, color: Color.fromARGB(255, 44, 44, 44)),
               title: const Text("Lưu bài"),
               onTap: () async {
                 Navigator.pop(ctx);
                 await _saveArticle();
               },
             ),
-
-            const SizedBox(height: 10),
           ],
         ),
       ),
@@ -188,14 +116,14 @@ class _ArticleDetailState extends State<ArticleDetail> {
     final article = widget.article;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF2C1A1F),
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 59, 19, 34),
-        elevation: 0,
+        backgroundColor: const Color(0xFFB42652),
+        elevation: 1,
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "EngNews",
-          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
@@ -205,67 +133,95 @@ class _ArticleDetailState extends State<ArticleDetail> {
           )
         ],
       ),
-
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (article.contentImage.isNotEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(article.contentImage,
-                    width: double.infinity, fit: BoxFit.cover),
-              ),
-            const SizedBox(height: 20),
-
-            Text(article.title,
-                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
-            const SizedBox(height: 8),
-
-            Text("Published: ${article.date.toLocal().toString().split(' ')[0]}",
-                style: const TextStyle(fontSize: 13, color: Colors.grey)),
-            const SizedBox(height: 20),
-
-            Column(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: _translatedParagraphs != null
-                  ? _translatedParagraphs!.map((p) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(p['en'] ?? '',
+              children: [
+                if (article.contentImage.isNotEmpty)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(article.contentImage,
+                        width: double.infinity, fit: BoxFit.cover),
+                  ),
+                const SizedBox(height: 20),
+                Text(article.title,
+                    style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87)),
+                const SizedBox(height: 8),
+                Text("Published: ${article.date.toLocal().toString().split(' ')[0]}",
+                    style: const TextStyle(fontSize: 13, color: Colors.grey)),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _translatedParagraphs != null
+                      ? _translatedParagraphs!.map((p) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(p['en'] ?? '',
+                                  textAlign: TextAlign.justify,
+                                  style: const TextStyle(
+                                      color: Colors.black87, fontSize: 16)),
+                              const SizedBox(height: 4),
+                              Text(p['vi'] ?? '',
+                                  textAlign: TextAlign.justify,
+                                  style: const TextStyle(
+                                      color: Color(0xFFB42652), fontSize: 16)),
+                              const SizedBox(height: 12),
+                            ],
+                          );
+                        }).toList()
+                      : [
+                          Text(
+                              article.content.isNotEmpty
+                                  ? article.content
+                                  : article.description,
                               textAlign: TextAlign.justify,
-                              style: const TextStyle(color: Colors.white, fontSize: 16)),
-                          const SizedBox(height: 4),
-                          Text(p['vi'] ?? '',
-                              textAlign: TextAlign.justify,
-                              style:
-                                  const TextStyle(color: Color.fromARGB(255, 151, 151, 151), fontSize: 16)),
-                          const SizedBox(height: 12),
+                              style: const TextStyle(
+                                  fontSize: 16, height: 1.6, color: Colors.black87)),
                         ],
-                      );
-                    }).toList()
-                  : [
-                      Text(
-                          article.content.isNotEmpty
-                              ? article.content
-                              : article.description,
-                          textAlign: TextAlign.justify,
-                          style:
-                              const TextStyle(fontSize: 16, height: 1.6, color: Colors.white70)),
-                    ],
+                ),
+                const SizedBox(height: 40),
+                ArticleCommentsWidget(article: article),
+                RelatedArticlesWidget(
+                  categoryId: widget.article.categoryId,
+                  currentArticleId: widget.article.id,
+                ),
+                RandomArticlesWidget(),
+              ],
             ),
-            const SizedBox(height: 40),
+          ),
 
-            ArticleCommentsWidget(article: article),
-            RelatedArticlesWidget(
-              categoryId: widget.article.categoryId,
-              currentArticleId: widget.article.id,
+          if (_isTranslating)
+            Container(
+              color: Colors.black.withOpacity(0.4),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Color(0xFFB42652)),
+                      strokeWidth: 4,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      "Đang dịch bài...",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            RandomArticlesWidget(),
-          ],
-        ),
+        ],
       ),
     );
   }

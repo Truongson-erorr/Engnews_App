@@ -17,51 +17,58 @@ class ArticlesByCategoryScreen extends StatefulWidget {
   });
 
   @override
-  State<ArticlesByCategoryScreen> createState() => _ArticlesByCategoryScreenState();
+  State<ArticlesByCategoryScreen> createState() =>
+      _ArticlesByCategoryScreenState();
 }
 
 class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
   final CategoryViewModel _viewModel = CategoryViewModel();
   late Future<List<ArticleModel>> _futureArticles;
 
-  // userId có thể null nếu chưa đăng nhập
   final String? userId = FirebaseAuth.instance.currentUser?.uid;
 
   @override
   void initState() {
     super.initState();
-    _futureArticles = _viewModel.fetchArticlesByCategory(widget.categoryId);
+    _futureArticles =
+        _viewModel.fetchArticlesByCategory(widget.categoryId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2C1A1F), 
+      backgroundColor: Colors.white,
       appBar: AppBar(
+         backgroundColor: const Color(0xFFB42652),
+        elevation: 1,
         title: Text(
           widget.categoryTitle,
           style: const TextStyle(
-            color: Colors.white,
+            color: Color.fromARGB(255, 255, 255, 255), 
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 59, 19, 34),
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(
+          color: Color.fromARGB(255, 255, 255, 255), 
+        ),
       ),
+
       body: FutureBuilder<List<ArticleModel>>(
         future: _futureArticles,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: Colors.white));
+            return const Center(
+                child: CircularProgressIndicator(
+                    color: Color(0xFFB42652)));
           }
 
           if (snapshot.hasError) {
             return Center(
               child: Text(
                 'Lỗi: ${snapshot.error}',
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.red),
               ),
             );
           }
@@ -72,29 +79,20 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
             return const Center(
               child: Text(
                 'Không có bài viết nào trong danh mục này.',
-                style: TextStyle(color: Colors.white70),
+                style: TextStyle(color: Colors.black54),
               ),
             );
           }
 
-          return ListView.separated(
+          return ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: articles.length,
-            separatorBuilder: (_, __) => const Divider(
-              color: Color(0xFF4A3A3F),
-              thickness: 1,
-              height: 16,
-            ),
             itemBuilder: (context, index) {
               final article = articles[index];
+
               return InkWell(
-                borderRadius: BorderRadius.circular(12),
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                onTap: () async {
-                  // Chỉ thêm vào lịch sử nếu user đã đăng nhập
+                borderRadius: BorderRadius.circular(16),
+                onTap: () {
                   if (userId != null) {
                     ReadingHistoryViewModel().addOrUpdateHistory(
                       userId: userId!,
@@ -111,33 +109,38 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
                   );
                 },
                 child: Container(
+                  margin: const EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF2C1A1F),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.transparent,
                   ),
-                  padding: const EdgeInsets.all(8),
-                  margin: const EdgeInsets.symmetric(vertical: 6),
-                  child: Row(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16)),
                         child: article.image.isNotEmpty
                             ? Image.network(
                                 article.image,
-                                width: 100,
-                                height: 80,
+                                width: double.infinity,
+                                height: 180,
                                 fit: BoxFit.cover,
                               )
                             : Container(
-                                width: 100,
-                                height: 80,
-                                color: Colors.grey[700],
-                                child: const Icon(Icons.article_outlined, color: Colors.grey),
+                                width: double.infinity,
+                                height: 180,
+                                color: Colors.grey[300],
+                                child: const Icon(
+                                  Icons.article_outlined,
+                                  color: Colors.grey,
+                                  size: 50,
+                                ),
                               ),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
+                      Padding(
+                        padding: const EdgeInsets.all(12),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -146,25 +149,28 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 15,
+                                fontSize: 17,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: Colors.black87,
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 6),
                             Text(
                               article.description,
-                              maxLines: 2,
+                              maxLines: 3,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 13,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[800],
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 8),
                             Text(
                               'Ngày đăng: ${article.date.toLocal().toString().split(' ')[0]}',
-                              style: const TextStyle(fontSize: 11, color: Colors.grey),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.black45,
+                              ),
                             ),
                           ],
                         ),
@@ -175,6 +181,8 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
               );
             },
           );
+
+
         },
       ),
     );

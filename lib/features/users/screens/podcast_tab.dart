@@ -36,30 +36,37 @@ class PodcastTab extends StatelessWidget {
       imageUrl: 'https://picsum.photos/100/100?random=4',
       duration: '40:05',
     ),
-    PodcastModel(
-      title: 'Networking & APIs',
-      imageUrl: 'https://picsum.photos/100/100?random=5',
-      duration: '35:20',
-    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2C1A1F),
+      backgroundColor: Colors.white, 
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: podcasts.length,
         itemBuilder: (context, index) {
           final podcast = podcasts[index];
-          return Card(
-            color: const Color(0xFF3B1322), 
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: const Color.fromARGB(33, 255, 255, 255),
+                width: 1.2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  offset: const Offset(0, 3),
+                  blurRadius: 6,
+                ),
+              ],
             ),
             child: ListTile(
-              contentPadding: const EdgeInsets.all(12),
+              contentPadding: const EdgeInsets.all(14),
+
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
@@ -69,25 +76,38 @@ class PodcastTab extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
+
               title: Text(
                 podcast.title,
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                  fontSize: 16,
                 ),
               ),
               subtitle: Text(
                 podcast.duration,
-                style: const TextStyle(color: Colors.grey),
+                style: const TextStyle(
+                  color: Colors.black54,
+                  fontSize: 13,
+                ),
               ),
+
               trailing: IconButton(
-                icon: const Icon(Icons.play_arrow, color: Color(0xFFD0021B)),
+                icon: const Icon(
+                  Icons.play_circle_fill,
+                  size: 32,
+                  color: Color(0xFFD0021B),
+                ),
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Đang phát: ${podcast.title}')),
+                    SnackBar(
+                      content: Text('Đang phát: ${podcast.title}'),
+                    ),
                   );
                 },
               ),
+              splashColor: const Color(0x33D0021B),
             ),
           );
         },

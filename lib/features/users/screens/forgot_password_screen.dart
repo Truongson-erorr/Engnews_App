@@ -35,8 +35,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       );
     } on FirebaseAuthException catch (e) {
       String message = "Đã có lỗi xảy ra. Vui lòng thử lại.";
-      if (e.code == 'user-not-found') message = "Không tìm thấy tài khoản với email này.";
-      else if (e.code == 'invalid-email') message = "Địa chỉ email không hợp lệ.";
+
+      if (e.code == 'user-not-found') {
+        message = "Không tìm thấy tài khoản với email này.";
+      } else if (e.code == 'invalid-email') {
+        message = "Địa chỉ email không hợp lệ.";
+      }
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(message)),
@@ -48,17 +52,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const Color primaryRed = Color(0xFFB42652); 
+    const Color lightGrey = Color(0xFFF4F4F4);
+
     return Scaffold(
-      backgroundColor: const Color(0xFF1E0B12), 
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1E0B12),
+        backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
           "Quên mật khẩu",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
       ),
@@ -72,42 +79,48 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               "Nhập địa chỉ email của bạn để nhận hướng dẫn đặt lại mật khẩu.",
-              style: TextStyle(color: Colors.grey[300], fontSize: 16),
+              style: TextStyle(
+                color: Colors.black54,
+                fontSize: 16,
+              ),
             ),
             const SizedBox(height: 30),
 
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: "Email",
-                labelStyle: const TextStyle(color: Colors.white70),
+                labelStyle: const TextStyle(color: Colors.black54),
                 filled: true,
-                fillColor: const Color(0xFF2C1A1F),
+                fillColor: lightGrey,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
                 ),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 18,
+                ),
               ),
             ),
             const SizedBox(height: 30),
 
+            // BUTTON
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
                 onPressed: _isLoading ? null : _resetPassword,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF8B0000),
+                  backgroundColor: primaryRed, 
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),

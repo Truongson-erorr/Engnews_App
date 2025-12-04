@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dashboard_page.dart';
-import 'user_manager_page.dart';
+import 'category_manager_page.dart'; 
 import 'article_manager_page.dart';
-import 'statistics_page.dart';
-import 'profile_screen.dart';
+import 'user_manager_page.dart';
 import 'system_settings_page.dart';
+import 'notifications_page.dart'; 
+import 'profile_screen.dart';
 import '../../viewmodel/authen_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -19,17 +20,18 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = const [
-    DashboardPage(),
-    UserManagerPage(),
-    ArticleManagerPage(),
-    StatisticsPage(),
-    SystemSettingsPage(),
+    DashboardPage(), 
+    CategoryManagerPage(), 
+    ArticleManagerPage(), 
+    UserManagerPage(), 
+    NotificationsPage(), 
+    SystemSettingsPage(), 
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5), 
+      backgroundColor: const Color(0xFFF5F5F5),
 
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -49,7 +51,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-
         actions: [
           Consumer<AuthenViewModel>(
             builder: (context, auth, child) {
@@ -106,10 +107,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             ),
 
             _drawerItem(Icons.dashboard, "Dashboard", 0),
-            _drawerItem(Icons.person, "Quản lý người dùng", 1),
+            _drawerItem(Icons.grid_view, "Quản lý danh mục", 1),
             _drawerItem(Icons.article, "Quản lý bài viết", 2),
-            _drawerItem(Icons.bar_chart, "Thống kê", 3),
-            _drawerItem(Icons.settings, "Cài đặt hệ thống", 4),
+            _drawerItem(Icons.person, "Quản lý người dùng", 3),
+            _drawerItem(Icons.notifications, "Thông báo hệ thống", 4),
+            _drawerItem(Icons.settings, "Cài đặt hệ thống", 5),
 
             const Spacer(),
             const Padding(

@@ -18,8 +18,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   bool _isSaving = false;
 
-  static const Color _darkFieldColor = Color(0xFF3F2B31); 
-  static const Color _darkTextColor = Colors.white70; 
+  static const Color _iconColor = Color(0xFFB42652); 
+  static const Color _textColor = Color.fromRGBO(0, 0, 0, 0.867);   
 
   @override
   void initState() {
@@ -73,14 +73,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFF2C1A1F),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           "Chỉnh sửa thông tin cá nhân",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color.fromARGB(255, 59, 19, 34),
-        foregroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 241, 241, 241),
+        foregroundColor: const Color.fromARGB(255, 0, 0, 0),
         elevation: 0.5,
         centerTitle: true,
       ),
@@ -96,7 +96,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 label: "Họ và tên",
                 icon: Icons.person_outline,
                 validator: (v) => v!.isEmpty ? "Vui lòng nhập họ tên" : null,
-                fillColor: _darkFieldColor, 
               ),
               const SizedBox(height: 20),
               _buildTextField(
@@ -105,7 +104,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 icon: Icons.phone_outlined,
                 keyboardType: TextInputType.phone,
                 validator: (v) => v!.isEmpty ? "Vui lòng nhập số điện thoại" : null,
-                fillColor: _darkFieldColor, 
               ),
               const SizedBox(height: 20),
               _buildTextField(
@@ -113,7 +111,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 label: "Email",
                 icon: Icons.email_outlined,
                 readOnly: true,
-                fillColor: _darkFieldColor,
               ),
               const SizedBox(height: 40),
               SizedBox(
@@ -122,7 +119,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: ElevatedButton(
                   onPressed: _isSaving ? null : _saveChanges,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFD0021B),
+                    backgroundColor: const Color(0xFFB42652),
                     elevation: 2,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
@@ -154,35 +151,33 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     String? Function(String?)? validator,
     bool readOnly = false,
     TextInputType? keyboardType,
-    Color fillColor = Colors.white,
   }) {
     return TextFormField(
       controller: controller,
       readOnly: readOnly,
       keyboardType: keyboardType,
       validator: validator,
-      style: const TextStyle(color: Colors.white), 
+      style: TextStyle(color: _textColor),
       decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: _darkTextColor),
+        prefixIcon: Icon(icon, color: _iconColor),
         labelText: label,
-
-        labelStyle: const TextStyle(fontSize: 14, color: _darkTextColor),
-        errorStyle: const TextStyle(color: Color(0xFFFF8A80)), 
+        labelStyle: TextStyle(fontSize: 14, color: _textColor),
+        errorStyle: const TextStyle(color: Color(0xFFFF8A80)),
         filled: true,
-        fillColor: fillColor,
-        border: InputBorder.none,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none, // KHÔNG viền màu
+        ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
-
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
-
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
     );
   }

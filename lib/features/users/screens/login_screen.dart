@@ -59,8 +59,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const Color primaryRed = Color(0xFFB42652);
+    const Color lightGrey = Color(0xFFF4F4F4);
+
     return Scaffold(
-      backgroundColor: const Color(0xFF1E0B12), 
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 70),
         child: Column(
@@ -72,17 +75,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(
                   fontSize: 44,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF8B0000),
+                  color: primaryRed, 
                   letterSpacing: 1.5,
                 ),
               ),
             ),
             const SizedBox(height: 40),
+
             const Text(
               "Chào mừng trở lại!",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.black,
                 fontSize: 30,
               ),
             ),
@@ -90,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Text(
               "Đăng nhập để tiếp tục đọc báo nhé!",
               style: TextStyle(
-                color: Colors.grey[300],
+                color: Colors.black54,
                 fontSize: 16,
               ),
             ),
@@ -98,12 +102,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
             TextField(
               controller: _emailController,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: "Email",
-                labelStyle: const TextStyle(color: Colors.white70),
+                labelStyle: const TextStyle(color: Colors.black54),
                 filled: true,
-                fillColor: const Color(0xFF2C1A1F),
+                fillColor: lightGrey,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
@@ -117,12 +121,12 @@ class _LoginScreenState extends State<LoginScreen> {
             TextField(
               controller: _passwordController,
               obscureText: true,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: "Mật khẩu",
-                labelStyle: const TextStyle(color: Colors.white70),
+                labelStyle: const TextStyle(color: Colors.black54),
                 filled: true,
-                fillColor: const Color(0xFF2C1A1F),
+                fillColor: lightGrey,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
@@ -143,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: const Text(
                   "Quên mật khẩu?",
                   style: TextStyle(
-                    color: Color(0xFF8B0000),
+                    color: primaryRed, 
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -157,12 +161,12 @@ class _LoginScreenState extends State<LoginScreen> {
               child: ElevatedButton(
                 onPressed: _isLoading ? null : _signIn,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF8B0000),
+                  backgroundColor: primaryRed,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  shadowColor: Colors.black54,
-                  elevation: 4,
+                  shadowColor: Colors.black38,
+                  elevation: 3,
                 ),
                 child: _isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
@@ -177,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            
+
             Center(
               child: TextButton.icon(
                 onPressed: _signInWithGoogle,
@@ -189,14 +193,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   "Đăng nhập bằng Google",
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
                 style: TextButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  backgroundColor: const Color(0xFF3A1F25),
-                  foregroundColor: Colors.white,
+                  backgroundColor: lightGrey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -214,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: const Text(
                   "Chưa có tài khoản? Đăng ký ngay",
                   style: TextStyle(
-                    color: Color(0xFF8B0000),
+                    color: primaryRed, 
                     fontSize: 15,
                   ),
                 ),

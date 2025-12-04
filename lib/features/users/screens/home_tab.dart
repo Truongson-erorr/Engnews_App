@@ -105,10 +105,11 @@ class _HomeTabState extends State<HomeTab> {
     if (_categories.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
+
     return Column(
       children: [
         HighlightBanner(articles: _highlightArticles),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
 
         SizedBox(
           height: 40,
@@ -126,18 +127,27 @@ class _HomeTabState extends State<HomeTab> {
                 onTap: () => _onCategorySelected(category.id, index),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: isSelected ? const Color(0xFFD0021B) : const Color.fromARGB(255, 56, 44, 48),
-                    borderRadius: BorderRadius.circular(10),
+                    color: isSelected ? const Color(0xFFB42652) : const Color(0xFFECECEC), // đỏ đậm #b42652 khi chọn
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: isSelected
+                        ? [
+                            BoxShadow(
+                              color: const Color(0xFFB42652).withOpacity(0.3),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ]
+                        : null,
                   ),
                   child: Center(
                     child: Text(
                       category.title,
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: TextStyle(
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: isSelected ? Colors.white : Colors.black87,
                       ),
                     ),
                   ),
@@ -146,7 +156,7 @@ class _HomeTabState extends State<HomeTab> {
             },
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
 
         Expanded(
           child: PageView.builder(
@@ -159,7 +169,6 @@ class _HomeTabState extends State<HomeTab> {
             },
             itemCount: _categories.length,
             itemBuilder: (context, pageIndex) {
-              if (pageIndex >= _categories.length) return const SizedBox();
               final category = _categories[pageIndex];
 
               return FutureBuilder<List<ArticleModel>>(
@@ -173,20 +182,22 @@ class _HomeTabState extends State<HomeTab> {
                     return const Center(
                       child: Text(
                         'Chưa có bài báo nào.',
-                        style: TextStyle(color: Colors.white70),
+                        style: TextStyle(color: Colors.black54),
                       ),
                     );
                   }
+
                   return ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: articles.length,
-                    separatorBuilder: (_, __) => const Divider(
-                      color: Color(0xFF4A3A3F),
+                    separatorBuilder: (_, __) => Divider(
+                      color: Colors.grey[300],
                       thickness: 1,
-                      height: 16,
+                      height: 20,
                     ),
                     itemBuilder: (context, index) {
                       final article = articles[index];
+
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -206,10 +217,9 @@ class _HomeTabState extends State<HomeTab> {
                         },
                         child: Container(
                           height: 110,
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF2C1A1F),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12),                        
                           ),
                           child: Row(
                             children: [
@@ -221,9 +231,9 @@ class _HomeTabState extends State<HomeTab> {
                                     Text(
                                       article.title,
                                       style: const TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                        color: Colors.black,
                                       ),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
@@ -231,9 +241,9 @@ class _HomeTabState extends State<HomeTab> {
                                     const SizedBox(height: 4),
                                     Text(
                                       article.description,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey[300],
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.black54,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -243,13 +253,14 @@ class _HomeTabState extends State<HomeTab> {
                                       "Ngày đăng: ${article.date}",
                                       style: const TextStyle(
                                         fontSize: 11,
-                                        color: Color.fromARGB(255, 110, 110, 110),
+                                        color: Colors.black45,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
                               const SizedBox(width: 8),
+
                               if (article.image.isNotEmpty)
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(8),

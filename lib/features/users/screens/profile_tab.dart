@@ -14,16 +14,21 @@ class ProfileTab extends StatelessWidget {
     final userVM = Provider.of<AuthenViewModel>(context);
 
     if (userVM.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator(color: Color(0xFFD0021B)));
     }
 
     final user = userVM.currentUser;
     if (user == null) {
-      return const Center(child: Text("Không có thông tin người dùng"));
+      return const Center(
+        child: Text(
+          "Không có thông tin người dùng",
+          style: TextStyle(color: Colors.black87),
+        ),
+      );
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFF2C1A1F),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -35,7 +40,7 @@ class ProfileTab extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 55,
-                      backgroundColor: const Color(0xFFDDE1FF),
+                      backgroundColor: const Color(0xFFEDEDED),
                       backgroundImage: user.image.isNotEmpty
                           ? NetworkImage(user.image)
                           : null,
@@ -56,9 +61,7 @@ class ProfileTab extends StatelessWidget {
                       bottom: 0,
                       right: 0,
                       child: GestureDetector(
-                        onTap: () {
-                          
-                        },
+                        onTap: () {},
                         child: Container(
                           decoration: const BoxDecoration(
                             color: Color.fromARGB(255, 121, 121, 121),
@@ -77,20 +80,20 @@ class ProfileTab extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(221, 255, 255, 255),
+                    color: Colors.black87,
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   user.email,
-                  style: const TextStyle(color: Colors.grey, fontSize: 15),
+                  style: const TextStyle(color: Colors.black54, fontSize: 15),
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-          
+            const SizedBox(height: 20),
+
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 6),
               child: Column(
                 children: [
                   _buildMenuItem(
@@ -106,9 +109,7 @@ class ProfileTab extends StatelessWidget {
                   _buildMenuItem(
                     icon: Icons.lock_outline,
                     title: 'Đổi mật khẩu',
-                    onTap: () {
-                      
-                    },
+                    onTap: () {},
                   ),
                   _buildMenuItem(
                     icon: Icons.history,
@@ -126,27 +127,20 @@ class ProfileTab extends StatelessWidget {
 
                       Navigator.push(
                         context,
-                        createSlideRoute(
-                          ReadingHistoryScreen(userId: userId),
-                        ),
+                        createSlideRoute(ReadingHistoryScreen(userId: userId)),
                       );
                     },
                   ),
                   _buildMenuItem(
                     icon: Icons.settings_outlined,
                     title: 'Cài đặt ứng dụng',
-                    onTap: () {
-                      
-                    },
+                    onTap: () {},
                   ),
                   _buildMenuItem(
                     icon: Icons.help_outline,
                     title: 'Trợ giúp & Hỗ trợ',
-                    onTap: () {
-                      
-                    },
+                    onTap: () {},
                   ),
-                  
                   _buildMenuItem(
                     icon: Icons.logout,
                     title: 'Đăng xuất',
@@ -155,7 +149,7 @@ class ProfileTab extends StatelessWidget {
                       final confirm = await showDialog<bool>(
                         context: context,
                         builder: (ctx) => AlertDialog(
-                          backgroundColor: Colors.white, 
+                          backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
@@ -175,20 +169,19 @@ class ProfileTab extends StatelessWidget {
                             OutlinedButton(
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: const Color.fromARGB(221, 126, 126, 126),
-                                backgroundColor: Colors.white,   
+                                backgroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(26),
                                 ),
-                                side: BorderSide.none, 
+                                side: BorderSide.none,
                               ),
                               onPressed: () => Navigator.pop(ctx, false),
                               child: const Text("Hủy"),
                             ),
-
                             OutlinedButton(
                               style: OutlinedButton.styleFrom(
-                                foregroundColor: Colors.black87, 
-                                backgroundColor: Colors.white,   
+                                foregroundColor: Colors.black87,
+                                backgroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(26),
                                 ),
@@ -223,22 +216,30 @@ class ProfileTab extends StatelessWidget {
   Widget _buildMenuItem({
     required IconData icon,
     required String title,
-    Color color = const Color.fromARGB(221, 255, 255, 255),
+    Color color = Colors.black87,
     required VoidCallback onTap,
   }) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(vertical: 4),
-      leading: Icon(icon, color: color, size: 26),
-      title: Text(
-        title,
-        style: TextStyle(
-          fontSize: 16,
-          color: color,
-          fontWeight: FontWeight.w500,
-        ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color.fromARGB(33, 255, 255, 255)),
       ),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-      onTap: onTap,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+        leading: Icon(icon, color: color, size: 26),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 16,
+            color: color,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+        onTap: onTap,
+      ),
     );
   }
 }
