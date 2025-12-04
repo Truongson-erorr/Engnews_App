@@ -128,43 +128,43 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: EdgeInsets.fromLTRB(16, 12, 0, 8),
                 child: Text(
                   "Cài đặt & Hỗ trợ",
-                  style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w600),
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
                 ),
               ),
               ListTile(
-                leading: const Icon(Icons.settings_outlined, color: Colors.white70),
-                title: const Text("Tuỳ chỉnh giao diện", style: TextStyle(color: Colors.white70)),
+                leading: const Icon(Icons.settings_outlined, color: Colors.white),
+                title: const Text("Tuỳ chỉnh giao diện", style: TextStyle(color: Colors.white)),
                 onTap: () {},
               ),
               ListTile(
-                leading: const Icon(Icons.notifications_outlined, color: Colors.white70),
-                title: const Text("Thông báo", style: TextStyle(color: Colors.white70)),
+                leading: const Icon(Icons.notifications_outlined, color: Colors.white),
+                title: const Text("Thông báo", style: TextStyle(color: Colors.white)),
                 onTap: () {},
               ),
               ListTile(
-                leading: const Icon(Icons.translate, color: Colors.white70),
-                title: const Text("Ngôn ngữ", style: TextStyle(color: Colors.white70)),
+                leading: const Icon(Icons.translate, color: Colors.white),
+                title: const Text("Ngôn ngữ", style: TextStyle(color: Colors.white)),
                 onTap: () {},
               ),
               ListTile(
-                leading: const Icon(Icons.dark_mode_outlined, color: Colors.white70),
-                title: const Text("Chế độ tối", style: TextStyle(color: Colors.white70)),
+                leading: const Icon(Icons.dark_mode_outlined, color: Colors.white),
+                title: const Text("Chế độ tối", style: TextStyle(color: Colors.white)),
                 onTap: () {},
               ),
               const Divider(color: Colors.white38),
               ListTile(
-                leading: const Icon(Icons.star_border, color: Colors.white70),
-                title: const Text("Đánh giá ứng dụng", style: TextStyle(color: Colors.white70)),
+                leading: const Icon(Icons.star_border, color: Colors.white),
+                title: const Text("Đánh giá ứng dụng", style: TextStyle(color: Colors.white)),
                 onTap: () {},
               ),
               ListTile(
-                leading: const Icon(Icons.feedback_outlined, color: Colors.white70),
-                title: const Text("Góp ý & Hỗ trợ", style: TextStyle(color: Colors.white70)),
+                leading: const Icon(Icons.feedback_outlined, color: Colors.white),
+                title: const Text("Góp ý & Hỗ trợ", style: TextStyle(color: Colors.white)),
                 onTap: () {},
               ),
               ListTile(
-                leading: const Icon(Icons.info_outline, color: Colors.white70),
-                title: const Text("Giới thiệu", style: TextStyle(color: Colors.white70)),
+                leading: const Icon(Icons.info_outline, color: Colors.white),
+                title: const Text("Giới thiệu", style: TextStyle(color: Colors.white)),
                 onTap: () {},
               ),
 
@@ -198,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
         unselectedItemColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.article_outlined), label: "Tin mới"),
+          BottomNavigationBarItem(icon: Icon(Icons.article_outlined), label: "Trang chủ"),
           BottomNavigationBarItem(icon: Icon(Icons.grid_view_outlined), label: "Chuyên mục"),
           BottomNavigationBarItem(icon: Icon(Icons.podcasts_outlined), label: "Podcast"),
           BottomNavigationBarItem(icon: Icon(Icons.bookmark_outline), label: "Đã lưu"),
@@ -208,3 +208,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+

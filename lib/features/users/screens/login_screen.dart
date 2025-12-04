@@ -3,6 +3,7 @@ import 'register_screen.dart';
 import 'package:caonientruongson/core/animation';
 import 'forgot_password_screen.dart';
 import 'home_screen.dart';
+import '../../admin/screens/admin_dashboard_screen.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodel/authen_viewmodel.dart';
 
@@ -28,11 +29,17 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     if (success) {
-      Navigator.of(context).pushReplacement(createSlideRoute(const HomeScreen()));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(authVM.errorMessage ?? "Đăng nhập thất bại")),
-      );
+      final user = authVM.currentUser;
+
+      if (user != null && user.role == "admin") {
+        Navigator.of(context).pushReplacement(
+          createSlideRoute(const AdminDashboardScreen()),
+        );
+      } else {
+        Navigator.of(context).pushReplacement(
+          createSlideRoute(const HomeScreen()),
+        );
+      }
     }
 
     setState(() => _isLoading = false);
@@ -89,7 +96,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 40),
 
-            // Email
             TextField(
               controller: _emailController,
               style: const TextStyle(color: Colors.white),
