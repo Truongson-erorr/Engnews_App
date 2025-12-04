@@ -34,11 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _handlePrivateTab(int index) {
     final user = Provider.of<AuthenViewModel>(context, listen: false).currentUser;
+
     if (user == null && (index == 3 || index == 4)) {
-      Navigator.push(
-        context,
-        createSlideRoute(const LoginScreen()), 
-      );
+      Navigator.push(context, createSlideRoute(const LoginScreen()));
       return;
     }
     _onMenuTap(index);
@@ -47,45 +45,37 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E0B12),
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 59, 19, 34),
-        elevation: 0.8,
+        backgroundColor: const Color(0xFFB42652), 
+        elevation: 0.6,
         centerTitle: true,
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.list),
-            color: Colors.white,
-            onPressed: () => Scaffold.of(context).openDrawer(),
+        iconTheme: const IconThemeData(color: Colors.white), 
+        title: const Text(
+          "EngNews",
+          style: TextStyle(
+            color: Colors.white, 
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.1,
           ),
         ),
-        title: const Text("EngNews",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: Colors.white,
-              letterSpacing: 1.2,
-            )),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
-            color: Colors.white,
-            onPressed: () {
-              Navigator.push(
-                context,
-                createSlideRoute(const SearchScreen()),
-              );
-            },
+            icon: const Icon(Icons.search, color: Colors.white), 
+            onPressed: () => Navigator.push(
+              context,
+              createSlideRoute(const SearchScreen()),
+            ),
           ),
           IconButton(
-            icon: const Icon(Icons.notifications_none),
-            color: Colors.white,
+            icon: const Icon(Icons.notifications_none, color: Colors.white), 
             onPressed: () {},
           ),
         ],
       ),
+
       drawer: Drawer(
-        backgroundColor: const Color(0xFF2C1A1F),
+        backgroundColor: Colors.white,
         child: SafeArea(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -94,31 +84,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context, userVM, _) {
                   final user = userVM.currentUser;
                   return UserAccountsDrawerHeader(
-                    decoration: const BoxDecoration(color: Color(0xFF3B1322)),
+                    decoration: const BoxDecoration(color: Colors.white),
                     currentAccountPicture: CircleAvatar(
                       radius: 32,
-                      backgroundColor: const Color(0xFF8C8C8C), // nền xám
+                      backgroundColor: Colors.grey[300],
                       backgroundImage: (user != null && user.image.isNotEmpty)
                           ? NetworkImage(user.image)
                           : null,
                       child: (user == null || user.image.isEmpty)
-                          ? const Icon(
-                              Icons.person,
-                              size: 32,
-                              color: Colors.white,
-                            )
+                          ? const Icon(Icons.person, size: 32, color: Color(0xFFB42652))
                           : null,
                     ),
                     accountName: Text(
                       user?.fullName ?? 'Chưa đăng nhập',
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white),
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     accountEmail: Text(
                       user?.email ?? 'Đăng nhập để trải nghiệm nhiều hơn',
-                      style: const TextStyle(color: Colors.white70),
+                      style: TextStyle(color: Colors.grey[700]),
                     ),
                   );
                 },
@@ -128,51 +114,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: EdgeInsets.fromLTRB(16, 12, 0, 8),
                 child: Text(
                   "Cài đặt & Hỗ trợ",
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-              ListTile(
-                leading: const Icon(Icons.settings_outlined, color: Colors.white),
-                title: const Text("Tuỳ chỉnh giao diện", style: TextStyle(color: Colors.white)),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: const Icon(Icons.notifications_outlined, color: Colors.white),
-                title: const Text("Thông báo", style: TextStyle(color: Colors.white)),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: const Icon(Icons.translate, color: Colors.white),
-                title: const Text("Ngôn ngữ", style: TextStyle(color: Colors.white)),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: const Icon(Icons.dark_mode_outlined, color: Colors.white),
-                title: const Text("Chế độ tối", style: TextStyle(color: Colors.white)),
-                onTap: () {},
-              ),
-              const Divider(color: Colors.white38),
-              ListTile(
-                leading: const Icon(Icons.star_border, color: Colors.white),
-                title: const Text("Đánh giá ứng dụng", style: TextStyle(color: Colors.white)),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: const Icon(Icons.feedback_outlined, color: Colors.white),
-                title: const Text("Góp ý & Hỗ trợ", style: TextStyle(color: Colors.white)),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: const Icon(Icons.info_outline, color: Colors.white),
-                title: const Text("Giới thiệu", style: TextStyle(color: Colors.white)),
-                onTap: () {},
-              ),
+
+              _drawerItem(Icons.settings_outlined, "Tuỳ chỉnh giao diện"),
+              _drawerItem(Icons.notifications_outlined, "Thông báo"),
+              _drawerItem(Icons.translate, "Ngôn ngữ"),
+              _drawerItem(Icons.dark_mode_outlined, "Chế độ tối"),
+              const Divider(color: Colors.black26),
+              _drawerItem(Icons.star_border, "Đánh giá ứng dụng"),
+              _drawerItem(Icons.feedback_outlined, "Góp ý & Hỗ trợ"),
+              _drawerItem(Icons.info_outline, "Giới thiệu"),
 
               const Padding(
                 padding: EdgeInsets.all(12),
                 child: Text(
                   "Phiên bản 1.0.0",
-                  style: TextStyle(color: Colors.white54, fontSize: 13),
+                  style: TextStyle(color: Colors.black45, fontSize: 13),
                 ),
               ),
             ],
@@ -186,16 +148,17 @@ class _HomeScreenState extends State<HomeScreen> {
             FadeTransition(opacity: animation, child: child),
         child: Container(
           key: ValueKey(_selectedIndex),
-          color: const Color(0xFF2C1A1F),
+          color: Colors.white,
           child: _pages[_selectedIndex],
         ),
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _handlePrivateTab,
-        backgroundColor: const Color(0xFF2C1A1F),
-        selectedItemColor: const Color(0xFFD0021B),
-        unselectedItemColor: Colors.white,
+        backgroundColor: Colors.white,
+        selectedItemColor: const Color(0xFFB42652),
+        unselectedItemColor: Colors.black54,
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.article_outlined), label: "Trang chủ"),
@@ -207,6 +170,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  Widget _drawerItem(IconData icon, String title) {
+    return ListTile(
+      leading: Icon(icon, color: const Color.fromARGB(255, 0, 0, 0)),
+      title: Text(title, style: const TextStyle(color: Color.fromARGB(255, 38, 38, 38))),
+      onTap: () {},
+    );
+  }
 }
-
-

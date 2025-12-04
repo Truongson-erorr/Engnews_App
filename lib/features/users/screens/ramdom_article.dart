@@ -15,7 +15,7 @@ class RandomArticlesWidget extends StatelessWidget {
         const Text(
           "Các nội dung khác",
           style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+              color: Color.fromARGB(255, 0, 0, 0), fontSize: 20, fontWeight: FontWeight.bold),
         ),
 
         FutureBuilder<List<ArticleModel>>(
@@ -74,7 +74,7 @@ class RandomArticlesWidget extends StatelessWidget {
                               Text(
                                 article.title,
                                 style: const TextStyle(
-                                    color: Colors.white,
+                                    color: Color.fromARGB(255, 0, 0, 0),
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold),
                                 maxLines: 2,
@@ -84,7 +84,7 @@ class RandomArticlesWidget extends StatelessWidget {
                               Text(
                                 article.description,
                                 style: const TextStyle(
-                                  color: Colors.white70,
+                                  color: Color.fromARGB(179, 98, 98, 98),
                                   fontSize: 12,
                                 ),
                                 maxLines: 2,

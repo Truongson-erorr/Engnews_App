@@ -17,8 +17,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final ArticleViewModel _articleVM = ArticleViewModel();
   final TextEditingController _searchController = TextEditingController();
 
-  String? userId; 
-
+  String? userId;
   List<ArticleModel> _results = [];
   bool _isLoading = false;
 
@@ -34,7 +33,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
-    userId = FirebaseAuth.instance.currentUser?.uid; 
+    userId = FirebaseAuth.instance.currentUser?.uid;
   }
 
   Future<void> _searchArticles() async {
@@ -57,19 +56,18 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2C1A1F),
+      backgroundColor: Colors.white, 
       appBar: AppBar(
+        backgroundColor: const Color(0xFFB42652), // nền đỏ
+        elevation: 0.6,
+        iconTheme: const IconThemeData(color: Colors.white), // icon trắng
         title: const Text(
           "Tìm kiếm",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
-            color: Colors.white,
+            color: Colors.white, // text trắng
           ),
-        ),
-        backgroundColor: const Color.fromARGB(255, 59, 19, 34),
-        iconTheme: const IconThemeData(
-          color: Colors.white, 
         ),
       ),
       body: Padding(
@@ -78,82 +76,50 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
             TextField(
               controller: _searchController,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 hintText: 'Nhập từ khóa bài báo...',
-                hintStyle: TextStyle(color: Colors.grey[400]),
+                hintStyle: TextStyle(color: Colors.grey[500]),
                 filled: true,
-                fillColor: const Color.fromARGB(255, 73, 49, 55),
+                fillColor: const Color(0xFFF5F5F5), // nền xám nhẹ
                 contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                 suffixIcon: _searchController.text.isEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.search, color: Color(0xFFD0021B)),
+                        icon: const Icon(Icons.search, color: Color(0xFFB42652)), // đỏ đậm
                         onPressed: _searchArticles,
                       )
                     : IconButton(
                         icon: const Icon(Icons.close, color: Colors.grey),
                         onPressed: () {
                           _searchController.clear();
-                          setState(() {
-                            _results = [];
-                          });
+                          setState(() => _results = []);
                         },
                       ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide.none,
+                ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                   borderSide: BorderSide.none,
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none,
+                  borderSide: BorderSide(
+                    color: const Color(0xFFB42652),
+                    width: 1.5,
+                  ),
                 ),
               ),
               onChanged: (value) => setState(() {}),
               onSubmitted: (_) => _searchArticles(),
             ),
             const SizedBox(height: 20),
-
             Expanded(
               child: _searchController.text.isEmpty
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Có thể bạn sẽ thích',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Expanded(
-                          child: ListView.separated(
-                            itemCount: _suggestions.length,
-                            separatorBuilder: (_, __) => Divider(
-                              height: 12,
-                              color: Colors.grey[700],
-                            ),
-                            itemBuilder: (context, index) {
-                              final keyword = _suggestions[index];
-                              return ListTile(
-                                leading: const Icon(Icons.search, color: Colors.grey),
-                                title: Text(
-                                  keyword,
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                onTap: () => _onSuggestionTap(keyword),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    )
+                  ? _buildSuggestions()
                   : _isLoading
-                      ? const Center(child: CircularProgressIndicator(color: Colors.white))
+                      ? const Center(child: CircularProgressIndicator(color: Color(0xFFB42652)))
                       : _results.isEmpty
                           ? const Center(
                               child: Text(
@@ -161,99 +127,116 @@ class _SearchScreenState extends State<SearchScreen> {
                                 style: TextStyle(color: Colors.grey, fontSize: 16),
                               ),
                             )
-                          : ListView.separated(
-                              itemCount: _results.length,
-                              separatorBuilder: (_, __) => Divider(
-                                height: 24,
-                                color: Colors.grey[700],
-                              ),
-                              itemBuilder: (context, index) {
-                                final article = _results[index];
-                                return InkWell(
-                                  borderRadius: BorderRadius.circular(12),
-                                  onTap: () {
-                                    if (userId != null) {
-                                      ReadingHistoryViewModel().addOrUpdateHistory(
-                                        userId: userId!,
-                                        articleId: article.id,
-                                        title: article.title,
-                                        description: article.description,
-                                        image: article.image,
-                                      );
-                                    }
-
-                                    Navigator.push(
-                                      context,
-                                      createSlideRoute(ArticleDetail(article: article)),
-                                    );
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    margin: const EdgeInsets.symmetric(vertical: 4),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(8),
-                                          child: article.image.isNotEmpty
-                                              ? Image.network(
-                                                  article.image,
-                                                  width: 90,
-                                                  height: 70,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Container(
-                                                  width: 90,
-                                                  height: 70,
-                                                  color: Colors.grey[700],
-                                                  child: const Icon(
-                                                    Icons.article_outlined,
-                                                    color: Colors.grey,
-                                                  ),
-                                                ),
-                                        ),
-                                        const SizedBox(width: 12),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                article.title,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 4),
-                                              Text(
-                                                article.description,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  color: Colors.grey[300],
-                                                  fontSize: 13,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                          : _buildResultList(),
             ),
           ],
         ),
       ),
     );
   }
-}
 
+  Widget _buildSuggestions() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Có thể bạn sẽ thích',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+        ),
+        const SizedBox(height: 12),
+        Expanded(
+          child: ListView.separated(
+            itemCount: _suggestions.length,
+            separatorBuilder: (_, __) => Divider(
+              height: 12,
+              color: const Color(0xFFB42652).withOpacity(0.2), // nhạt đỏ
+            ),
+            itemBuilder: (context, index) {
+              final keyword = _suggestions[index];
+              return ListTile(
+                leading: const Icon(Icons.search, color: Color(0xFFB42652)),
+                title: Text(
+                  keyword,
+                  style: const TextStyle(fontSize: 15, color: Colors.black),
+                ),
+                onTap: () => _onSuggestionTap(keyword),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildResultList() {
+    return ListView.separated(
+      itemCount: _results.length,
+      separatorBuilder: (_, __) => Divider(
+        height: 24,
+        color: Colors.grey.withOpacity(0.2),
+      ),
+      itemBuilder: (context, index) {
+        final article = _results[index];
+        return InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            if (userId != null) {
+              ReadingHistoryViewModel().addOrUpdateHistory(
+                userId: userId!,
+                articleId: article.id,
+                title: article.title,
+                description: article.description,
+                image: article.image,
+              );
+            }
+            Navigator.push(
+              context,
+              createSlideRoute(ArticleDetail(article: article)),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: article.image.isNotEmpty
+                      ? Image.network(article.image, width: 90, height: 70, fit: BoxFit.cover)
+                      : Container(
+                          width: 90,
+                          height: 70,
+                          color: Colors.grey[300],
+                          child: const Icon(Icons.article_outlined, color: Colors.grey),
+                        ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        article.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        article.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

@@ -12,15 +12,9 @@ class ReadingHistoryScreen extends StatelessWidget {
   String timeAgo(DateTime date) {
     final diff = DateTime.now().difference(date);
 
-    if (diff.inSeconds < 60) {
-      return '${diff.inSeconds} giây trước';
-    }
-    if (diff.inMinutes < 60) {
-      return '${diff.inMinutes} phút trước';
-    }
-    if (diff.inHours < 24) {
-      return '${diff.inHours} giờ trước';
-    }
+    if (diff.inSeconds < 60) return '${diff.inSeconds} giây trước';
+    if (diff.inMinutes < 60) return '${diff.inMinutes} phút trước';
+    if (diff.inHours < 24) return '${diff.inHours} giờ trước';
     return '${diff.inDays} ngày trước';
   }
 
@@ -29,40 +23,44 @@ class ReadingHistoryScreen extends StatelessWidget {
     final historyVM = ReadingHistoryViewModel();
 
     return Scaffold(
-      backgroundColor: Color(0xFF2C1A1F),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           'Bài báo đã đọc gần đây',
           style: TextStyle(
-            color: Colors.white,
+            color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 59, 19, 34),
+        backgroundColor: const Color(0xFFB42652),
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 255, 255, 255)),
       ),
-
       body: FutureBuilder<List<ReadingHistoryModel>>(
         future: historyVM.getHistoryOnce(userId),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(color: Color(0xFFD0021B)));
           }
 
           final historyList = snapshot.data!;
           if (historyList.isEmpty) {
-            return const Center(child: Text('Chưa có bài báo nào.'));
+            return const Center(
+              child: Text(
+                'Chưa có bài báo nào.',
+                style: TextStyle(color: Colors.grey, fontSize: 16),
+              ),
+            );
           }
 
           return ListView.separated(
             padding: const EdgeInsets.all(16),
             itemCount: historyList.length,
             separatorBuilder: (_, __) => const Divider(
-                  color: Color(0xFF4A3A3F),
-                  thickness: 1,
-                  height: 16,
+              color: Color(0xFFE0E0E0),
+              thickness: 1,
+              height: 16,
             ),
             itemBuilder: (context, index) {
               final item = historyList[index];
@@ -95,53 +93,71 @@ class ReadingHistoryScreen extends StatelessWidget {
                     );
                   });
                 },
-                child: Row(
-                  children: [
-                    if (item.image.isNotEmpty)
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          item.image,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: const EdgeInsets.symmetric(vertical: 6),
+                  
+                  child: Row(
+                    children: [
+                      if (item.image.isNotEmpty)
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            item.image,
+                            width: 100,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      else
+                        Container(
                           width: 100,
                           height: 80,
-                          fit: BoxFit.cover,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(Icons.article_outlined, color: Colors.grey),
+                        ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              item.title,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              item.description,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Colors.black54,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Đã đọc ${timeAgo(item.readAt)}',
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            item.title,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            item.description,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Color.fromARGB(136, 197, 197, 197),
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Đã đọc ${timeAgo(item.readAt)}',
-                            style: const TextStyle(fontSize: 10, color: Color.fromARGB(255, 127, 127, 127)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },
