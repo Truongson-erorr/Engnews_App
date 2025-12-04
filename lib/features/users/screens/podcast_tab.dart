@@ -53,7 +53,7 @@ class PodcastTab extends StatelessWidget {
         itemBuilder: (context, index) {
           final podcast = podcasts[index];
           return Card(
-            color: const Color(0xFF3B1322), // slightly lighter than background
+            color: const Color(0xFF3B1322), 
             margin: const EdgeInsets.symmetric(vertical: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),

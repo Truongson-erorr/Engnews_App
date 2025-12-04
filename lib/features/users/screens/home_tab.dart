@@ -75,7 +75,7 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   void _scrollToCenter(int index) {
-    const double itemWidth = 80, separator = 16;
+    const double itemWidth = 110, separator = 16;
     final screenWidth = MediaQuery.of(context).size.width;
     final targetOffset =
         (itemWidth + separator) * index - (screenWidth - itemWidth) / 2;
@@ -111,43 +111,36 @@ class _HomeTabState extends State<HomeTab> {
         const SizedBox(height: 8),
 
         SizedBox(
-          height: 50,
+          height: 40,
           child: ListView.separated(
             controller: _menuScrollController,
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: _categories.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 16),
+            separatorBuilder: (_, __) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
               final category = _categories[index];
               final isSelected = category.id == _selectedCategoryId;
 
               return GestureDetector(
                 onTap: () => _onCategorySelected(category.id, index),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: isSelected ? const Color(0xFFD0021B) : const Color.fromARGB(255, 56, 44, 48),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text(
                       category.title,
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                        color: isSelected
-                            ? const Color(0xFFD0021B)
-                            : const Color.fromARGB(221, 255, 255, 255),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      height: 3,
-                      width: isSelected ? 24 : 0,
-                      decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFFD0021B) : Colors.transparent,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               );
             },

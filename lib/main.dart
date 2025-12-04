@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
-        textTheme: GoogleFonts.baloo2TextTheme(
+        textTheme: GoogleFonts.poppinsTextTheme(
           Theme.of(context).textTheme,
         ),
       ),

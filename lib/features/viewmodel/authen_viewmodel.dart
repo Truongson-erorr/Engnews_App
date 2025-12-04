@@ -36,6 +36,7 @@ class AuthenViewModel extends ChangeNotifier {
         phone: phone,
         email: email,
         image: '', 
+        role: 'user',   
         createdAt: DateTime.now(),
       );
 
@@ -148,6 +149,7 @@ class AuthenViewModel extends ChangeNotifier {
           phone: user.phoneNumber ?? '',
           email: user.email ?? '',
           image: user.photoURL ?? '',
+          role: 'user',   
           createdAt: DateTime.now(),
         );
         await _firestore.collection('users').doc(user.uid).set(newUser.toMap());
@@ -190,6 +192,7 @@ class AuthenViewModel extends ChangeNotifier {
           uid: currentUser!.uid,
           fullName: fullName,
           phone: phone,
+          role: 'user',   
           email: currentUser!.email,
           image: currentUser!.image,
           createdAt: currentUser!.createdAt,
