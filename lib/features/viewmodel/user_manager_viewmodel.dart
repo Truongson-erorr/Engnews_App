@@ -5,6 +5,7 @@ import '../models/user_model.dart';
 class UserManagerViewModel extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // Fetch all users from Firestore
   Future<List<UserModel>> fetchAllUsers() async {
     final snapshot = await _firestore.collection("users").get();
 
@@ -13,6 +14,7 @@ class UserManagerViewModel extends ChangeNotifier {
         .toList();
   }
 
+  // Delete user by UID
   Future<void> deleteUser(String uid) async {
     await _firestore.collection("users").doc(uid).delete();
   }
