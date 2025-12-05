@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart'; 
 import 'firebase_options.dart'; 
 import 'features/viewmodel/authen_viewmodel.dart';
+import 'features/viewmodel/user_manager_viewmodel.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
@@ -16,12 +17,21 @@ void main() async {
 
   await dotenv.load();
   runApp(
-    ChangeNotifierProvider(
-      create: (_) {
-        final vm = AuthenViewModel();
-        vm.fetchCurrentUser(); 
-        return vm;
-      },
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) {
+            final vm = AuthenViewModel();
+            vm.fetchCurrentUser();
+            return vm;
+          },
+        ),
+
+        /// Provider cho UserManager
+        ChangeNotifierProvider(
+          create: (_) => UserManagerViewModel(),
+        ),
+      ],
       child: const MyApp(),
     ),
   );
