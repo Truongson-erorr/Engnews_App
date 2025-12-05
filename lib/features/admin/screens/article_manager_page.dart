@@ -104,53 +104,83 @@ class _ArticleManagerPageState extends State<ArticleManagerPage> {
                                   ),
                                 ],
                               ),
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                title: Text(
-                                  article.title,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold, color: Colors.black87, fontSize: 16),
-                                ),
-                                subtitle: Text(
-                                  article.description,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(color: Colors.grey[700], fontSize: 14),
-                                ),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Row(
                                   children: [
-                                    // Nút Sửa
-                                    TextButton(
-                                      onPressed: () => _editArticle(article),
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: Colors.blue.shade50, 
-                                        foregroundColor: Colors.blue.shade800,
-                                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        article.image,
+                                        width: 70,
+                                        height: 70,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (_, __, ___) => Container(
+                                          width: 70,
+                                          height: 70,
+                                          color: Colors.grey[300],
+                                          child: const Icon(Icons.broken_image),
                                         ),
-                                        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                                       ),
-                                      child: const Text("Sửa"),
+                                    ),
+                                    const SizedBox(width: 12),
+
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            article.title,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            article.description,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(color: Colors.grey[700]),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     const SizedBox(width: 8),
-                                    TextButton(
-                                      onPressed: () => _deleteArticle(article.id),
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: Colors.red.shade50, 
-                                        foregroundColor: Colors.red.shade800, 
-                                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
+
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () => _editArticle(article),
+                                          style: TextButton.styleFrom(
+                                            backgroundColor: Colors.blue.shade50,
+                                            foregroundColor: Colors.blue.shade800,
+                                            minimumSize: const Size(60, 32),
+                                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                                          ),
+                                          child: const Text("Sửa"),
                                         ),
-                                        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                                      ),
-                                      child: const Text("Xóa"),
+                                        const SizedBox(height: 4),
+
+                                        TextButton(
+                                          onPressed: () => _deleteArticle(article.id),
+                                          style: TextButton.styleFrom(
+                                            backgroundColor: Colors.red.shade50,
+                                            foregroundColor: Colors.red.shade800,
+                                            minimumSize: const Size(60, 32),
+                                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                                          ),
+                                          child: const Text("Xóa"),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
                               ),
+
                             );
                           },
                         ),

@@ -137,9 +137,14 @@ class ProfileScreen extends StatelessWidget {
                       }
                     },
                     icon: const Icon(Icons.logout),
-                    label: const Text("Đăng xuất"),
+                    label: const Text(
+                      "Đăng xuất",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 183, 38, 38),
+                      backgroundColor: Color(0xFFB42652),
                       foregroundColor: Colors.white,
                       minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
@@ -156,7 +161,11 @@ class ProfileScreen extends StatelessWidget {
   Widget _infoItem(IconData icon, String label, String value) {
     return Row(
       children: [
-        Icon(icon, size: 22, color: const Color.fromARGB(255, 198, 23, 23)),
+        Icon(
+          icon,
+          size: 22,
+          color: Color(0xFFB42652),
+        ),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
