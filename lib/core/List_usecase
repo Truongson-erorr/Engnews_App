@@ -30,9 +30,28 @@ DANH SÁCH USE CASES CỦA ỨNG DỤNG
 - Xem danh sách bài yêu thích (Get Favorite Articles)
 - Xem lịch sử đã đọc (Get Reading History)
 
-1.6 Support / Feedback (Hỗ trợ người dùng)
-- Gửi phản hồi / liên hệ (Send Feedback or Contact)
-- Xem danh sách câu hỏi thường gặp (View FAQ)
+1.6 Notification (Thông báo)
+- Nhận thông báo bài viết mới theo danh mục quan tâm (Receive Category Notifications)
+- Nhận thông báo khi có bản tin nổi bật (Receive Breaking News Notifications)
+- Quản lý trạng thái thông báo (Enable/Disable Notifications)
+
+1.7 Personalization (Cá nhân hóa nội dung)
+- Chọn danh mục yêu thích (Select Favorite Categories)
+- Nhận gợi ý bài viết dựa trên hành vi đọc (Get Personalized Recommendations)
+
+1.8 Voice (Đọc bài viết bằng giọng nói)
+- Chuyển đổi bài viết sang giọng đọc (Convert Article to Speech)
+- Phát giọng đọc bài viết (Play Voice Reading)
+- Tạm dừng / tiếp tục giọng đọc (Pause / Resume Voice Reading)
+- Điều chỉnh tốc độ đọc (Adjust Reading Speed)
+- Tua nhanh / tua lùi (Seek Forward / Backward)
+
+1.9 Tóm tắt tin tức bằng AI
+- Tạo tóm tắt bài viết tự động (Generate AI Summary)
+- Chọn độ dài tóm tắt (ngắn / vừa / chi tiết) (Select Summary Length)
+- Xem tóm tắt nổi bật (key points) (View Key Highlights)
+- Tóm tắt theo yêu cầu người dùng (Custom AI Summary Prompt — optional)
+- Chia sẻ tóm tắt nhanh (Share AI Summary)
 
 2. Nhóm Admin (Quản trị viên)
 2.1 Quản lý bài viết
@@ -57,3 +76,8 @@ DANH SÁCH USE CASES CỦA ỨNG DỤNG
 - Xem bài viết được xem nhiều nhất (Get Most Viewed Articles)
 - Xem bài viết được yêu thích nhiều nhất (Get Most Liked Articles)
 - Xem hoạt động người dùng gần đây (Get Recent User Activity)
+
+2.5 Quản lý bình luận
+- Duyệt bình luận (Approve Comment)
+- Xóa bình luận vi phạm (Delete Comment)
+- Chặn người dùng spam bình luận (Block User Commenting)

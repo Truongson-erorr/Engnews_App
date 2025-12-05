@@ -23,17 +23,27 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
 
     if (user == null) {
       return const Scaffold(
-        body: Center(child: Text("Vui lòng đăng nhập để xem bài đã lưu")),
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Text(
+            "Vui lòng đăng nhập để xem bài đã lưu",
+            style: TextStyle(color: Colors.black87, fontSize: 16),
+          ),
+        ),
       );
     }
 
     return Scaffold(
-      backgroundColor: Color(0xFF2C1A1F),
+      backgroundColor: Colors.white,
       body: StreamBuilder<List<String>>(
         stream: _favoriteVM.getFavorites(user.uid),
         builder: (context, favSnap) {
           if (favSnap.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Color(0xFFD0021B),
+              ),
+            );
           }
 
           final favIds = favSnap.data ?? [];
@@ -51,7 +61,11 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
             future: _articleVM.fetchArticles(),
             builder: (context, articleSnap) {
               if (articleSnap.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xFFD0021B),
+                  ),
+                );
               }
 
               final savedArticles = articleSnap.data!
@@ -70,8 +84,8 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
               return ListView.separated(
                 padding: const EdgeInsets.all(16),
                 itemCount: savedArticles.length,
-                separatorBuilder: (_, __) => const Divider(
-                  color: Color(0xFF4A3A3F),
+                separatorBuilder: (_, __) => Divider(
+                  color: Colors.grey[300],
                   thickness: 1,
                   height: 16,
                 ),
@@ -84,16 +98,20 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
                     onDismissed: (_) async {
                       await _favoriteVM.removeFavorite(user.uid, article.id);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Đã xóa bài viết')),
+                        const SnackBar(
+                          content: Text('Đã xóa bài viết'),
+                        ),
                       );
                     },
                     background: Container(
                       padding: const EdgeInsets.only(right: 20),
                       alignment: Alignment.centerRight,
-                      color: Colors.redAccent,
+                      color: const Color(0xFFD0021B),
                       child: const Icon(Icons.delete, color: Colors.white),
                     ),
                     child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      splashColor: const Color.fromARGB(51, 254, 254, 254),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -101,7 +119,7 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
                         );
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 6),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -118,8 +136,10 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
                                       width: 100,
                                       height: 80,
                                       color: Colors.grey[300],
-                                      child: const Icon(Icons.article_outlined,
-                                          color: Colors.grey),
+                                      child: const Icon(
+                                        Icons.article_outlined,
+                                        color: Colors.grey,
+                                      ),
                                     ),
                             ),
                             const SizedBox(width: 12),
@@ -139,39 +159,35 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
                                           style: const TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold,
-                                            color: Color.fromARGB(221, 255, 255, 255),
+                                            color: Colors.black87,
                                           ),
                                         ),
                                       ),
-                                      PopupMenuTheme(
-                                        data: const PopupMenuThemeData(
-                                          color: Color.fromARGB(255, 201, 201, 201),
+                                      PopupMenuButton<String>(
+                                        icon: const Icon(
+                                          Icons.more_vert,
+                                          color: Color(0xFFD0021B),
                                         ),
-                                        child: PopupMenuButton<String>(
-                                          icon: const Icon(
-                                              Icons.more_vert,
-                                              color: Colors.grey),
-                                          onSelected: (value) async {
-                                            if (value == 'delete') {
-                                              await _favoriteVM.removeFavorite(
-                                                  user.uid, article.id);
-                                              
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                    content: Text(
-                                                        'Đã xóa bài viết')),
-                                              );
-                                            }
-                                          },
-                                          itemBuilder: (context) => [
-                                            const PopupMenuItem(
-                                              value: 'delete',
-                                              child:
-                                                  Text('Xóa bài viết đã lưu'),
-                                            ),
-                                          ],
-                                        ),
+                                        onSelected: (value) async {
+                                          if (value == 'delete') {
+                                            await _favoriteVM.removeFavorite(
+                                                user.uid, article.id);
+
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                  content: Text(
+                                                      'Đã xóa bài viết')),
+                                            );
+                                          }
+                                        },
+                                        itemBuilder: (context) => [
+                                          const PopupMenuItem(
+                                            value: 'delete',
+                                            child:
+                                                Text('Xóa bài viết đã lưu'),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -181,8 +197,10 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                        color: Color.fromARGB(137, 197, 197, 197), fontSize: 13),
-                                  ),                               
+                                      color: Colors.black54,
+                                      fontSize: 13,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),

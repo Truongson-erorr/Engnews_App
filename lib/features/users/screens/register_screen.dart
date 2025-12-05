@@ -22,19 +22,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const Color primaryRed = Color(0xFFB42652);
+    const Color lightGrey = Color(0xFFF4F4F4);
+
     return Scaffold(
-      backgroundColor: const Color(0xFF1E0B12), 
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1E0B12),
+        backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.black),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -43,25 +46,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 32,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               "Điền thông tin bên dưới để bắt đầu nhé!",
-              style: TextStyle(color: Colors.grey[300], fontSize: 16),
+              style: TextStyle(color: Colors.black54, fontSize: 16),
             ),
             const SizedBox(height: 30),
 
-            // Full name
             TextField(
               controller: fullNameController,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: "Họ và tên",
-                labelStyle: const TextStyle(color: Colors.white70),
+                labelStyle: const TextStyle(color: Colors.black54),
                 filled: true,
-                fillColor: const Color(0xFF2C1A1F),
+                fillColor: lightGrey,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
@@ -72,15 +74,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 16),
 
-            // Phone
             TextField(
               controller: phoneController,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: "Số điện thoại",
-                labelStyle: const TextStyle(color: Colors.white70),
+                labelStyle: const TextStyle(color: Colors.black54),
                 filled: true,
-                fillColor: const Color(0xFF2C1A1F),
+                fillColor: lightGrey,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
@@ -91,15 +92,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 16),
 
-            // Email
             TextField(
               controller: emailController,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: "Email",
-                labelStyle: const TextStyle(color: Colors.white70),
+                labelStyle: const TextStyle(color: Colors.black54),
                 filled: true,
-                fillColor: const Color(0xFF2C1A1F),
+                fillColor: lightGrey,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
@@ -110,16 +110,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 16),
 
-            // Password
             TextField(
               controller: passwordController,
               obscureText: true,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: "Mật khẩu",
-                labelStyle: const TextStyle(color: Colors.white70),
+                labelStyle: const TextStyle(color: Colors.black54),
                 filled: true,
-                fillColor: const Color(0xFF2C1A1F),
+                fillColor: lightGrey,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
@@ -133,12 +132,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             TextField(
               controller: confirmController,
               obscureText: true,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: "Xác nhận mật khẩu",
-                labelStyle: const TextStyle(color: Colors.white70),
+                labelStyle: const TextStyle(color: Colors.black54),
                 filled: true,
-                fillColor: const Color(0xFF2C1A1F),
+                fillColor: lightGrey,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
@@ -150,7 +149,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(height: 30),
 
             isLoading
-                ? const Center(child: CircularProgressIndicator(color: Colors.white))
+                ? const Center(
+                    child: CircularProgressIndicator(color: primaryRed))
                 : SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -162,7 +162,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           );
                           return;
                         }
-
                         setState(() => isLoading = true);
 
                         bool success = await vm.register(
@@ -188,7 +187,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF8B0000),
+                        backgroundColor: primaryRed, 
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
@@ -203,6 +202,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   ),
+
             const SizedBox(height: 20),
 
             Center(
@@ -212,10 +212,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     MaterialPageRoute(builder: (_) => const LoginScreen()),
                   );
                 },
-                child: const Text(
+                child: Text(
                   "Đã có tài khoản? Đăng nhập",
                   style: TextStyle(
-                    color: Color(0xFF8B0000),
+                    color: primaryRed, 
                     fontSize: 15,
                   ),
                 ),
