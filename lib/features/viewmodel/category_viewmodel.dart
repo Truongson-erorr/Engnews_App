@@ -34,4 +34,16 @@ class CategoryViewModel {
       return [];
     }
   }
+
+  /// Update category title in Firestore
+  Future<void> updateCategory(String categoryId, String newTitle) async {
+    try {
+      await _firestore.collection('categories').doc(categoryId).update({
+        'title': newTitle,
+      });
+    } catch (e) {
+      print('Lỗi khi cập nhật danh mục: $e');
+      rethrow;
+    }
+  }
 }

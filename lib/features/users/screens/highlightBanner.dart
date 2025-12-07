@@ -64,7 +64,6 @@ class _HighlightBannerState extends State<HighlightBanner> {
           final article = widget.articles[index];
           return GestureDetector(
             onTap: () {
-              // Thêm vào lịch sử chỉ khi userId != null
               if (userId != null) {
                 ReadingHistoryViewModel().addOrUpdateHistory(
                   userId: userId!,
@@ -97,23 +96,48 @@ class _HighlightBannerState extends State<HighlightBanner> {
                     alignment: Alignment.center,
                     child: const Icon(Icons.image, color: Colors.white54, size: 48),
                   ),
-                Container(
-                  alignment: Alignment.bottomLeft,
-                  padding: const EdgeInsets.all(12),
-                  color: Colors.black38,
-                  child: Text(
-                    article.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+
+                Positioned(
+                  top: 8,
+                  left: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 58, 58),
+                      borderRadius: BorderRadius.circular(4),
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    child: const Text(
+                      "Tin mới",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    child: Text(
+                      article.title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
               ],
             ),
+
           );
         },
       ),

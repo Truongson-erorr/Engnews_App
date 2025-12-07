@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../viewmodel/category_viewmodel.dart';
 import '../../models/category_model.dart';
+import 'edit_categorypage.dart';
 
 class CategoryManagerPage extends StatefulWidget {
   const CategoryManagerPage({super.key});
@@ -51,8 +52,20 @@ class _CategoryManagerPageState extends State<CategoryManagerPage> {
     _loadCategories();
   }
 
-  void _editCategory(CategoryModel category) {
+  void _editCategory(CategoryModel category) async {
+    final result = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditCategoryPage(
+          category: category,
+          categoryVM: _categoryVM,
+        ),
+      ),
+    );
 
+    if (result == true) {
+      _loadCategories(); 
+    }
   }
 
   void _addCategory() {
@@ -66,8 +79,40 @@ class _CategoryManagerPageState extends State<CategoryManagerPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Quản lý danh mục",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                TextButton(
+                  onPressed: _addCategory, 
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.green.shade100, 
+                    foregroundColor: Colors.green.shade800,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  ),
+                  child: const Text(
+                    "+ Thêm danh mục mới",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
+
           Expanded(
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
@@ -87,7 +132,9 @@ class _CategoryManagerPageState extends State<CategoryManagerPage> {
                                 title: Text(
                                   category.title,
                                   style: const TextStyle(
-                                      color: Colors.black87, fontWeight: FontWeight.bold),
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 subtitle: Text(
                                   "ID: ${category.id}",
