@@ -18,13 +18,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   bool _isSaving = false;
 
-  static const Color _iconColor = Color(0xFFB42652); 
-  static const Color _textColor = Color.fromRGBO(0, 0, 0, 0.867);   
-
   @override
   void initState() {
     super.initState();
-    final user = Provider.of<AuthenViewModel>(context, listen: false).currentUser;
+    final user =
+        Provider.of<AuthenViewModel>(context, listen: false).currentUser;
+
     _nameController = TextEditingController(text: user?.fullName ?? '');
     _phoneController = TextEditingController(text: user?.phone ?? '');
     _emailController = TextEditingController(text: user?.email ?? '');
@@ -53,8 +52,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Cập nhật thông tin thành công!'),
+        SnackBar(
+          content: const Text('Cập nhật thông tin thành công!'),
+          backgroundColor: const Color(0xFFB42652),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -64,25 +64,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     final user = Provider.of<AuthenViewModel>(context).currentUser;
 
     if (user == null) {
-      return const Scaffold(
-        body: Center(child: Text("Không có thông tin người dùng")),
+      return Scaffold(
+        backgroundColor: colors.background,
+        body: Center(
+          child: Text(
+            "Không có thông tin người dùng",
+            style: textTheme.bodyLarge?.copyWith(color: colors.onBackground),
+          ),
+        ),
       );
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.background,
       appBar: AppBar(
-        title: const Text(
-          "Chỉnh sửa thông tin cá nhân",
-          style: TextStyle(fontWeight: FontWeight.bold),
+        backgroundColor: const Color(0xFFB42652), 
+        elevation: 0.6,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(
+          "Chỉnh sửa hồ sơ",
+          style: textTheme.titleLarge?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: const Color.fromARGB(255, 241, 241, 241),
-        foregroundColor: const Color.fromARGB(255, 0, 0, 0),
-        elevation: 0.5,
-        centerTitle: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -91,28 +102,38 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Column(
             children: [
               const SizedBox(height: 10),
+
               _buildTextField(
+                context: context,
                 controller: _nameController,
                 label: "Họ và tên",
                 icon: Icons.person_outline,
                 validator: (v) => v!.isEmpty ? "Vui lòng nhập họ tên" : null,
               ),
+
               const SizedBox(height: 20),
+
               _buildTextField(
+                context: context,
                 controller: _phoneController,
                 label: "Số điện thoại",
                 icon: Icons.phone_outlined,
                 keyboardType: TextInputType.phone,
-                validator: (v) => v!.isEmpty ? "Vui lòng nhập số điện thoại" : null,
+                validator: (v) =>
+                    v!.isEmpty ? "Vui lòng nhập số điện thoại" : null,
               ),
+
               const SizedBox(height: 20),
+
               _buildTextField(
+                context: context,
                 controller: _emailController,
                 label: "Email",
                 icon: Icons.email_outlined,
                 readOnly: true,
               ),
               const SizedBox(height: 40),
+
               SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -120,18 +141,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   onPressed: _isSaving ? null : _saveChanges,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFB42652),
-                    elevation: 2,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
                   child: _isSaving
                       ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text(
+                      : Text(
                           "Lưu thay đổi",
-                          style: TextStyle(
+                          style: textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
-                            fontSize: 16,
                             color: Colors.white,
                           ),
                         ),
@@ -145,6 +164,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Widget _buildTextField({
+    required BuildContext context,
     required TextEditingController controller,
     required String label,
     required IconData icon,
@@ -152,22 +172,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     bool readOnly = false,
     TextInputType? keyboardType,
   }) {
+    final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return TextFormField(
       controller: controller,
       readOnly: readOnly,
       keyboardType: keyboardType,
       validator: validator,
-      style: TextStyle(color: _textColor),
+      style: textTheme.bodyLarge?.copyWith(color: colors.onSurface),
       decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: _iconColor),
+        prefixIcon: Icon(icon, color: const Color(0xFFB42652)), 
         labelText: label,
-        labelStyle: TextStyle(fontSize: 14, color: _textColor),
-        errorStyle: const TextStyle(color: Color(0xFFFF8A80)),
+        labelStyle:
+            textTheme.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: colors.surface, 
+        errorStyle: TextStyle(color: colors.error),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none, // KHÔNG viền màu
+          borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -175,9 +199,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderSide: const BorderSide(color: Color(0xFFB42652), width: 1),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
     );
   }

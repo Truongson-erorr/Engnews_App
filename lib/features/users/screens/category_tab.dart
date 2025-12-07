@@ -23,20 +23,27 @@ class _CategoryTabState extends State<CategoryTab> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
-      color: Colors.white, 
+      color: theme.scaffoldBackgroundColor,
       child: FutureBuilder<List<CategoryModel>>(
         future: _futureCategories,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: Colors.red));
+            return Center(
+              child: CircularProgressIndicator(
+                color: theme.colorScheme.primary,
+              ),
+            );
           }
 
           if (snapshot.hasError) {
             return Center(
               child: Text(
                 'Lỗi: ${snapshot.error}',
-                style: const TextStyle(color: Colors.red),
+                style: TextStyle(color: theme.colorScheme.error),
               ),
             );
           }
@@ -44,10 +51,10 @@ class _CategoryTabState extends State<CategoryTab> {
           final categories = snapshot.data ?? [];
 
           if (categories.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'Chưa có danh mục nào.',
-                style: TextStyle(color: Colors.black54),
+                style: TextStyle(color: theme.colorScheme.onBackground.withOpacity(0.6)),
               ),
             );
           }
@@ -56,7 +63,7 @@ class _CategoryTabState extends State<CategoryTab> {
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
             itemCount: categories.length,
             separatorBuilder: (_, __) => Divider(
-              color: Colors.grey[300],
+              color: theme.dividerColor,
               thickness: 1,
               height: 16,
             ),
@@ -65,25 +72,33 @@ class _CategoryTabState extends State<CategoryTab> {
 
               return Container(
                 decoration: BoxDecoration(
-                  color: Colors.white, 
+                  color: theme.cardColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: ListTile(
                   contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  leading: const Icon(Icons.label_outline, color: Color(0xFFB42652)), 
+                  leading: Icon(
+                    Icons.label_outline,
+                    color: const Color(0xFFB42652),
+                  ),
                   title: Text(
                     category.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black, 
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                   subtitle: Text(
                     category.description,
-                    style: const TextStyle(color: Colors.black54),
+                    style: TextStyle(
+                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                    ),
                   ),
-                  trailing: const Icon(Icons.chevron_right, color: Colors.black38),
+                  trailing: Icon(
+                    Icons.chevron_right,
+                    color: theme.iconTheme.color?.withOpacity(0.6),
+                  ),
                   onTap: () {
                     Navigator.push(
                       context,

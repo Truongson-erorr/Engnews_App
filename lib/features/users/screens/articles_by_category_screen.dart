@@ -30,45 +30,48 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
   @override
   void initState() {
     super.initState();
-    _futureArticles =
-        _viewModel.fetchArticlesByCategory(widget.categoryId);
+    _futureArticles = _viewModel.fetchArticlesByCategory(widget.categoryId);
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
+
       appBar: AppBar(
-         backgroundColor: const Color(0xFFB42652),
+        backgroundColor: const Color(0xFFB42652), 
         elevation: 1,
         title: Text(
           widget.categoryTitle,
           style: const TextStyle(
-            color: Color.fromARGB(255, 255, 255, 255), 
+            color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Color.fromARGB(255, 255, 255, 255), 
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
 
       body: FutureBuilder<List<ArticleModel>>(
         future: _futureArticles,
         builder: (context, snapshot) {
+          
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-                child: CircularProgressIndicator(
-                    color: Color(0xFFB42652)));
+            return Center(
+              child: CircularProgressIndicator(
+                color: theme.colorScheme.primary,
+              ),
+            );
           }
 
           if (snapshot.hasError) {
             return Center(
               child: Text(
                 'Lỗi: ${snapshot.error}',
-                style: const TextStyle(color: Colors.red),
+                style: TextStyle(color: theme.colorScheme.error),
               ),
             );
           }
@@ -76,10 +79,12 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
           final articles = snapshot.data ?? [];
 
           if (articles.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'Không có bài viết nào trong danh mục này.',
-                style: TextStyle(color: Colors.black54),
+                style: TextStyle(
+                  color: theme.colorScheme.onBackground.withOpacity(0.6),
+                ),
               ),
             );
           }
@@ -108,19 +113,22 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
                     createSlideRoute(ArticleDetail(article: article)),
                   );
                 },
+
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: Colors.transparent,
+                    color: theme.cardColor,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
                       ClipRRect(
                         borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(16),
-                            topRight: Radius.circular(16)),
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
                         child: article.image.isNotEmpty
                             ? Image.network(
                                 article.image,
@@ -131,45 +139,55 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
                             : Container(
                                 width: double.infinity,
                                 height: 180,
-                                color: Colors.grey[300],
-                                child: const Icon(
+                                color: isDark
+                                    ? Colors.grey[800]
+                                    : Colors.grey[300],
+                                child: Icon(
                                   Icons.article_outlined,
-                                  color: Colors.grey,
+                                  color: isDark
+                                      ? Colors.white54
+                                      : Colors.grey,
                                   size: 50,
                                 ),
                               ),
                       ),
+
                       Padding(
                         padding: const EdgeInsets.all(12),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+
                             Text(
                               article.title,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black87,
+                                color: theme.colorScheme.onSurface,
                               ),
                             ),
                             const SizedBox(height: 6),
+
                             Text(
                               article.description,
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.grey[800],
+                                color: theme.colorScheme.onSurface
+                                    .withOpacity(0.7),
                               ),
                             ),
                             const SizedBox(height: 8),
+
                             Text(
                               'Ngày đăng: ${article.date.toLocal().toString().split(' ')[0]}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.black45,
+                                color: theme.colorScheme.onSurface
+                                    .withOpacity(0.5),
                               ),
                             ),
                           ],
@@ -181,8 +199,6 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
               );
             },
           );
-
-
         },
       ),
     );

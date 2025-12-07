@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; 
+import 'package:intl/intl.dart';
 import '../../models/article_model.dart';
 import '../../models/comment_model.dart';
 import '../../viewmodel/comment_viewmodel.dart';
@@ -16,50 +16,82 @@ class ArticleCommentsWidget extends StatefulWidget {
 class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
   final CommentViewModel _commentVM = CommentViewModel();
   final TextEditingController _commentController = TextEditingController();
-  final DateFormat _dateFormat = DateFormat('dd/MM/yyyy HH:mm'); 
+  final DateFormat _dateFormat = DateFormat('dd/MM/yyyy HH:mm');
 
   @override
   Widget build(BuildContext context) {
-    final article = widget.article;
+    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(12),
+      color: theme.colorScheme.background,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Bình luận",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.onBackground,
+            ),
           ),
           const SizedBox(height: 8),
+
           StreamBuilder<List<CommentModel>>(
-            stream: _commentVM.getComments(article.id),
+            stream: _commentVM.getComments(widget.article.id),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator(color: Color(0xFFD0021B)));
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: const Color(0xFFB42652),
+                  ),
+                );
               }
+
               final comments = snapshot.data ?? [];
               if (comments.isEmpty) {
-                return const Text("Chưa có bình luận nào.", style: TextStyle(color: Colors.grey));
+                return Text(
+                  "Chưa có bình luận nào.",
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  ),
+                );
               }
+
               return Column(
                 children: comments.map((comment) {
-                  final firstLetter = comment.user.isNotEmpty ? comment.user[0].toUpperCase() : '?';
+                  final firstLetter = comment.user.isNotEmpty
+                      ? comment.user[0].toUpperCase()
+                      : '?';
+
                   return ListTile(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0), 
+                    contentPadding: const EdgeInsets.symmetric(vertical: 4),
                     leading: CircleAvatar(
-                      radius: 16, 
-                      backgroundColor: Colors.grey[400],
+                      radius: 16,
+                      backgroundColor: const Color(0xFFB42652),
                       child: Text(
                         firstLetter,
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    title: Text(comment.user, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87, fontSize: 14)),
-                    subtitle: Text(comment.text, style: const TextStyle(color: Colors.black87, fontSize: 13)),
+                    title: Text(
+                      comment.user,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(
+                      comment.text,
+                      style: theme.textTheme.bodyMedium,
+                    ),
                     trailing: Text(
-                      _dateFormat.format(comment.date), 
-                      style: const TextStyle(fontSize: 11, color: Colors.grey),
+                      _dateFormat.format(comment.date),
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      ),
                     ),
                   );
                 }).toList(),
@@ -67,32 +99,35 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
             },
           ),
           const SizedBox(height: 12),
+
           Row(
             children: [
               Expanded(
                 child: TextField(
                   controller: _commentController,
-                  style: const TextStyle(color: Colors.black87, fontSize: 14),
+                  style: theme.textTheme.bodyMedium,
                   decoration: InputDecoration(
                     hintText: "Nhập bình luận...",
-                    hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                     filled: true,
-                    fillColor: Colors.grey[200],
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), 
+                    fillColor: theme.colorScheme.surface, 
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15), 
+                      borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,
                     ),
                   ),
                 ),
               ),
               const SizedBox(width: 6),
+
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFB42652), 
+                  color: const Color(0xFFB42652),
                   borderRadius: BorderRadius.circular(15),
                 ),
-
                 child: IconButton(
                   icon: const Icon(Icons.send, color: Colors.white, size: 20),
                   onPressed: () async {
@@ -102,12 +137,16 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
                     final user = FirebaseAuth.instance.currentUser;
                     if (user == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Vui lòng đăng nhập để bình luận.")),
+                        const SnackBar(
+                          content:
+                              Text("Vui lòng đăng nhập để bình luận."),
+                        ),
                       );
                       return;
                     }
+
                     await _commentVM.addComment(
-                      article.id,
+                      widget.article.id,
                       CommentModel(
                         id: '',
                         user: user.displayName ?? user.email ?? user.uid,
@@ -115,6 +154,7 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
                         date: DateTime.now(),
                       ),
                     );
+
                     _commentController.clear();
                   },
                 ),

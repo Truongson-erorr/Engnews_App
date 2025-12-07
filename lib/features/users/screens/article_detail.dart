@@ -49,12 +49,12 @@ class _ArticleDetailState extends State<ArticleDetail> {
   void _showSummaryOptions() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (ctx) {
-        String selectedLang = "vi"; 
+        String selectedLang = "vi";
 
         return StatefulBuilder(
           builder: (context, setModalState) {
@@ -64,11 +64,16 @@ class _ArticleDetailState extends State<ArticleDetail> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Tùy chọn tóm tắt",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text("Tùy chọn tóm tắt",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).textTheme.titleLarge!.color)),
 
                   const SizedBox(height: 16),
-                  const Text("Ngôn ngữ tóm tắt:"),
+                  Text("Ngôn ngữ tóm tắt:",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium!.color)),
 
                   DropdownButton<String>(
                     value: selectedLang,
@@ -84,7 +89,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 45),
-                      backgroundColor: Color(0xFFB42652),
+                      backgroundColor: const Color(0xFFB42652), 
                     ),
                     onPressed: () {
                       Navigator.pop(ctx);
@@ -149,7 +154,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
   void _showBottomMenu() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -170,13 +175,19 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
             ListTile(
               leading: _isTranslating
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: 22,
                       width: 22,
-                      child: CircularProgressIndicator(strokeWidth: 2),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation(Theme.of(context).colorScheme.primary),
+                      ),
                     )
-                  : const Icon(Icons.translate, color: Colors.black87),
-              title: Text(_isTranslating ? "Đang dịch..." : "Dịch bài"),
+                  : Icon(Icons.translate, color: Theme.of(context).iconTheme.color),
+              title: Text(
+                _isTranslating ? "Đang dịch..." : "Dịch bài",
+                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
+              ),
               onTap: _isTranslating
                   ? null
                   : () async {
@@ -186,40 +197,54 @@ class _ArticleDetailState extends State<ArticleDetail> {
             ),
 
             ListTile(
-              leading: const Icon(Icons.summarize),
-              title: const Text("Tóm tắt nội dung bằng AI"),
+              leading: Icon(Icons.summarize, color: Theme.of(context).iconTheme.color),
+              title: Text(
+                "Tóm tắt nội dung bằng AI",
+                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
+              ),
               onTap: () async {
                 Navigator.pop(ctx);
                 _showSummaryOptions();
               },
             ),
 
-
             ListTile(
-              leading: const Icon(Icons.analytics_outlined),
-              title: const Text("Phân tích cảm xúc (AI)"),
+              leading: Icon(Icons.analytics_outlined, color: Theme.of(context).iconTheme.color),
+              title: Text(
+                "Phân tích cảm xúc (AI)",
+                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
+              ),
               onTap: () {},
             ),
 
             ListTile(
-              leading: const Icon(Icons.copy_all),
-              title: const Text("Sao chép nội dung"),
+              leading: Icon(Icons.copy_all, color: Theme.of(context).iconTheme.color),
+              title: Text(
+                "Sao chép nội dung",
+                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
+              ),
               onTap: () {
                 Navigator.pop(ctx);
               },
             ),
 
             ListTile(
-              leading: const Icon(Icons.share),
-              title: const Text("Chia sẻ bài viết"),
+              leading: Icon(Icons.share, color: Theme.of(context).iconTheme.color),
+              title: Text(
+                "Chia sẻ bài viết",
+                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
+              ),
               onTap: () {
                 Navigator.pop(ctx);
               },
             ),
 
             ListTile(
-              leading: const Icon(Icons.bookmark_add_outlined),
-              title: const Text("Lưu bài"),
+              leading: Icon(Icons.bookmark_add_outlined, color: Theme.of(context).iconTheme.color),
+              title: Text(
+                "Lưu bài",
+                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
+              ),
               onTap: () async {
                 Navigator.pop(ctx);
                 await _saveArticle();
@@ -236,7 +261,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
     final article = widget.article;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: const Color(0xFFB42652),
         elevation: 1,
@@ -272,21 +297,23 @@ class _ArticleDetailState extends State<ArticleDetail> {
                     style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87)),
+                        color: Color(0xFFB42652))), 
                 const SizedBox(height: 8),
 
                 Text("Published: ${article.date.toLocal().toString().split(' ')[0]}",
-                    style: const TextStyle(fontSize: 13, color: Colors.grey)),
+                    style: TextStyle(
+                        fontSize: 13, color: Theme.of(context).textTheme.bodySmall!.color)),
                 const SizedBox(height: 20),
 
                 if (_summary != null) ...[
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Color(0xFFFFF3F6),
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? const Color(0xFFFFF3F6)
+                          : Colors.grey[800],
                       borderRadius: BorderRadius.circular(12),
-                      border:
-                          Border.all(color: Color(0xFFB42652), width: 1),
+                      border: Border.all(color: const Color(0xFFB42652), width: 1),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,8 +329,9 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         Text(
                           _summary!,
                           textAlign: TextAlign.justify,
-                          style: const TextStyle(
-                              fontSize: 15, color: Colors.black87),
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Theme.of(context).textTheme.bodyMedium!.color),
                         )
                       ],
                     ),
@@ -319,12 +347,16 @@ class _ArticleDetailState extends State<ArticleDetail> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(p['en'] ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 16, color: Colors.black87)),
+                              textAlign: TextAlign.justify,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Theme.of(context).textTheme.bodyMedium!.color)),
                               const SizedBox(height: 4),
                               Text(p['vi'] ?? '',
+                              textAlign: TextAlign.justify,
                                   style: const TextStyle(
-                                      fontSize: 16, color: Color(0xFFB42652))),
+                                      fontSize: 16,
+                                      color: Color(0xFFB42652))), 
                               const SizedBox(height: 12),
                             ],
                           );
@@ -334,9 +366,11 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         article.content.isNotEmpty
                             ? article.content
                             : article.description,
-                            textAlign: TextAlign.justify,
-                        style: const TextStyle(
-                            fontSize: 16, height: 1.6, color: Colors.black87),
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                            fontSize: 16,
+                            height: 1.6,
+                            color: Theme.of(context).textTheme.bodyMedium!.color),
                       ),
                 const SizedBox(height: 40),
 
@@ -354,17 +388,19 @@ class _ArticleDetailState extends State<ArticleDetail> {
           if (_isSummarizing)
             Container(
               color: Colors.black.withOpacity(0.45),
-              child: const Center(
+              child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CircularProgressIndicator(
+                    const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation(Color(0xFFB42652)),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Text(
                       "AI đang tóm tắt...",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                          fontSize: 18),
                     )
                   ],
                 ),
@@ -374,10 +410,10 @@ class _ArticleDetailState extends State<ArticleDetail> {
           if (_isTranslating)
             Container(
               color: Colors.black.withOpacity(0.4),
-              child: const Center(
+              child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
+                  children: const [
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation(Color(0xFFB42652)),
                       strokeWidth: 4,

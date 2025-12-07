@@ -15,16 +15,20 @@ class RelatedArticlesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 20),
-        const Text(
+        Text(
           "Bài viết liên quan",
-          style: TextStyle(
-              color: Color.fromARGB(255, 0, 0, 0), fontSize: 20, fontWeight: FontWeight.bold),
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
-
+        const SizedBox(height: 10),
         FutureBuilder<List<ArticleModel>>(
           future: ArticleViewModel().fetchRelatedArticles(
             categoryId,
@@ -32,28 +36,31 @@ class RelatedArticlesWidget extends StatelessWidget {
           ),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const Padding(
-                padding: EdgeInsets.all(20),
-                child: CircularProgressIndicator(color: Colors.white),
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: CircularProgressIndicator(color: colors.primary),
               );
             }
 
             final related = snapshot.data!;
             if (related.isEmpty) {
-              return const Text(
+              return Text(
                 "Không có bài viết liên quan.",
-                style: TextStyle(color: Colors.grey),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: colors.onSurfaceVariant,
+                ),
               );
             }
 
             return SizedBox(
-              height: 140, 
+              height: 100,
               child: ListView.separated(
-                scrollDirection: Axis.horizontal, 
+                scrollDirection: Axis.horizontal,
                 itemCount: related.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 12), 
+                separatorBuilder: (_, __) => const SizedBox(width: 12),
                 itemBuilder: (context, index) {
                   final article = related[index];
+
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -63,55 +70,45 @@ class RelatedArticlesWidget extends StatelessWidget {
                         ),
                       );
                     },
-                    child: SizedBox(
-                      width: 220, 
-                      child: Row(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              article.image,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            article.image,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
                           ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  article.title,
-                                  style: const TextStyle(
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(width: 10),
+
+                        SizedBox(
+                          width: 140, 
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                article.title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  article.description,
-                                  style: const TextStyle(
-                                    color: Color.fromARGB(179, 118, 118, 118),
-                                    fontSize: 12,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                "Ngày: ${article.date.toLocal().toString().split(' ')[0]}",
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: colors.outline,
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  "Ngày: ${article.date.toLocal().toString().split(' ')[0]}",
-                                  style: const TextStyle(
-                                      color: Colors.grey, fontSize: 10),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   );
                 },

@@ -13,22 +13,27 @@ class ProfileTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final userVM = Provider.of<AuthenViewModel>(context);
 
+    final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     if (userVM.isLoading) {
-      return const Center(child: CircularProgressIndicator(color: Color(0xFFD0021B)));
+      return Center(
+        child: CircularProgressIndicator(color: colors.primary),
+      );
     }
 
     final user = userVM.currentUser;
     if (user == null) {
-      return const Center(
+      return Center(
         child: Text(
           "Không có thông tin người dùng",
-          style: TextStyle(color: Colors.black87),
+          style: textTheme.bodyMedium?.copyWith(color: colors.onBackground),
         ),
       );
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.background,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -40,19 +45,18 @@ class ProfileTab extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 55,
-                      backgroundColor: const Color(0xFFEDEDED),
-                      backgroundImage: user.image.isNotEmpty
-                          ? NetworkImage(user.image)
-                          : null,
+                      backgroundColor: colors.surfaceVariant,
+                      backgroundImage:
+                          user.image.isNotEmpty ? NetworkImage(user.image) : null,
                       child: user.image.isEmpty
                           ? Text(
                               user.fullName.isNotEmpty
                                   ? user.fullName[0].toUpperCase()
                                   : '?',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 36,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFFD0021B),
+                                color: colors.primary,
                               ),
                             )
                           : null,
@@ -63,30 +67,39 @@ class ProfileTab extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {},
                         child: Container(
-                          decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 121, 121, 121),
+                          decoration: BoxDecoration(
+                            color: colors.secondary,
                             shape: BoxShape.circle,
                           ),
                           padding: const EdgeInsets.all(6),
-                          child: const Icon(Icons.schedule, color: Colors.white, size: 18),
+                          child: Icon(
+                            Icons.schedule,
+                            color: colors.onSecondary,
+                            size: 18,
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 14),
+
                 Text(
                   user.fullName,
-                  style: const TextStyle(
-                    fontSize: 22,
+                  style: textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: colors.onBackground,
                   ),
                 ),
+
                 const SizedBox(height: 6),
+
                 Text(
                   user.email,
-                  style: const TextStyle(color: Colors.black54, fontSize: 15),
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: colors.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
@@ -97,6 +110,7 @@ class ProfileTab extends StatelessWidget {
               child: Column(
                 children: [
                   _buildMenuItem(
+                    context: context,
                     icon: Icons.person_outline,
                     title: 'Chỉnh sửa thông tin cá nhân',
                     onTap: () {
@@ -106,24 +120,20 @@ class ProfileTab extends StatelessWidget {
                       );
                     },
                   ),
+
                   _buildMenuItem(
+                    context: context,
                     icon: Icons.lock_outline,
                     title: 'Đổi mật khẩu',
                     onTap: () {},
                   ),
+
                   _buildMenuItem(
+                    context: context,
                     icon: Icons.history,
                     title: 'Lịch sử đọc báo',
                     onTap: () {
-                      final authVM = Provider.of<AuthenViewModel>(context, listen: false);
-                      final userId = authVM.currentUser?.uid;
-
-                      if (userId == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Vui lòng đăng nhập để xem lịch sử đọc.')),
-                        );
-                        return;
-                      }
+                      final userId = user.uid;
 
                       Navigator.push(
                         context,
@@ -131,74 +141,77 @@ class ProfileTab extends StatelessWidget {
                       );
                     },
                   ),
+
                   _buildMenuItem(
+                    context: context,
                     icon: Icons.settings_outlined,
                     title: 'Cài đặt ứng dụng',
                     onTap: () {},
                   ),
+
                   _buildMenuItem(
+                    context: context,
                     icon: Icons.help_outline,
                     title: 'Trợ giúp & Hỗ trợ',
                     onTap: () {},
                   ),
+
                   _buildMenuItem(
+                    context: context,
                     icon: Icons.logout,
                     title: 'Đăng xuất',
                     color: Colors.red,
                     onTap: () async {
                       final confirm = await showDialog<bool>(
                         context: context,
-                        builder: (ctx) => AlertDialog(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          title: const Text(
-                            "Xác nhận đăng xuất",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+                        builder: (ctx) {
+                          final dialogColors = Theme.of(ctx).colorScheme;
+                          final dialogText = Theme.of(ctx).textTheme;
+
+                          return AlertDialog(
+                            backgroundColor: dialogColors.surface,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
                             ),
-                          ),
-                          content: const Text(
-                            "Bạn có chắc chắn muốn đăng xuất không?",
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                          actionsAlignment: MainAxisAlignment.end,
-                          actions: [
-                            OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: const Color.fromARGB(221, 126, 126, 126),
-                                backgroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(26),
-                                ),
-                                side: BorderSide.none,
+                            title: Text(
+                              "Xác nhận đăng xuất",
+                              style: dialogText.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: dialogColors.onSurface,
                               ),
-                              onPressed: () => Navigator.pop(ctx, false),
-                              child: const Text("Hủy"),
                             ),
-                            OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: Colors.black87,
-                                backgroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(26),
-                                ),
-                                side: BorderSide.none,
+                            content: Text(
+                              "Bạn có chắc chắn muốn đăng xuất không?",
+                              style: dialogText.bodyMedium?.copyWith(
+                                color: dialogColors.onSurfaceVariant,
                               ),
-                              onPressed: () => Navigator.pop(ctx, true),
-                              child: const Text("Đăng xuất"),
                             ),
-                          ],
-                        ),
+                            actionsAlignment: MainAxisAlignment.end,
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(ctx, false),
+                                child: Text(
+                                  "Hủy",
+                                  style: TextStyle(color: dialogColors.outline),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(ctx, true),
+                                child: Text(
+                                  "Đăng xuất",
+                                  style: TextStyle(color: dialogColors.primary),
+                                ),
+                              )
+                            ],
+                          );
+                        },
                       );
 
                       if (confirm == true) {
                         await userVM.signOut();
-
                         Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => const LoginScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => const LoginScreen()),
                           (route) => false,
                         );
                       }
@@ -214,30 +227,37 @@ class ProfileTab extends StatelessWidget {
   }
 
   Widget _buildMenuItem({
+    required BuildContext context,
     required IconData icon,
     required String title,
-    Color color = Colors.black87,
+    Color? color,
     required VoidCallback onTap,
   }) {
+    final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color.fromARGB(33, 255, 255, 255)),
+        border: Border.all(color: colors.outline.withOpacity(0.2)),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-        leading: Icon(icon, color: color, size: 26),
+        leading: Icon(icon, color: color ?? colors.onSurface, size: 26),
         title: Text(
           title,
-          style: TextStyle(
-            fontSize: 16,
-            color: color,
+          style: textTheme.bodyLarge?.copyWith(
+            color: color ?? colors.onSurface,
             fontWeight: FontWeight.w500,
           ),
         ),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+        trailing: Icon(
+          Icons.arrow_forward_ios,
+          size: 16,
+          color: colors.onSurfaceVariant,
+        ),
         onTap: onTap,
       ),
     );

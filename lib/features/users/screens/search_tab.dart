@@ -42,6 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     setState(() => _isLoading = true);
     final results = await _articleVM.searchArticlesByTitle(keyword);
+
     setState(() {
       _results = results;
       _isLoading = false;
@@ -55,41 +56,46 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.white, 
+      backgroundColor: theme.scaffoldBackgroundColor,
+
       appBar: AppBar(
-        backgroundColor: const Color(0xFFB42652), // nền đỏ
-        elevation: 0.6,
-        iconTheme: const IconThemeData(color: Colors.white), // icon trắng
         title: const Text(
-          "Tìm kiếm",
+          'Tìm kiếm bài báo',
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            color: Colors.white,
             fontSize: 20,
-            color: Colors.white, // text trắng
+            fontWeight: FontWeight.bold,
           ),
         ),
+        backgroundColor: const Color(0xFFB42652),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               controller: _searchController,
-              style: const TextStyle(color: Colors.black),
+              style: TextStyle(color: cs.onBackground),
               decoration: InputDecoration(
                 hintText: 'Nhập từ khóa bài báo...',
-                hintStyle: TextStyle(color: Colors.grey[500]),
+                hintStyle: TextStyle(color: cs.onSurfaceVariant),
                 filled: true,
-                fillColor: const Color(0xFFF5F5F5), // nền xám nhẹ
-                contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                fillColor: cs.surface, 
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                 suffixIcon: _searchController.text.isEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.search, color: Color(0xFFB42652)), // đỏ đậm
+                        icon: const Icon(Icons.search, color: Color(0xFFB42652)),
                         onPressed: _searchArticles,
                       )
                     : IconButton(
-                        icon: const Icon(Icons.close, color: Colors.grey),
+                        icon: Icon(Icons.close, color: cs.onSurfaceVariant),
                         onPressed: () {
                           _searchController.clear();
                           setState(() => _results = []);
@@ -105,29 +111,31 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide(
-                    color: const Color(0xFFB42652),
-                    width: 1.5,
-                  ),
+                  borderSide: const BorderSide(color: Color(0xFFB42652), width: 1.5),
                 ),
               ),
-              onChanged: (value) => setState(() {}),
+              onChanged: (_) => setState(() {}),
               onSubmitted: (_) => _searchArticles(),
             ),
+
             const SizedBox(height: 20),
+
             Expanded(
               child: _searchController.text.isEmpty
-                  ? _buildSuggestions()
+                  ? _buildSuggestions(theme, cs)
                   : _isLoading
-                      ? const Center(child: CircularProgressIndicator(color: Color(0xFFB42652)))
+                      ? Center(
+                          child: CircularProgressIndicator(color: const Color(0xFFB42652)),
+                        )
                       : _results.isEmpty
-                          ? const Center(
+                          ? Center(
                               child: Text(
                                 'Không có kết quả nào phù hợp',
-                                style: TextStyle(color: Colors.grey, fontSize: 16),
+                                style: TextStyle(
+                                    color: cs.onSurfaceVariant, fontSize: 16),
                               ),
                             )
-                          : _buildResultList(),
+                          : _buildResultList(theme, cs),
             ),
           ],
         ),
@@ -135,29 +143,31 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildSuggestions() {
+  Widget _buildSuggestions(ThemeData theme, ColorScheme cs) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Có thể bạn sẽ thích',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: cs.onBackground,
+          ),
         ),
         const SizedBox(height: 12),
         Expanded(
           child: ListView.separated(
             itemCount: _suggestions.length,
-            separatorBuilder: (_, __) => Divider(
-              height: 12,
-              color: const Color(0xFFB42652).withOpacity(0.2), // nhạt đỏ
-            ),
+            separatorBuilder: (_, __) =>
+                Divider(height: 12, color: const Color(0xFFB42652).withOpacity(0.2)),
             itemBuilder: (context, index) {
               final keyword = _suggestions[index];
               return ListTile(
                 leading: const Icon(Icons.search, color: Color(0xFFB42652)),
                 title: Text(
                   keyword,
-                  style: const TextStyle(fontSize: 15, color: Colors.black),
+                  style: TextStyle(fontSize: 15, color: cs.onBackground),
                 ),
                 onTap: () => _onSuggestionTap(keyword),
               );
@@ -168,15 +178,14 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildResultList() {
+  Widget _buildResultList(ThemeData theme, ColorScheme cs) {
     return ListView.separated(
       itemCount: _results.length,
-      separatorBuilder: (_, __) => Divider(
-        height: 24,
-        color: Colors.grey.withOpacity(0.2),
-      ),
+      separatorBuilder: (_, __) =>
+          Divider(height: 24, color: const Color(0xFFB42652).withOpacity(0.2)),
       itemBuilder: (context, index) {
         final article = _results[index];
+
         return InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () {
@@ -202,12 +211,14 @@ class _SearchScreenState extends State<SearchScreen> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: article.image.isNotEmpty
-                      ? Image.network(article.image, width: 90, height: 70, fit: BoxFit.cover)
+                      ? Image.network(article.image,
+                          width: 90, height: 70, fit: BoxFit.cover)
                       : Container(
                           width: 90,
                           height: 70,
-                          color: Colors.grey[300],
-                          child: const Icon(Icons.article_outlined, color: Colors.grey),
+                          color: cs.surfaceVariant,
+                          child: const Icon(Icons.article_outlined,
+                              color: Colors.white),
                         ),
                 ),
                 const SizedBox(width: 12),
@@ -219,15 +230,21 @@ class _SearchScreenState extends State<SearchScreen> {
                         article.title,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: cs.onBackground,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         article.description,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                        style: TextStyle(
+                          color: cs.onSurfaceVariant,
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   ),

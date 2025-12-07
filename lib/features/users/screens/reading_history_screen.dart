@@ -20,36 +20,42 @@ class ReadingHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final historyVM = ReadingHistoryViewModel();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
+
       appBar: AppBar(
         title: const Text(
-          'Bài báo đã đọc gần đây',
+          'Đã xem gần đây',
           style: TextStyle(
-            color: Color.fromARGB(255, 255, 255, 255),
+            color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: const Color(0xFFB42652),
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 255, 255, 255)),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
+
       body: FutureBuilder<List<ReadingHistoryModel>>(
         future: historyVM.getHistoryOnce(userId),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator(color: Color(0xFFD0021B)));
+            return Center(
+              child: CircularProgressIndicator(
+                color: theme.colorScheme.primary,
+              ),
+            );
           }
 
           final historyList = snapshot.data!;
           if (historyList.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'Chưa có bài báo nào.',
-                style: TextStyle(color: Colors.grey, fontSize: 16),
+                style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(.6)),
               ),
             );
           }
@@ -57,13 +63,14 @@ class ReadingHistoryScreen extends StatelessWidget {
           return ListView.separated(
             padding: const EdgeInsets.all(16),
             itemCount: historyList.length,
-            separatorBuilder: (_, __) => const Divider(
-              color: Color(0xFFE0E0E0),
+            separatorBuilder: (_, __) => Divider(
+              color: theme.dividerColor,
               thickness: 1,
               height: 16,
             ),
             itemBuilder: (context, index) {
               final item = historyList[index];
+
               final article = ArticleModel(
                 id: item.articleId,
                 title: item.title,
@@ -93,64 +100,73 @@ class ReadingHistoryScreen extends StatelessWidget {
                     );
                   });
                 },
+
                 child: Container(
                   padding: const EdgeInsets.all(8),
-                  margin: const EdgeInsets.symmetric(vertical: 6),
-                  
+                  decoration: BoxDecoration(
+                    color: theme.cardColor,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: theme.shadowColor.withOpacity(0.07),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      )
+                    ],
+                  ),
+
                   child: Row(
                     children: [
-                      if (item.image.isNotEmpty)
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            item.image,
-                            width: 100,
-                            height: 80,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      else
-                        Container(
-                          width: 100,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 255, 255, 255),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(Icons.article_outlined, color: Colors.grey),
-                        ),
+                      /// IMAGE
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: item.image.isNotEmpty
+                            ? Image.network(
+                                item.image,
+                                width: 100,
+                                height: 80,
+                                fit: BoxFit.cover,
+                              )
+                            : Container(
+                                width: 100,
+                                height: 80,
+                                color: theme.dividerColor.withOpacity(.2),
+                                child: Icon(
+                                  Icons.article_outlined,
+                                  color: theme.iconTheme.color,
+                                ),
+                              ),
+                      ),
                       const SizedBox(width: 12),
+
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               item.title,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             const SizedBox(height: 4),
+
                             Text(
                               item.description,
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: Colors.black54,
-                              ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.textTheme.bodySmall!.color!.withOpacity(.8),
+                              ),
                             ),
                             const SizedBox(height: 4),
+
                             Text(
                               'Đã đọc ${timeAgo(item.readAt)}',
-                              style: const TextStyle(
-                                fontSize: 11,
-                                color: Colors.grey,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: theme.textTheme.bodySmall!.color!.withOpacity(.6),
                               ),
                             ),
                           ],

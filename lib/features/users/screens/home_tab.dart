@@ -8,7 +8,7 @@ import '../../viewmodel/reading_history_viewmodel.dart';
 import 'article_detail.dart';
 import '../../../core/animation';
 import 'dart:math';
-import 'highlightBanner.dart'; 
+import 'highlightBanner.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -22,7 +22,6 @@ class _HomeTabState extends State<HomeTab> {
   final CategoryViewModel _categoryVM = CategoryViewModel();
 
   String? userId;
-
   List<CategoryModel> _categories = [];
   String? _selectedCategoryId;
 
@@ -36,7 +35,6 @@ class _HomeTabState extends State<HomeTab> {
     super.initState();
     _categoryPageController = PageController();
     _menuScrollController = ScrollController();
-
     userId = FirebaseAuth.instance.currentUser?.uid;
 
     _loadCategories();
@@ -53,6 +51,7 @@ class _HomeTabState extends State<HomeTab> {
   void _loadCategories() async {
     final cats = await _categoryVM.fetchCategories();
     if (!mounted) return;
+
     setState(() {
       _categories = cats;
       if (_categories.isNotEmpty) {
@@ -64,6 +63,7 @@ class _HomeTabState extends State<HomeTab> {
   void _loadHighlightArticles() async {
     final articles = await _articleVM.fetchArticles();
     if (!mounted) return;
+
     if (articles.isNotEmpty) {
       final random = Random();
       _highlightArticles = List.generate(
@@ -77,6 +77,7 @@ class _HomeTabState extends State<HomeTab> {
   void _scrollToCenter(int index) {
     const double itemWidth = 110, separator = 16;
     final screenWidth = MediaQuery.of(context).size.width;
+
     final targetOffset =
         (itemWidth + separator) * index - (screenWidth - itemWidth) / 2;
 
@@ -93,6 +94,7 @@ class _HomeTabState extends State<HomeTab> {
   void _onCategorySelected(String categoryId, int index) {
     setState(() => _selectedCategoryId = categoryId);
     _scrollToCenter(index);
+
     _categoryPageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
@@ -102,6 +104,9 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     if (_categories.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -111,6 +116,7 @@ class _HomeTabState extends State<HomeTab> {
         HighlightBanner(articles: _highlightArticles),
         const SizedBox(height: 12),
 
+        // CATEGORY BAR
         SizedBox(
           height: 40,
           child: ListView.separated(
@@ -129,7 +135,7 @@ class _HomeTabState extends State<HomeTab> {
                   duration: const Duration(milliseconds: 200),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: isSelected ? const Color(0xFFB42652) : const Color(0xFFECECEC), // đỏ đậm #b42652 khi chọn
+                    color: isSelected ? const Color(0xFFB42652) : cs.surfaceVariant,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: isSelected
                         ? [
@@ -137,21 +143,21 @@ class _HomeTabState extends State<HomeTab> {
                               color: const Color(0xFFB42652).withOpacity(0.3),
                               blurRadius: 6,
                               offset: const Offset(0, 3),
-                            ),
+                            )
                           ]
                         : null,
                   ),
                   child: Center(
                     child: Text(
                       category.title,
-                      style: TextStyle(
-                        fontSize: 13,
+                      style: textTheme.bodyMedium!.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: isSelected ? Colors.white : Colors.black87,
+                        color: isSelected ? Colors.white : cs.onSurfaceVariant,
                       ),
                     ),
                   ),
                 ),
+
               );
             },
           ),
@@ -177,12 +183,14 @@ class _HomeTabState extends State<HomeTab> {
                   if (!snapshot.hasData) {
                     return const Center(child: CircularProgressIndicator());
                   }
+
                   final articles = snapshot.data!;
                   if (articles.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Text(
                         'Chưa có bài báo nào.',
-                        style: TextStyle(color: Colors.black54),
+                        style: textTheme.bodyMedium!
+                            .copyWith(color: cs.onSurfaceVariant),
                       ),
                     );
                   }
@@ -191,7 +199,7 @@ class _HomeTabState extends State<HomeTab> {
                     padding: const EdgeInsets.all(16),
                     itemCount: articles.length,
                     separatorBuilder: (_, __) => Divider(
-                      color: Colors.grey[300],
+                      color: cs.outlineVariant,
                       thickness: 1,
                       height: 20,
                     ),
@@ -219,7 +227,8 @@ class _HomeTabState extends State<HomeTab> {
                           height: 110,
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),                        
+                            borderRadius: BorderRadius.circular(12),
+                            color: cs.surface,
                           ),
                           child: Row(
                             children: [
@@ -230,10 +239,9 @@ class _HomeTabState extends State<HomeTab> {
                                   children: [
                                     Text(
                                       article.title,
-                                      style: const TextStyle(
-                                        fontSize: 18,
+                                      style: textTheme.titleMedium!.copyWith(
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                        color: cs.onSurface,
                                       ),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
@@ -241,9 +249,8 @@ class _HomeTabState extends State<HomeTab> {
                                     const SizedBox(height: 4),
                                     Text(
                                       article.description,
-                                      style: const TextStyle(
-                                        fontSize: 10,
-                                        color: Colors.black54,
+                                      style: textTheme.bodySmall!.copyWith(
+                                        color: cs.onSurfaceVariant,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -251,9 +258,8 @@ class _HomeTabState extends State<HomeTab> {
                                     const SizedBox(height: 4),
                                     Text(
                                       "Ngày đăng: ${article.date}",
-                                      style: const TextStyle(
-                                        fontSize: 11,
-                                        color: Colors.black45,
+                                      style: textTheme.bodySmall!.copyWith(
+                                        color: cs.onSurfaceVariant,
                                       ),
                                     ),
                                   ],

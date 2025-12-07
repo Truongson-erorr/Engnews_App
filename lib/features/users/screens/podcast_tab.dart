@@ -40,25 +40,30 @@ class PodcastTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white, 
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: podcasts.length,
         itemBuilder: (context, index) {
           final podcast = podcasts[index];
+
           return Container(
             margin: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: theme.cardColor,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: const Color.fromARGB(33, 255, 255, 255),
-                width: 1.2,
+                color: theme.colorScheme.outlineVariant.withOpacity(0.2),
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: isDark
+                      ? Colors.black.withOpacity(0.25)
+                      : Colors.black.withOpacity(0.05),
                   offset: const Offset(0, 3),
                   blurRadius: 6,
                 ),
@@ -79,35 +84,37 @@ class PodcastTab extends StatelessWidget {
 
               title: Text(
                 podcast.title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
                   fontSize: 16,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
               subtitle: Text(
                 podcast.duration,
-                style: const TextStyle(
-                  color: Colors.black54,
+                style: TextStyle(
                   fontSize: 13,
+                  color: theme.colorScheme.onSurface.withOpacity(0.6),
                 ),
               ),
 
               trailing: IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.play_circle_fill,
                   size: 32,
-                  color: Color(0xFFD0021B),
+                  color: theme.colorScheme.primary,
                 ),
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Đang phát: ${podcast.title}'),
+                      backgroundColor: theme.colorScheme.primary,
                     ),
                   );
                 },
               ),
-              splashColor: const Color(0x33D0021B),
+
+              splashColor: theme.colorScheme.primary.withOpacity(0.25),
             ),
           );
         },
