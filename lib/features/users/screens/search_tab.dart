@@ -160,7 +160,7 @@ class _SearchScreenState extends State<SearchScreen> {
           child: ListView.separated(
             itemCount: _suggestions.length,
             separatorBuilder: (_, __) =>
-                Divider(height: 12, color: const Color(0xFFB42652).withOpacity(0.2)),
+                Divider(height: 12, color: const Color.fromARGB(255, 174, 174, 174).withOpacity(0.2)),
             itemBuilder: (context, index) {
               final keyword = _suggestions[index];
               return ListTile(
@@ -182,7 +182,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return ListView.separated(
       itemCount: _results.length,
       separatorBuilder: (_, __) =>
-          Divider(height: 24, color: const Color(0xFFB42652).withOpacity(0.2)),
+          Divider(height: 24, color: const Color.fromARGB(255, 197, 197, 197).withOpacity(0.2)),
       itemBuilder: (context, index) {
         final article = _results[index];
 
