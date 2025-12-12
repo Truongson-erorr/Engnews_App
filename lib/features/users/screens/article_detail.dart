@@ -8,7 +8,6 @@ import '../screens/article_comments_widget.dart';
 import '../screens/related_articles_widget.dart';
 import '../screens/ramdom_article.dart';
 import '../screens/article_detail_bottom_menu.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import '../../viewmodel/speech_viewmodel.dart';
 import 'article_speech_widget.dart';
 

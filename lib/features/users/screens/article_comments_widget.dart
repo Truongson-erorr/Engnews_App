@@ -87,11 +87,63 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
                       comment.text,
                       style: theme.textTheme.bodyMedium,
                     ),
-                    trailing: Text(
-                      _dateFormat.format(comment.date),
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.6),
-                      ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          _dateFormat.format(comment.date),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+
+                        if (FirebaseAuth.instance.currentUser != null &&
+                            (FirebaseAuth.instance.currentUser!.displayName == comment.user ||
+                            FirebaseAuth.instance.currentUser!.email == comment.user))
+                          PopupMenuButton<String>(
+                            icon: const Icon(Icons.more_vert, size: 20),
+                            onSelected: (value) async {
+                              if (value == 'delete') {
+                                final confirm = await showDialog<bool>(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text("Xóa bình luận?"),
+                                    content: const Text("Bạn có chắc muốn xóa bình luận này?"),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text("Hủy"),
+                                        onPressed: () => Navigator.pop(context, false),
+                                      ),
+                                      TextButton(
+                                        child: const Text("Xóa", style: TextStyle(color: Colors.red)),
+                                        onPressed: () => Navigator.pop(context, true),
+                                      ),
+                                    ],
+                                  ),
+                                );
+
+                                if (confirm == true) {
+                                  await _commentVM.deleteComment(
+                                    widget.article.id,
+                                    comment.id,
+                                  );
+                                }
+                              }
+                            },
+                            itemBuilder: (context) => [
+                              const PopupMenuItem(
+                                value: 'delete',
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: 8),
+                                    Text("Xóa bình luận"),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
                     ),
                   );
                 }).toList(),

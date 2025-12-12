@@ -71,7 +71,7 @@ class ArticleViewModel {
     return allArticles.take(limit).toList();
   }
 
-    // Listen in realtime when there are new posts
+  // Listen in realtime when there are new posts
   Stream<List<ArticleModel>> listenArticlesFromToday() {
     final now = DateTime.now();
     final todayStart = DateTime(now.year, now.month, now.day); 
