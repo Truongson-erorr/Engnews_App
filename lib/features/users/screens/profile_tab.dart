@@ -241,7 +241,6 @@ class ProfileTab extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colors.outline.withOpacity(0.2)),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),

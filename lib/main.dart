@@ -9,12 +9,16 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'core/theme/theme_viewmodel.dart';
 import "core/theme/app_theme.dart";
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await FirebaseAuth.instance.signOut();
 
   await dotenv.load();
   

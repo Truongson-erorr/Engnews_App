@@ -13,7 +13,7 @@ class CategoryViewModel {
           .map((doc) => CategoryModel.fromFirestore(doc))
           .toList();
     } catch (e) {
-      print('Lỗi khi lấy danh mục: $e'); 
+      print('Lỗi khi lấy danh mục: $e');
       return [];
     }
   }
@@ -35,14 +35,46 @@ class CategoryViewModel {
     }
   }
 
-  /// Update category title in Firestore
-  Future<void> updateCategory(String categoryId, String newTitle) async {
+  /// Add new category 
+  Future<void> addCategory(String title, {String? description}) async {
+    try {
+      final newDoc = _firestore.collection('categories').doc();
+
+      await newDoc.set({
+        'id': newDoc.id,
+        'title': title,
+        'description': description,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      print("Lỗi khi thêm danh mục: $e");
+      rethrow;
+    }
+  }
+
+  /// Update category (title + description)
+  Future<void> updateCategory(
+      String categoryId,
+      String newTitle, {
+      String? newDescription,
+    }) async {
     try {
       await _firestore.collection('categories').doc(categoryId).update({
         'title': newTitle,
+        'description': newDescription ?? "",
       });
     } catch (e) {
       print('Lỗi khi cập nhật danh mục: $e');
+      rethrow;
+    }
+  }
+
+  /// Delete category by ID
+  Future<void> deleteCategory(String categoryId) async {
+    try {
+      await _firestore.collection('categories').doc(categoryId).delete();
+    } catch (e) {
+      print("Lỗi khi xoá danh mục: $e");
       rethrow;
     }
   }

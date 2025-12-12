@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../viewmodel/category_viewmodel.dart';
 import '../../models/category_model.dart';
 import 'edit_categorypage.dart';
+import 'add_category_page.dart';
 
 class CategoryManagerPage extends StatefulWidget {
   const CategoryManagerPage({super.key});
@@ -46,10 +47,44 @@ class _CategoryManagerPageState extends State<CategoryManagerPage> {
   }
 
   void _deleteCategory(String categoryId) async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Đã xoá danh mục!")),
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Xác nhận xoá"),
+          content: const Text("Bạn có chắc muốn xoá danh mục này không?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("Hủy"),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text(
+                "Xoá",
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        );
+      },
     );
-    _loadCategories();
+
+    if (shouldDelete != true) return;
+
+    try {
+      await _categoryVM.deleteCategory(categoryId);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Đã xoá danh mục!")),
+      );
+
+      _loadCategories();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Xoá thất bại: $e")),
+      );
+    }
   }
 
   void _editCategory(CategoryModel category) async {
@@ -68,8 +103,17 @@ class _CategoryManagerPageState extends State<CategoryManagerPage> {
     }
   }
 
-  void _addCategory() {
+  void _addCategory() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddCategoryPage(categoryVM: _categoryVM),
+      ),
+    );
 
+    if (result == true) {
+      _loadCategories();
+    }
   }
 
   @override
@@ -136,9 +180,22 @@ class _CategoryManagerPageState extends State<CategoryManagerPage> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                subtitle: Text(
-                                  "ID: ${category.id}",
-                                  style: const TextStyle(color: Colors.black54),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [                                
+                                    if (category.description.isNotEmpty)
+                                      Text(
+                                        category.description,
+                                        style: const TextStyle(
+                                          color: Colors.black87,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                      Text(
+                                      "ID: ${category.id}",
+                                      style: const TextStyle(color: Colors.black54),
+                                    ),
+                                  ],
                                 ),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,

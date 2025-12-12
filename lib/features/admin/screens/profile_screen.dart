@@ -52,6 +52,7 @@ class ProfileScreen extends StatelessWidget {
                   const SizedBox(height: 24),
 
                   Card(
+                    color: Colors.white,
                     elevation: 3,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
