@@ -87,4 +87,15 @@ class ArticleViewModel {
           .toList();
     });
   }
+
+  // count the number of comments
+  Future<int> getCommentCount(String articleId) async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('articles')
+        .doc(articleId)
+        .collection('comments')
+        .get();
+
+    return snapshot.docs.length;
+  }
 }

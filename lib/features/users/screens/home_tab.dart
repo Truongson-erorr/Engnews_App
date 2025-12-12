@@ -115,8 +115,6 @@ class _HomeTabState extends State<HomeTab> {
       children: [
         HighlightBanner(articles: _highlightArticles),
         const SizedBox(height: 12),
-
-        // CATEGORY BAR
         SizedBox(
           height: 40,
           child: ListView.separated(
@@ -206,80 +204,104 @@ class _HomeTabState extends State<HomeTab> {
                     itemBuilder: (context, index) {
                       final article = articles[index];
 
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            createSlideRoute(ArticleDetail(article: article)),
-                          );
+                      return FutureBuilder<int>(
+                        future: _articleVM.getCommentCount(article.id),
+                        builder: (context, snapshot) {
+                          final commentCount = snapshot.data ?? 0;
 
-                          if (userId != null) {
-                            ReadingHistoryViewModel().addOrUpdateHistory(
-                              userId: userId!,
-                              articleId: article.id,
-                              title: article.title,
-                              description: article.description,
-                              image: article.image,
-                            );
-                          }
-                        },
-                        child: Container(
-                          height: 110,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: cs.surface,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      article.title,
-                                      style: textTheme.titleMedium!.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: cs.onSurface,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      article.description,
-                                      style: textTheme.bodySmall!.copyWith(
-                                        color: cs.onSurfaceVariant,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      "Ngày đăng: ${article.date}",
-                                      style: textTheme.bodySmall!.copyWith(
-                                        color: cs.onSurfaceVariant,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                createSlideRoute(ArticleDetail(article: article)),
+                              );
+
+                              if (userId != null) {
+                                ReadingHistoryViewModel().addOrUpdateHistory(
+                                  userId: userId!,
+                                  articleId: article.id,
+                                  title: article.title,
+                                  description: article.description,
+                                  image: article.image,
+                                );
+                              }
+                            },
+                            child: Container(
+                              height: 130,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: cs.surface,
                               ),
-                              const SizedBox(width: 8),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          article.title,
+                                          style: textTheme.titleMedium!.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: cs.onSurface,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 4),
 
-                              if (article.image.isNotEmpty)
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.network(
-                                    article.image,
-                                    height: 90,
-                                    width: 100,
-                                    fit: BoxFit.cover,
+                                        Text(
+                                          article.description,
+                                          style: textTheme.bodySmall!.copyWith(
+                                            color: cs.onSurfaceVariant,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 4),
+
+                                        Text(
+                                          "Ngày đăng: ${article.date.day}/${article.date.month}/${article.date.year}",
+                                          style: textTheme.bodySmall!.copyWith(
+                                            color: cs.onSurfaceVariant,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.comment, size: 14),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              "$commentCount bình luận",
+                                              style: textTheme.bodySmall!.copyWith(
+                                                color: cs.onSurfaceVariant,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                            ],
-                          ),
-                        ),
+
+                                  const SizedBox(width: 8),
+
+                                  if (article.image.isNotEmpty)
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.network(
+                                        article.image,
+                                        height: 90,
+                                        width: 100,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                   );
