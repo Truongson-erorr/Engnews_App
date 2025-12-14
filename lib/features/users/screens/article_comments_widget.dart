@@ -44,7 +44,7 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: CircularProgressIndicator(
-                    color: const Color(0xFFB42652),
+                    color: const Color(0xFF015E53),
                   ),
                 );
               }
@@ -78,7 +78,7 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
                               children: [
                                 CircleAvatar(
                                   radius: 22,
-                                  backgroundColor: const Color(0xFFB42652),
+                                  backgroundColor: const Color(0xFF015E53),
                                   backgroundImage: 
                                     (image != null && image.isNotEmpty)
                                         ? NetworkImage(image)
@@ -167,7 +167,7 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
 
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFB42652),
+                  color: const Color(0xFF015E53),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: IconButton(

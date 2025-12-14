@@ -71,7 +71,7 @@ class _SearchScreenState extends State<SearchScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color(0xFFB42652),
+        backgroundColor: const Color(0xFF015E53),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
 
@@ -91,7 +91,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                 suffixIcon: _searchController.text.isEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.search, color: Color(0xFFB42652)),
+                        icon: const Icon(Icons.search, color: Color(0xFF015E53)),
                         onPressed: _searchArticles,
                       )
                     : IconButton(
@@ -111,7 +111,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
-                  borderSide: const BorderSide(color: Color(0xFFB42652), width: 1.5),
+                  borderSide: const BorderSide(color: Color(0xFF015E53), width: 1.5),
                 ),
               ),
               onChanged: (_) => setState(() {}),
@@ -125,7 +125,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ? _buildSuggestions(theme, cs)
                   : _isLoading
                       ? Center(
-                          child: CircularProgressIndicator(color: const Color(0xFFB42652)),
+                          child: CircularProgressIndicator(color: const Color(0xFF015E53)),
                         )
                       : _results.isEmpty
                           ? Center(
@@ -164,7 +164,7 @@ class _SearchScreenState extends State<SearchScreen> {
             itemBuilder: (context, index) {
               final keyword = _suggestions[index];
               return ListTile(
-                leading: const Icon(Icons.search, color: Color(0xFFB42652)),
+                leading: const Icon(Icons.search, color: Color(0xFF015E53)),
                 title: Text(
                   keyword,
                   style: TextStyle(fontSize: 15, color: cs.onBackground),

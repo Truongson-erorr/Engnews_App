@@ -54,7 +54,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Cập nhật thông tin thành công!'),
-          backgroundColor: const Color(0xFFB42652),
+          backgroundColor: const Color(0xFF015E53),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -84,7 +84,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       backgroundColor: colors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFB42652), 
+        backgroundColor: const Color(0xFF015E53), 
         elevation: 0.6,
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
@@ -140,7 +140,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: ElevatedButton(
                   onPressed: _isSaving ? null : _saveChanges,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFB42652),
+                    backgroundColor: const Color(0xFF015E53),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
@@ -182,7 +182,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       validator: validator,
       style: textTheme.bodyLarge?.copyWith(color: colors.onSurface),
       decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: const Color(0xFFB42652)), 
+        prefixIcon: Icon(icon, color: const Color(0xFF015E53)), 
         labelText: label,
         labelStyle:
             textTheme.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
@@ -199,7 +199,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFB42652), width: 1),
+          borderSide: const BorderSide(color: Color(0xFF015E53), width: 1),
         ),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 14),

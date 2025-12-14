@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    const primaryColor = Color(0xFFB42652); 
+    const primaryColor = Color(0xFF015E53); 
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -188,24 +188,36 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _handlePrivateTab,
-        backgroundColor: theme.bottomNavigationBarTheme.backgroundColor ??
-            theme.scaffoldBackgroundColor,
+        backgroundColor: theme.scaffoldBackgroundColor,
         selectedItemColor: primaryColor, 
-        unselectedItemColor:
-            theme.bottomNavigationBarTheme.unselectedItemColor ??
-                theme.unselectedWidgetColor,
+        unselectedItemColor: theme.unselectedWidgetColor,
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.article_outlined), label: "Trang chủ"),
+            icon: Icon(Icons.article_outlined),
+            activeIcon: Icon(Icons.article),
+            label: "Tin tức",
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.grid_view_outlined), label: "Chuyên mục"),
+            icon: Icon(Icons.view_list_outlined),
+            activeIcon: Icon(Icons.view_list),
+            label: "Chuyên mục",
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.podcasts_outlined), label: "Podcast"),
+            icon: Icon(Icons.headphones_outlined),
+            activeIcon: Icon(Icons.headphones),
+            label: "Podcast",
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_outline), label: "Đã lưu"),
+            icon: Icon(Icons.bookmark_outline),
+            activeIcon: Icon(Icons.bookmark),
+            label: "Đã lưu",
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline), label: "Tôi"),
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: "Tôi",
+          ),
         ],
       ),
     );

@@ -35,7 +35,7 @@ class ReadingHistoryScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color(0xFFB42652),
+        backgroundColor: const Color(0xFF015E53),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
 
@@ -117,7 +117,6 @@ class ReadingHistoryScreen extends StatelessWidget {
 
                   child: Row(
                     children: [
-                      /// IMAGE
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: item.image.isNotEmpty

@@ -70,34 +70,39 @@ class _CategoryTabState extends State<CategoryTab> {
             itemBuilder: (context, index) {
               final category = categories[index];
 
-              return Container(
-                decoration: BoxDecoration(
-                  color: theme.cardColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
+              return Material(
+                color: Theme.of(context).colorScheme.surface,
+                surfaceTintColor: Colors.transparent, 
+                borderRadius: BorderRadius.circular(12),
                 child: ListTile(
                   contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.label_outline,
-                    color: const Color(0xFFB42652),
+                    color: Color(0xFF015E53),
                   ),
                   title: Text(
                     category.title,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   subtitle: Text(
                     category.description,
                     style: TextStyle(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.7),
                     ),
                   ),
                   trailing: Icon(
                     Icons.chevron_right,
-                    color: theme.iconTheme.color?.withOpacity(0.6),
+                    color: Theme.of(context)
+                        .iconTheme
+                        .color
+                        ?.withOpacity(0.6),
                   ),
                   onTap: () {
                     Navigator.push(

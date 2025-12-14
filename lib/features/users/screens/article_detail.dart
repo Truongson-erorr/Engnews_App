@@ -93,7 +93,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 45),
-                      backgroundColor: const Color(0xFFB42652), 
+                      backgroundColor: const Color(0xFF015E53), 
                     ),
                     onPressed: () {
                       Navigator.pop(ctx);
@@ -199,7 +199,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFB42652),
+        backgroundColor: const Color(0xFF015E53),
         elevation: 1,
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
@@ -233,7 +233,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                     style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFFB42652))), 
+                        color: Color(0xFF015E53))), 
                 const SizedBox(height: 8),
 
                 ArticleSpeechWidget(
@@ -255,7 +255,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                           ? const Color(0xFFFFF3F6)
                           : Colors.grey[800],
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFFB42652), width: 1),
+                      border: Border.all(color: const Color(0xFF015E53), width: 1),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,7 +265,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
-                              color: Color(0xFFB42652)),
+                              color: Color(0xFF015E53)),
                         ),
                         const SizedBox(height: 8),
                         Text(
@@ -298,7 +298,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                               textAlign: TextAlign.justify,
                                   style: const TextStyle(
                                       fontSize: 16,
-                                      color: Color(0xFFB42652))), 
+                                      color: Color(0xFF015E53))), 
                               const SizedBox(height: 12),
                             ],
                           );
@@ -335,7 +335,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(Color(0xFFB42652)),
+                      valueColor: AlwaysStoppedAnimation(Color(0xFF015E53)),
                     ),
                     const SizedBox(height: 16),
                     Text(
@@ -357,7 +357,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                   mainAxisSize: MainAxisSize.min,
                   children: const [
                     CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(Color(0xFFB42652)),
+                      valueColor: AlwaysStoppedAnimation(Color(0xFF015E53)),
                       strokeWidth: 4,
                     ),
                     SizedBox(height: 16),

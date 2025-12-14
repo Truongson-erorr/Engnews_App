@@ -24,7 +24,7 @@ class ArticleSpeechWidget extends StatelessWidget {
                     ? Icons.pause_circle_filled
                     : Icons.play_circle_fill,
                 size: 32,
-                color: const Color(0xFFB42652),
+                color: const Color(0xFF015E53),
               ),
               onPressed: () {
                 if (!speechVM.isReading) {

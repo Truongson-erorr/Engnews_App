@@ -7,8 +7,6 @@ import '../../viewmodel/category_viewmodel.dart';
 import '../../viewmodel/reading_history_viewmodel.dart';
 import 'article_detail.dart';
 import '../../../core/animation';
-import 'dart:math';
-import 'highlightBanner.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -28,8 +26,6 @@ class _HomeTabState extends State<HomeTab> {
   late PageController _categoryPageController;
   late ScrollController _menuScrollController;
 
-  List<ArticleModel> _highlightArticles = [];
-
   @override
   void initState() {
     super.initState();
@@ -38,7 +34,6 @@ class _HomeTabState extends State<HomeTab> {
     userId = FirebaseAuth.instance.currentUser?.uid;
 
     _loadCategories();
-    _loadHighlightArticles();
   }
 
   @override
@@ -58,20 +53,6 @@ class _HomeTabState extends State<HomeTab> {
         _selectedCategoryId = _categories.first.id;
       }
     });
-  }
-
-  void _loadHighlightArticles() async {
-    final articles = await _articleVM.fetchArticles();
-    if (!mounted) return;
-
-    if (articles.isNotEmpty) {
-      final random = Random();
-      _highlightArticles = List.generate(
-        7,
-        (_) => articles[random.nextInt(articles.length)],
-      );
-      setState(() {});
-    }
   }
 
   void _scrollToCenter(int index) {
@@ -113,61 +94,58 @@ class _HomeTabState extends State<HomeTab> {
 
     return Column(
       children: [
-        HighlightBanner(articles: _highlightArticles),
-        const SizedBox(height: 12),
         SizedBox(
-          height: 40,
+          height: 52,
           child: ListView.separated(
             controller: _menuScrollController,
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: _categories.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
+            separatorBuilder: (_, __) => const SizedBox(width: 20),
             itemBuilder: (context, index) {
               final category = _categories[index];
               final isSelected = category.id == _selectedCategoryId;
 
               return GestureDetector(
                 onTap: () => _onCategorySelected(category.id, index),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: isSelected ? const Color(0xFFB42652) : cs.surfaceVariant,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: isSelected
-                        ? [
-                            BoxShadow(
-                              color: const Color(0xFFB42652).withOpacity(0.3),
-                              blurRadius: 6,
-                              offset: const Offset(0, 3),
-                            )
-                          ]
-                        : null,
-                  ),
-                  child: Center(
-                    child: Text(
-                      category.title,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 200),
                       style: textTheme.bodyMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: isSelected ? Colors.white : cs.onSurfaceVariant,
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.w500,
+                        color: isSelected
+                            ? const Color(0xFF015E53)
+                            : cs.onSurfaceVariant,
+                      ),
+                      child: Text(category.title),
+                    ),
+                    const SizedBox(height: 6),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      height: 2,
+                      width: isSelected ? 30 : 0,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF015E53),
+                        borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-
               );
             },
           ),
         ),
-        const SizedBox(height: 4),
 
         Expanded(
           child: PageView.builder(
             controller: _categoryPageController,
             onPageChanged: (index) {
               if (index < _categories.length) {
-                setState(() => _selectedCategoryId = _categories[index].id);
+                setState(() =>
+                    _selectedCategoryId = _categories[index].id);
                 _scrollToCenter(index);
               }
             },
@@ -175,137 +153,154 @@ class _HomeTabState extends State<HomeTab> {
             itemBuilder: (context, pageIndex) {
               final category = _categories[pageIndex];
 
-              return FutureBuilder<List<ArticleModel>>(
-                future: _categoryVM.fetchArticlesByCategory(category.id),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+              return RefreshIndicator(
+                onRefresh: () async {
+                  setState(() {});
+                },
+                child: FutureBuilder<List<ArticleModel>>(
+                  future:
+                      _categoryVM.fetchArticlesByCategory(category.id),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                          child: CircularProgressIndicator());
+                    }
 
-                  final articles = snapshot.data!;
-                  if (articles.isEmpty) {
-                    return Center(
-                      child: Text(
-                        'Chưa có bài báo nào.',
-                        style: textTheme.bodyMedium!
-                            .copyWith(color: cs.onSurfaceVariant),
+                    final articles = snapshot.data!;
+                    if (articles.isEmpty) {
+                      return ListView(
+                        physics:
+                            const AlwaysScrollableScrollPhysics(),
+                        children: const [
+                          SizedBox(height: 200),
+                          Center(child: Text('Chưa có bài báo nào')),
+                        ],
+                      );
+                    }
+
+                    return ListView.separated(
+                      physics:
+                          const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(16),
+                      itemCount: articles.length,
+                      separatorBuilder: (_, __) => Divider(
+                        color: cs.outlineVariant,
+                        thickness: 1,
+                        height: 1,
                       ),
-                    );
-                  }
+                      itemBuilder: (context, index) {
+                        final article = articles[index];
 
-                  return ListView.separated(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: articles.length,
-                    separatorBuilder: (_, __) => Divider(
-                      color: cs.outlineVariant,
-                      thickness: 1,
-                      height: 20,
-                    ),
-                    itemBuilder: (context, index) {
-                      final article = articles[index];
+                        return FutureBuilder<int>(
+                          future: _articleVM
+                              .getCommentCount(article.id),
+                          builder: (context, snapshot) {
+                            final commentCount =
+                                snapshot.data ?? 0;
 
-                      return FutureBuilder<int>(
-                        future: _articleVM.getCommentCount(article.id),
-                        builder: (context, snapshot) {
-                          final commentCount = snapshot.data ?? 0;
-
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                createSlideRoute(ArticleDetail(article: article)),
-                              );
-
-                              if (userId != null) {
-                                ReadingHistoryViewModel().addOrUpdateHistory(
-                                  userId: userId!,
-                                  articleId: article.id,
-                                  title: article.title,
-                                  description: article.description,
-                                  image: article.image,
-                                );
-                              }
-                            },
-                            child: Container(
-                              height: 130,
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: cs.surface,
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          article.title,
-                                          style: textTheme.titleMedium!.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: cs.onSurface,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: 4),
-
-                                        Text(
-                                          article.description,
-                                          style: textTheme.bodySmall!.copyWith(
-                                            color: cs.onSurfaceVariant,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: 4),
-
-                                        Text(
-                                          "Ngày đăng: ${article.date.day}/${article.date.month}/${article.date.year}",
-                                          style: textTheme.bodySmall!.copyWith(
-                                            color: cs.onSurfaceVariant,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-
-                                        Row(
-                                          children: [
-                                            const Icon(Icons.comment, size: 14),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              "$commentCount bình luận",
-                                              style: textTheme.bodySmall!.copyWith(
-                                                color: cs.onSurfaceVariant,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  createSlideRoute(
+                                    ArticleDetail(
+                                        article: article),
                                   ),
+                                );
 
-                                  const SizedBox(width: 8),
-
-                                  if (article.image.isNotEmpty)
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.network(
-                                        article.image,
-                                        height: 90,
-                                        width: 100,
-                                        fit: BoxFit.cover,
+                                if (userId != null) {
+                                  ReadingHistoryViewModel()
+                                      .addOrUpdateHistory(
+                                    userId: userId!,
+                                    articleId: article.id,
+                                    title: article.title,
+                                    description:
+                                        article.description,
+                                    image: article.image,
+                                  );
+                                }
+                              },
+                              child: Container(
+                                height: 120,
+                                padding:
+                                    const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.circular(12),
+                                  color: cs.surface,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment
+                                                .start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .center,
+                                        children: [
+                                          Text(
+                                            article.title,
+                                            maxLines: 2,
+                                            overflow:
+                                                TextOverflow
+                                                    .ellipsis,
+                                            style: textTheme
+                                                .titleMedium!
+                                                .copyWith(
+                                              fontWeight:
+                                                  FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            article.description,
+                                            maxLines: 1,
+                                            overflow:
+                                                TextOverflow
+                                                    .ellipsis,
+                                            style:
+                                                textTheme.bodySmall,
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Row(
+                                            children: [
+                                              const Icon(
+                                                  Icons.comment,
+                                                  size: 14),
+                                              const SizedBox(width: 4),
+                                              Text(
+                                                '$commentCount bình luận',
+                                                style: textTheme
+                                                    .bodySmall,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                ],
+                                    if (article.image.isNotEmpty)
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8),
+                                        child: Image.network(
+                                          article.image,
+                                          height: 90,
+                                          width: 100,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
               );
             },
           ),

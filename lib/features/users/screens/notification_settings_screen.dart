@@ -28,7 +28,7 @@ class _NotificationSettingsScreenState
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color(0xFFB42652),
+        backgroundColor: const Color(0xFF015E53),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
 
@@ -97,7 +97,7 @@ class _NotificationSettingsScreenState
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFB42652),
+                backgroundColor: const Color(0xFF015E53),
                 padding: const EdgeInsets.symmetric(
                     horizontal: 34, vertical: 14),
               ),

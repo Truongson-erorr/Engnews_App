@@ -17,7 +17,7 @@ class NotificationScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFB42652),
+        backgroundColor: const Color(0xFF015E53),
         title: const Text(
           "Thông báo",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
@@ -122,7 +122,7 @@ class NotificationScreen extends StatelessWidget {
                       ),
                     )
                   : const Icon(Icons.notifications,
-                      color: Color(0xFFB42652), size: 48),
+                      color: Color(0xFF015E53), size: 48),
               title: Text(
                 article.title,
                 style: theme.textTheme.bodyLarge?.copyWith(
