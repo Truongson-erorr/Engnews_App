@@ -110,7 +110,9 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          createSlideRoute(ArticleDetail(article: article)),
+                          MaterialPageRoute(
+                            builder: (_) => ArticleDetail(article: article),
+                          ),
                         );
                       },
                       child: Padding(

@@ -110,7 +110,9 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
 
                   Navigator.push(
                     context,
-                    createSlideRoute(ArticleDetail(article: article)),
+                    MaterialPageRoute(
+                      builder: (_) => ArticleDetail(article: article),
+                    ),
                   );
                 },
 

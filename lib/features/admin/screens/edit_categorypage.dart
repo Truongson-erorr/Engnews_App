@@ -116,7 +116,6 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ---- Tên cũ ----
                     Text(
                       "Tên hiện tại",
                       style: TextStyle(color: Colors.grey[600], fontSize: 13),

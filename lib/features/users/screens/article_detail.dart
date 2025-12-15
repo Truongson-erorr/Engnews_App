@@ -10,6 +10,7 @@ import '../screens/ramdom_article.dart';
 import '../screens/article_detail_bottom_menu.dart';
 import '../../viewmodel/speech_viewmodel.dart';
 import 'article_speech_widget.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ArticleDetail extends StatefulWidget {
   final ArticleModel article;
@@ -47,6 +48,23 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Đã dịch bài!")),
+    );
+  }
+
+  void _shareArticle() {
+    final article = widget.article;
+    final content = '''
+
+  ${article.title}
+  ${article.description}
+  ${article.content.isNotEmpty ? article.content.substring(0, article.content.length > 500 ? 500 : article.content.length) + '...' : ''}
+
+  Nguồn: EngNews
+  ''';
+
+    Share.share(
+      content,
+      subject: article.title,
     );
   }
 
@@ -182,7 +200,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
         },
         onShare: () {
           Navigator.pop(ctx);
-
+          _shareArticle();
         },
         onSave: () {
           Navigator.pop(ctx);

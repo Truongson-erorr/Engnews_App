@@ -202,24 +202,22 @@ class _HomeTabState extends State<HomeTab> {
                               onTap: () {
                                 Navigator.push(
                                   context,
-                                  createSlideRoute(
-                                    ArticleDetail(
-                                        article: article),
+                                  MaterialPageRoute(
+                                    builder: (_) => ArticleDetail(article: article),
                                   ),
                                 );
 
                                 if (userId != null) {
-                                  ReadingHistoryViewModel()
-                                      .addOrUpdateHistory(
+                                  ReadingHistoryViewModel().addOrUpdateHistory(
                                     userId: userId!,
                                     articleId: article.id,
                                     title: article.title,
-                                    description:
-                                        article.description,
+                                    description: article.description,
                                     image: article.image,
                                   );
                                 }
                               },
+
                               child: Container(
                                 height: 120,
                                 padding:

@@ -141,13 +141,17 @@ class _LoginScreenState extends State<LoginScreen> {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {
-                  Navigator.of(context)
-                      .push(createSlideRoute(const ForgotPasswordScreen()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ForgotPasswordScreen(),
+                    ),
+                  );
                 },
                 child: const Text(
                   "Quên mật khẩu?",
                   style: TextStyle(
-                    color: primaryRed, 
+                    color: primaryRed,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -211,13 +215,17 @@ class _LoginScreenState extends State<LoginScreen> {
             Center(
               child: TextButton(
                 onPressed: () {
-                  Navigator.of(context)
-                      .push(createSlideRoute(const RegisterScreen()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const RegisterScreen(),
+                    ),
+                  );
                 },
                 child: const Text(
                   "Chưa có tài khoản? Đăng ký ngay",
                   style: TextStyle(
-                    color: primaryRed, 
+                    color: primaryRed,
                     fontSize: 15,
                   ),
                 ),

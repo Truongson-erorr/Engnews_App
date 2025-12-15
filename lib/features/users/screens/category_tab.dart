@@ -107,8 +107,8 @@ class _CategoryTabState extends State<CategoryTab> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      createSlideRoute(
-                        ArticlesByCategoryScreen(
+                      MaterialPageRoute(
+                        builder: (_) => ArticlesByCategoryScreen(
                           categoryId: category.id,
                           categoryTitle: category.title,
                         ),
