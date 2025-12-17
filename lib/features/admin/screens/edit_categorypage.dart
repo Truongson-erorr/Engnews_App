@@ -18,22 +18,27 @@ class EditCategoryPage extends StatefulWidget {
 
 class _EditCategoryPageState extends State<EditCategoryPage> {
   late TextEditingController _titleController;
+  late TextEditingController _descController;
   bool _isSaving = false;
 
   @override
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.category.title);
+    _descController = TextEditingController(text: widget.category.description ?? "");
   }
 
   @override
   void dispose() {
     _titleController.dispose();
+    _descController.dispose();
     super.dispose();
   }
 
   Future<void> _save() async {
     final newTitle = _titleController.text.trim();
+    final newDesc = _descController.text.trim();
+
     if (newTitle.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -48,7 +53,11 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
     setState(() => _isSaving = true);
 
     try {
-      await widget.categoryVM.updateCategory(widget.category.id, newTitle);
+      await widget.categoryVM.updateCategory(
+        widget.category.id,
+        newTitle,
+        newDescription: newDesc,
+      );
 
       if (!mounted) return;
 
@@ -86,6 +95,7 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
         ),
       ),
+
       body: Column(
         children: [
           const SizedBox(height: 20),
@@ -93,12 +103,16 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Card(
-              color: Colors.white, 
+              color: Colors.white,
               elevation: 2,
               shadowColor: Colors.black12,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
+
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -114,45 +128,78 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
                         fontWeight: FontWeight.w600,
                         color: Colors.black87,
                       ),
-                    ),
-                    const SizedBox(height: 20),
+                    ),          
+                    const SizedBox(height: 8),
 
                     TextField(
                       controller: _titleController,
-                      autofocus: true,
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (_) => _save(),
+                      autofocus: false,
+                      textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
-                        labelText: "Tên danh mục mới",
                         hintText: "Nhập tên danh mục...",
                         filled: true,
-                        fillColor: Colors.grey[100],
-                        border: OutlineInputBorder(
+                        fillColor: Colors.grey.shade100,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                        border: InputBorder.none,
+                        enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
                           borderSide: BorderSide.none,
                         ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    const Text(
+                      "Mô tả",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    TextField(
+                      controller: _descController,
+                      minLines: 3,
+                      maxLines: 6,
+                      decoration: InputDecoration(
+                        hintText: "Nhập mô tả...",
+                        filled: true,
+                        fillColor: Colors.grey.shade100,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                        border: InputBorder.none,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
+                          borderSide: BorderSide.none,
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 2),
+                          borderSide: BorderSide.none,
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                       ),
                     ),
+
                     const SizedBox(height: 24),
 
                     SizedBox(
                       width: double.infinity,
-                      height: 42, 
+                      height: 42,
                       child: ElevatedButton(
                         onPressed: _isSaving ? null : _save,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green.shade100, 
-                          foregroundColor: Colors.green.shade800, 
-                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
@@ -164,12 +211,15 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
                                 width: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2.5,
-                                  color: Colors.green,
+                                  color: Colors.white,
                                 ),
                               )
                             : const Text(
                                 "Lưu thay đổi",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                       ),
                     ),

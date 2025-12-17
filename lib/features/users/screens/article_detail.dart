@@ -7,6 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../screens/article_comments_widget.dart';
 import '../screens/related_articles_widget.dart';
 import '../screens/ramdom_article.dart';
+import '../screens/article_detail_bottom_menu.dart';
+import '../../viewmodel/speech_viewmodel.dart';
+import 'article_speech_widget.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ArticleDetail extends StatefulWidget {
   final ArticleModel article;
@@ -20,6 +24,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
   final FavoriteViewModel _favoriteVM = FavoriteViewModel();
   final TranslateViewModel _translateVM = TranslateViewModel();
   final AiViewModel _aiVM = AiViewModel();
+  final SpeechViewModel _speechVM = SpeechViewModel();
 
   List<Map<String, String>>? _translatedParagraphs;
   bool _isTranslating = false;
@@ -43,6 +48,23 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Đã dịch bài!")),
+    );
+  }
+
+  void _shareArticle() {
+    final article = widget.article;
+    final content = '''
+
+  ${article.title}
+  ${article.description}
+  ${article.content.isNotEmpty ? article.content.substring(0, article.content.length > 500 ? 500 : article.content.length) + '...' : ''}
+
+  Nguồn: EngNews
+  ''';
+
+    Share.share(
+      content,
+      subject: article.title,
     );
   }
 
@@ -89,7 +111,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 45),
-                      backgroundColor: const Color(0xFFB42652), 
+                      backgroundColor: const Color(0xFF015E53), 
                     ),
                     onPressed: () {
                       Navigator.pop(ctx);
@@ -158,100 +180,32 @@ class _ArticleDetailState extends State<ArticleDetail> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (ctx) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 50,
-              height: 5,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            const SizedBox(height: 10),
+      builder: (ctx) => ArticleDetailBottomMenu(
+        isTranslating: _isTranslating,
+        onTranslate: () {
+          Navigator.pop(ctx);
+          _translateContent();
+        },
+        onSummary: () {
+          Navigator.pop(ctx);
+          _showSummaryOptions();
+        },
+        onSentiment: () {
+          Navigator.pop(ctx);
 
-            ListTile(
-              leading: _isTranslating
-                  ? SizedBox(
-                      height: 22,
-                      width: 22,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation(Theme.of(context).colorScheme.primary),
-                      ),
-                    )
-                  : Icon(Icons.translate, color: Theme.of(context).iconTheme.color),
-              title: Text(
-                _isTranslating ? "Đang dịch..." : "Dịch bài",
-                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
-              ),
-              onTap: _isTranslating
-                  ? null
-                  : () async {
-                      Navigator.pop(ctx);
-                      await _translateContent();
-                    },
-            ),
+        },
+        onCopy: () {
+          Navigator.pop(ctx);
 
-            ListTile(
-              leading: Icon(Icons.summarize, color: Theme.of(context).iconTheme.color),
-              title: Text(
-                "Tóm tắt nội dung bằng AI",
-                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
-              ),
-              onTap: () async {
-                Navigator.pop(ctx);
-                _showSummaryOptions();
-              },
-            ),
-
-            ListTile(
-              leading: Icon(Icons.analytics_outlined, color: Theme.of(context).iconTheme.color),
-              title: Text(
-                "Phân tích cảm xúc (AI)",
-                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
-              ),
-              onTap: () {},
-            ),
-
-            ListTile(
-              leading: Icon(Icons.copy_all, color: Theme.of(context).iconTheme.color),
-              title: Text(
-                "Sao chép nội dung",
-                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
-              ),
-              onTap: () {
-                Navigator.pop(ctx);
-              },
-            ),
-
-            ListTile(
-              leading: Icon(Icons.share, color: Theme.of(context).iconTheme.color),
-              title: Text(
-                "Chia sẻ bài viết",
-                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
-              ),
-              onTap: () {
-                Navigator.pop(ctx);
-              },
-            ),
-
-            ListTile(
-              leading: Icon(Icons.bookmark_add_outlined, color: Theme.of(context).iconTheme.color),
-              title: Text(
-                "Lưu bài",
-                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium!.color),
-              ),
-              onTap: () async {
-                Navigator.pop(ctx);
-                await _saveArticle();
-              },
-            ),
-          ],
-        ),
+        },
+        onShare: () {
+          Navigator.pop(ctx);
+          _shareArticle();
+        },
+        onSave: () {
+          Navigator.pop(ctx);
+          _saveArticle();
+        },
       ),
     );
   }
@@ -263,7 +217,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFB42652),
+        backgroundColor: const Color(0xFF015E53),
         elevation: 1,
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
@@ -297,8 +251,14 @@ class _ArticleDetailState extends State<ArticleDetail> {
                     style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFFB42652))), 
+                        color: Color(0xFF015E53))), 
                 const SizedBox(height: 8),
+
+                ArticleSpeechWidget(
+                  speechVM: _speechVM,
+                  content: "${article.title}. ${article.description}".trim(),
+                ),
+                const SizedBox(height: 20),
 
                 Text("Published: ${article.date.toLocal().toString().split(' ')[0]}",
                     style: TextStyle(
@@ -313,7 +273,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                           ? const Color(0xFFFFF3F6)
                           : Colors.grey[800],
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFFB42652), width: 1),
+                      border: Border.all(color: const Color(0xFF015E53), width: 1),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -323,7 +283,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
-                              color: Color(0xFFB42652)),
+                              color: Color(0xFF015E53)),
                         ),
                         const SizedBox(height: 8),
                         Text(
@@ -356,7 +316,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                               textAlign: TextAlign.justify,
                                   style: const TextStyle(
                                       fontSize: 16,
-                                      color: Color(0xFFB42652))), 
+                                      color: Color(0xFF015E53))), 
                               const SizedBox(height: 12),
                             ],
                           );
@@ -393,7 +353,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(Color(0xFFB42652)),
+                      valueColor: AlwaysStoppedAnimation(Color(0xFF015E53)),
                     ),
                     const SizedBox(height: 16),
                     Text(
@@ -415,7 +375,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                   mainAxisSize: MainAxisSize.min,
                   children: const [
                     CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(Color(0xFFB42652)),
+                      valueColor: AlwaysStoppedAnimation(Color(0xFF015E53)),
                       strokeWidth: 4,
                     ),
                     SizedBox(height: 16),
@@ -435,3 +395,4 @@ class _ArticleDetailState extends State<ArticleDetail> {
     );
   }
 }
+

@@ -44,11 +44,15 @@ class DashboardPage extends StatelessWidget {
                 ),
               ],
             ),
-
             const SizedBox(height: 35),
+
             const Text(
               "Biểu đồ truy cập tuần",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+              style: TextStyle(
+                fontSize: 22, 
+                fontWeight: FontWeight.w700,
+                color: Colors.black87,
+              ),
             ),
             const SizedBox(height: 15),
 
@@ -69,7 +73,7 @@ class DashboardPage extends StatelessWidget {
                           if (value < 0 || value > 6) return const SizedBox();
                           return Text(
                             days[value.toInt()],
-                            style: const TextStyle(fontWeight: FontWeight.w600),
+                            style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black54),
                           );
                         },
                       ),
@@ -104,11 +108,15 @@ class DashboardPage extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 35),
+
             const Text(
               "Tỷ lệ phân loại bài viết",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+              style: TextStyle(
+                fontSize: 22, 
+                fontWeight: FontWeight.w700,
+                color: Colors.black87,
+              ),
             ),
             const SizedBox(height: 15),
 
@@ -185,12 +193,17 @@ class DashboardPage extends StatelessWidget {
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w700,
+              color: Color.fromARGB(221, 140, 140, 140),
             ),
           ),
           const SizedBox(height: 5),
           Text(
             title,
-            style: TextStyle(fontSize: 15, color: Colors.grey.shade600),
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.grey.shade800, 
+              fontWeight: FontWeight.w600,
+            ),
           )
         ],
       ),

@@ -71,4 +71,31 @@ class ArticleViewModel {
     return allArticles.take(limit).toList();
   }
 
+  // Listen in realtime when there are new posts
+  Stream<List<ArticleModel>> listenArticlesFromToday() {
+    final now = DateTime.now();
+    final todayStart = DateTime(now.year, now.month, now.day); 
+
+    return _firestore
+        .collection('articles')
+        .where('date', isGreaterThanOrEqualTo: todayStart)
+        .orderBy('date', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => ArticleModel.fromFirestore(doc))
+          .toList();
+    });
+  }
+
+  // count the number of comments
+  Future<int> getCommentCount(String articleId) async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('articles')
+        .doc(articleId)
+        .collection('comments')
+        .get();
+
+    return snapshot.docs.length;
+  }
 }

@@ -8,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class ArticleCommentsWidget extends StatefulWidget {
   final ArticleModel article;
   const ArticleCommentsWidget({super.key, required this.article});
-
+  
   @override
   State<ArticleCommentsWidget> createState() => _ArticleCommentsWidgetState();
 }
@@ -23,7 +23,7 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
     final theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(10),
       color: theme.colorScheme.background,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,6 +32,7 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
             "Bình luận",
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
+              fontSize: 20,
               color: theme.colorScheme.onBackground,
             ),
           ),
@@ -43,7 +44,7 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: CircularProgressIndicator(
-                    color: const Color(0xFFB42652),
+                    color: const Color(0xFF015E53),
                   ),
                 );
               }
@@ -60,39 +61,80 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
 
               return Column(
                 children: comments.map((comment) {
-                  final firstLetter = comment.user.isNotEmpty
-                      ? comment.user[0].toUpperCase()
-                      : '?';
+                  return FutureBuilder<String?>(
+                    future: _commentVM.getUserImage(comment.user),
+                    builder: (context, snapshot) {
+                      final image = snapshot.data;
+                      final firstLetter = comment.user.isNotEmpty
+                          ? comment.user[0].toUpperCase()
+                          : '?';
+                      return Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.symmetric(vertical: 6),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CircleAvatar(
+                                  radius: 22,
+                                  backgroundColor: const Color(0xFF015E53),
+                                  backgroundImage: 
+                                    (image != null && image.isNotEmpty)
+                                        ? NetworkImage(image)
+                                        : null,
+                                  child: (image == null || image.isEmpty)
+                                      ? Text(
+                                          firstLetter,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      : null,
+                                ),
+                                const SizedBox(width: 12),
 
-                  return ListTile(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                    leading: CircleAvatar(
-                      radius: 16,
-                      backgroundColor: const Color(0xFFB42652),
-                      child: Text(
-                        firstLetter,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    title: Text(
-                      comment.user,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Text(
-                      comment.text,
-                      style: theme.textTheme.bodyMedium,
-                    ),
-                    trailing: Text(
-                      _dateFormat.format(comment.date),
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.6),
-                      ),
-                    ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        comment.user,
+                                        style: theme.textTheme.titleSmall?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        comment.text,
+                                        style: theme.textTheme.bodyMedium?.copyWith(fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+
+                                Text(
+                                  _dateFormat.format(comment.date),
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (comments.last != comment)
+                            Divider(
+                              color: const Color.fromARGB(255, 204, 204, 204).withOpacity(0.3),
+                              thickness: 1,
+                              height: 10,
+                            ),
+                        ],
+                      );
+                    },
                   );
                 }).toList(),
               );
@@ -125,7 +167,7 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
 
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFB42652),
+                  color: const Color(0xFF015E53),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: IconButton(
@@ -154,7 +196,6 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
                         date: DateTime.now(),
                       ),
                     );
-
                     _commentController.clear();
                   },
                 ),

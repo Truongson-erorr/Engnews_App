@@ -1,13 +1,14 @@
 import 'package:caonientruongson/features/users/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'home_tab.dart';
 import 'search_tab.dart';
 import 'category_tab.dart';
-import 'podcast_tab.dart';
 import 'profile_tab.dart';
 import 'notification_screen.dart';
 import 'saved_articles_screen.dart';
+
 import '../../../core/animation';
 import '../../viewmodel/authen_viewmodel.dart';
 import 'notification_settings_screen.dart';
@@ -26,7 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     const HomeTab(key: ValueKey('home')),
     const CategoryTab(key: ValueKey('category')),
-    PodcastTab(key: ValueKey('podcast')),
     const SavedArticlesScreen(key: ValueKey('saved')),
     const ProfileTab(key: ValueKey('profile')),
   ];
@@ -39,10 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final user =
         Provider.of<AuthenViewModel>(context, listen: false).currentUser;
 
-    if (user == null && (index == 3 || index == 4)) {
+    if (user == null && (index == 2 || index == 3)) {
       Navigator.push(context, createSlideRoute(const LoginScreen()));
       return;
     }
+
     _onMenuTap(index);
   }
 
@@ -50,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    const primaryColor = Color(0xFFB42652); 
+    const primaryColor = Color(0xFF015E53);
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -71,17 +72,23 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () => Navigator.push(
-              context,
-              createSlideRoute(const SearchScreen()),
-            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const SearchScreen(),
+                ),
+              );
+            },
           ),
           IconButton(
             icon: const Icon(Icons.notifications_none, color: Colors.white),
             onPressed: () {
               Navigator.push(
                 context,
-                createSlideRoute(const NotificationScreen()),
+                MaterialPageRoute(
+                  builder: (_) => NotificationScreen(),
+                ),
               );
             },
           ),
@@ -99,17 +106,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context, userVM, _) {
                   final user = userVM.currentUser;
                   return UserAccountsDrawerHeader(
-                    decoration: BoxDecoration(
-                      color: primaryColor,
-                    ),
+                    decoration: const BoxDecoration(color: primaryColor),
                     currentAccountPicture: CircleAvatar(
-                      backgroundColor: theme.colorScheme.secondaryContainer,
-                      backgroundImage: (user != null && user.image.isNotEmpty)
-                          ? NetworkImage(user.image)
-                          : null,
+                      backgroundColor:
+                          theme.colorScheme.secondaryContainer,
+                      backgroundImage:
+                          (user != null && user.image.isNotEmpty)
+                              ? NetworkImage(user.image)
+                              : null,
                       child: (user == null || user.image.isEmpty)
                           ? Icon(Icons.person,
-                              color: theme.colorScheme.onSecondaryContainer)
+                              color: theme
+                                  .colorScheme.onSecondaryContainer)
                           : null,
                     ),
                     accountName: Text(
@@ -136,26 +144,37 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               ListTile(
-                leading: Icon(Icons.notifications_outlined,
-                    color: colorScheme.onBackground),
-                title: Text("Thông báo",
-                    style: TextStyle(color: colorScheme.onBackground)),
+                leading: Icon(
+                  Icons.notifications_outlined,
+                  color: colorScheme.onBackground,
+                ),
+                title: Text(
+                  "Thông báo",
+                  style: TextStyle(color: colorScheme.onBackground),
+                ),
                 onTap: () {
                   Navigator.push(
                     context,
-                    createSlideRoute(const NotificationSettingsScreen()),
+                    MaterialPageRoute(
+                      builder: (_) => const NotificationSettingsScreen(),
+                    ),
                   );
                 },
               ),
 
               SwitchListTile(
-                title: Text("Chế độ tối",
-                    style: TextStyle(color: colorScheme.onBackground)),
-                secondary:
-                    Icon(Icons.dark_mode_outlined, color: colorScheme.onBackground),
-                value: context.watch<ThemeViewModel>().isDarkMode,
-                onChanged: (value) =>
-                    context.read<ThemeViewModel>().toggleTheme(value),
+                title: Text(
+                  "Chế độ tối",
+                  style:
+                      TextStyle(color: colorScheme.onBackground),
+                ),
+                secondary: Icon(Icons.dark_mode_outlined,
+                    color: colorScheme.onBackground),
+                value:
+                    context.watch<ThemeViewModel>().isDarkMode,
+                onChanged: (value) => context
+                    .read<ThemeViewModel>()
+                    .toggleTheme(value),
               ),
 
               Divider(color: theme.dividerColor),
@@ -168,7 +187,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(12),
                 child: Text(
                   "Phiên bản 1.0.0",
-                  style: TextStyle(color: theme.hintColor, fontSize: 13),
+                  style:
+                      TextStyle(color: theme.hintColor, fontSize: 13),
                 ),
               ),
             ],
@@ -188,24 +208,31 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _handlePrivateTab,
-        backgroundColor: theme.bottomNavigationBarTheme.backgroundColor ??
-            theme.scaffoldBackgroundColor,
-        selectedItemColor: primaryColor, 
-        unselectedItemColor:
-            theme.bottomNavigationBarTheme.unselectedItemColor ??
-                theme.unselectedWidgetColor,
+        backgroundColor: theme.scaffoldBackgroundColor,
+        selectedItemColor: primaryColor,
+        unselectedItemColor: theme.unselectedWidgetColor,
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.article_outlined), label: "Trang chủ"),
+            icon: Icon(Icons.article_outlined),
+            activeIcon: Icon(Icons.article),
+            label: "Tin tức",
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.grid_view_outlined), label: "Chuyên mục"),
+            icon: Icon(Icons.view_list_outlined),
+            activeIcon: Icon(Icons.view_list),
+            label: "Chuyên mục",
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.podcasts_outlined), label: "Podcast"),
+            icon: Icon(Icons.bookmark_outline),
+            activeIcon: Icon(Icons.bookmark),
+            label: "Đã lưu",
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_outline), label: "Đã lưu"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline), label: "Tôi"),
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: "Tôi",
+          ),
         ],
       ),
     );

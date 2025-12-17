@@ -35,7 +35,7 @@ class ReadingHistoryScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color(0xFFB42652),
+        backgroundColor: const Color(0xFF015E53),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
 
@@ -87,7 +87,9 @@ class ReadingHistoryScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    createSlideRoute(ArticleDetail(article: article)),
+                    MaterialPageRoute(
+                      builder: (_) => ArticleDetail(article: article),
+                    ),
                   );
 
                   Future.microtask(() {
@@ -102,24 +104,12 @@ class ReadingHistoryScreen extends StatelessWidget {
                 },
 
                 child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: theme.cardColor,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: theme.shadowColor.withOpacity(0.07),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      )
-                    ],
-                  ),
-
+                  padding: const EdgeInsets.all(10),
+                  color: theme.colorScheme.surface, 
                   child: Row(
                     children: [
-                      /// IMAGE
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(6), 
                         child: item.image.isNotEmpty
                             ? Image.network(
                                 item.image,
@@ -130,10 +120,10 @@ class ReadingHistoryScreen extends StatelessWidget {
                             : Container(
                                 width: 100,
                                 height: 80,
-                                color: theme.dividerColor.withOpacity(.2),
+                                color: theme.colorScheme.surfaceVariant,
                                 child: Icon(
                                   Icons.article_outlined,
-                                  color: theme.iconTheme.color,
+                                  color: theme.colorScheme.onSurfaceVariant,
                                 ),
                               ),
                       ),
@@ -148,7 +138,8 @@ class ReadingHistoryScreen extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
+                                color: theme.colorScheme.onSurface,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -158,7 +149,7 @@ class ReadingHistoryScreen extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.textTheme.bodySmall!.color!.withOpacity(.8),
+                                color: theme.colorScheme.onSurfaceVariant,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -166,7 +157,7 @@ class ReadingHistoryScreen extends StatelessWidget {
                             Text(
                               'Đã đọc ${timeAgo(item.readAt)}',
                               style: theme.textTheme.labelSmall?.copyWith(
-                                color: theme.textTheme.bodySmall!.color!.withOpacity(.6),
+                                color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
                               ),
                             ),
                           ],
@@ -175,6 +166,7 @@ class ReadingHistoryScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+
               );
             },
           );

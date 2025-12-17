@@ -5,6 +5,8 @@ import '../screens/login_screen.dart';
 import '../screens/reading_history_screen.dart';
 import '../screens/edit_profile_screen.dart';
 import '../../../core/animation';
+import '../screens/change_password_screen.dart';
+import '../screens/setting_screen.dart';
 
 class ProfileTab extends StatelessWidget {
   const ProfileTab({super.key});
@@ -116,18 +118,25 @@ class ProfileTab extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        createSlideRoute(EditProfileScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const EditProfileScreen(),
+                        ),
                       );
                     },
                   ),
-
                   _buildMenuItem(
                     context: context,
                     icon: Icons.lock_outline,
                     title: 'Đổi mật khẩu',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ChangePasswordScreen(),
+                        ),
+                      );
+                    },
                   ),
-
                   _buildMenuItem(
                     context: context,
                     icon: Icons.history,
@@ -137,25 +146,31 @@ class ProfileTab extends StatelessWidget {
 
                       Navigator.push(
                         context,
-                        createSlideRoute(ReadingHistoryScreen(userId: userId)),
+                        MaterialPageRoute(
+                          builder: (_) => ReadingHistoryScreen(userId: userId),
+                        ),
                       );
                     },
                   ),
-
                   _buildMenuItem(
                     context: context,
                     icon: Icons.settings_outlined,
                     title: 'Cài đặt ứng dụng',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const AppSettingsScreen(),
+                        ),
+                      );
+                    },
                   ),
-
                   _buildMenuItem(
                     context: context,
                     icon: Icons.help_outline,
                     title: 'Trợ giúp & Hỗ trợ',
                     onTap: () {},
                   ),
-
                   _buildMenuItem(
                     context: context,
                     icon: Icons.logout,
@@ -241,7 +256,6 @@ class ProfileTab extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colors.outline.withOpacity(0.2)),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),

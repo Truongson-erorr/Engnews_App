@@ -8,6 +8,8 @@ import 'features/viewmodel/user_manager_viewmodel.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'core/theme/theme_viewmodel.dart';
 import "core/theme/app_theme.dart";
+import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +18,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await FirebaseAuth.instance.signOut();
   await dotenv.load();
   
   runApp(
@@ -41,8 +44,21 @@ class MyApp extends StatelessWidget {
       title: 'EngNews',
       debugShowCheckedModeBanner: false,
 
-      theme: AppTheme.lightTheme,     
-      darkTheme: AppTheme.darkTheme,   
+      theme: AppTheme.lightTheme.copyWith(
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: AppTheme.lightTheme.colorScheme.copyWith(
+          background: Colors.white,
+          surface: Colors.white,
+        ),
+        textTheme: GoogleFonts.interTextTheme(),
+      ),
+
+      darkTheme: AppTheme.darkTheme.copyWith(
+        textTheme: GoogleFonts.interTextTheme(
+          ThemeData.dark().textTheme,
+        ),
+      ),
+
       themeMode: themeVM.isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
       home: const HomeScreen(),

@@ -42,7 +42,7 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
       backgroundColor: theme.scaffoldBackgroundColor,
 
       appBar: AppBar(
-        backgroundColor: const Color(0xFFB42652), 
+        backgroundColor: const Color(0xFF015E53), 
         elevation: 1,
         title: Text(
           widget.categoryTitle,
@@ -110,7 +110,9 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
 
                   Navigator.push(
                     context,
-                    createSlideRoute(ArticleDetail(article: article)),
+                    MaterialPageRoute(
+                      builder: (_) => ArticleDetail(article: article),
+                    ),
                   );
                 },
 

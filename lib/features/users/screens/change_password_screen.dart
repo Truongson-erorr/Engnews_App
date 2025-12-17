@@ -1,65 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../viewmodel/authen_viewmodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
+class ChangePasswordScreen extends StatefulWidget {
+  const ChangePasswordScreen({super.key});
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  late TextEditingController _nameController;
-  late TextEditingController _phoneController;
-  late TextEditingController _emailController;
+  final _oldPassCtrl = TextEditingController();
+  final _newPassCtrl = TextEditingController();
+  final _confirmPassCtrl = TextEditingController();
 
   bool _isSaving = false;
 
-  @override
-  void initState() {
-    super.initState();
-    final user =
-        Provider.of<AuthenViewModel>(context, listen: false).currentUser;
+  Future<void> _handleChangePassword() async {
+    if (!_formKey.currentState!.validate()) return;
 
-    _nameController = TextEditingController(text: user?.fullName ?? '');
-    _phoneController = TextEditingController(text: user?.phone ?? '');
-    _emailController = TextEditingController(text: user?.email ?? '');
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null || user.email == null) return;
+
+    setState(() => _isSaving = true);
+
+    try {
+      final credential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: _oldPassCtrl.text.trim(),
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      await user.updatePassword(_newPassCtrl.text.trim());
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text("Đổi mật khẩu thành công!"),
+            backgroundColor: const Color(0xFF015E53),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        Navigator.pop(context);
+      }
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? "Đổi mật khẩu thất bại"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
+    }
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _phoneController.dispose();
-    _emailController.dispose();
+    _oldPassCtrl.dispose();
+    _newPassCtrl.dispose();
+    _confirmPassCtrl.dispose();
     super.dispose();
-  }
-
-  Future<void> _saveChanges() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    setState(() => _isSaving = true);
-
-    final authVM = Provider.of<AuthenViewModel>(context, listen: false);
-    await authVM.updateUserProfile(
-      fullName: _nameController.text.trim(),
-      phone: _phoneController.text.trim(),
-    );
-
-    setState(() => _isSaving = false);
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Cập nhật thông tin thành công!'),
-          backgroundColor: const Color(0xFF015E53),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-      Navigator.pop(context);
-    }
   }
 
   @override
@@ -67,28 +71,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    final user = Provider.of<AuthenViewModel>(context).currentUser;
-
-    if (user == null) {
-      return Scaffold(
-        backgroundColor: colors.background,
-        body: Center(
-          child: Text(
-            "Không có thông tin người dùng",
-            style: textTheme.bodyLarge?.copyWith(color: colors.onBackground),
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
       backgroundColor: colors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF015E53), 
+        backgroundColor: const Color(0xFF015E53),
         elevation: 0.6,
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
-          "Chỉnh sửa hồ sơ",
+          "Đổi mật khẩu",
           style: textTheme.titleLarge?.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -103,42 +93,51 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             children: [
               const SizedBox(height: 10),
 
-              _buildTextField(
+              _buildPasswordField(
                 context: context,
-                controller: _nameController,
-                label: "Họ và tên",
-                icon: Icons.person_outline,
-                validator: (v) => v!.isEmpty ? "Vui lòng nhập họ tên" : null,
-              ),
-
-              const SizedBox(height: 20),
-
-              _buildTextField(
-                context: context,
-                controller: _phoneController,
-                label: "Số điện thoại",
-                icon: Icons.phone_outlined,
-                keyboardType: TextInputType.phone,
+                controller: _oldPassCtrl,
+                label: "Mật khẩu cũ",
+                icon: Icons.lock_outline,
                 validator: (v) =>
-                    v!.isEmpty ? "Vui lòng nhập số điện thoại" : null,
+                    v == null || v.isEmpty ? "Vui lòng nhập mật khẩu cũ" : null,
               ),
 
               const SizedBox(height: 20),
 
-              _buildTextField(
+              _buildPasswordField(
                 context: context,
-                controller: _emailController,
-                label: "Email",
-                icon: Icons.email_outlined,
-                readOnly: true,
+                controller: _newPassCtrl,
+                label: "Mật khẩu mới",
+                icon: Icons.lock_reset,
+                validator: (v) {
+                  if (v == null || v.isEmpty) {
+                    return "Vui lòng nhập mật khẩu mới";
+                  }
+                  if (v.length < 6) {
+                    return "Mật khẩu tối thiểu 6 ký tự";
+                  }
+                  return null;
+                },
               ),
+
+              const SizedBox(height: 20),
+
+              _buildPasswordField(
+                context: context,
+                controller: _confirmPassCtrl,
+                label: "Xác nhận mật khẩu mới",
+                icon: Icons.lock_outline,
+                validator: (v) =>
+                    v != _newPassCtrl.text ? "Mật khẩu không khớp" : null,
+              ),
+
               const SizedBox(height: 40),
 
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
-                  onPressed: _isSaving ? null : _saveChanges,
+                  onPressed: _isSaving ? null : _handleChangePassword,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF015E53),
                     shape: RoundedRectangleBorder(
@@ -148,7 +147,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: _isSaving
                       ? const CircularProgressIndicator(color: Colors.white)
                       : Text(
-                          "Lưu thay đổi",
+                          "Đổi mật khẩu",
                           style: textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -163,31 +162,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget _buildTextField({
+  Widget _buildPasswordField({
     required BuildContext context,
     required TextEditingController controller,
     required String label,
     required IconData icon,
     String? Function(String?)? validator,
-    bool readOnly = false,
-    TextInputType? keyboardType,
   }) {
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     return TextFormField(
       controller: controller,
-      readOnly: readOnly,
-      keyboardType: keyboardType,
+      obscureText: true,
       validator: validator,
       style: textTheme.bodyLarge?.copyWith(color: colors.onSurface),
       decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: const Color(0xFF015E53)), 
+        prefixIcon: Icon(icon, color: const Color(0xFF015E53)),
         labelText: label,
         labelStyle:
             textTheme.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
         filled: true,
-        fillColor: colors.surface, 
+        fillColor: colors.surface,
         errorStyle: TextStyle(color: colors.error),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -199,7 +195,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF015E53), width: 1),
+          borderSide:
+              const BorderSide(color: Color(0xFF015E53), width: 1),
         ),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 14),

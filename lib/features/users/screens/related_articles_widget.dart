@@ -25,6 +25,7 @@ class RelatedArticlesWidget extends StatelessWidget {
         Text(
           "Bài viết liên quan",
           style: theme.textTheme.titleMedium?.copyWith(
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
