@@ -115,4 +115,24 @@ class ArticleViewModel {
       return [];
     }
   }
+
+  // edit article for flow admin
+  Future<void> updateArticle({
+    required String articleId,
+    required String title,
+    required String description,
+    required String image,
+    required String contentImage,
+    String? categoryId,
+  }) async {
+    await _firestore.collection('articles').doc(articleId).update({
+      'title': title,
+      'description': description,
+      'image': image,
+      'contentImage': contentImage,
+      if (categoryId != null) 'categoryId': categoryId,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
 }

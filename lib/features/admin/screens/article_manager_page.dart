@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../viewmodel/article_viewmodel.dart';
 import '../../models/article_model.dart';
+import 'edit_article_page.dart';
 
 class ArticleManagerPage extends StatefulWidget {
   const ArticleManagerPage({super.key});
@@ -51,8 +52,17 @@ class _ArticleManagerPageState extends State<ArticleManagerPage> {
     _loadArticles();
   }
 
-  void _editArticle(ArticleModel article) {
+  void _editArticle(ArticleModel article) async {
+    final updated = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => EditArticlePage(article: article),
+      ),
+    );
 
+    if (updated == true) {
+      _loadArticles();
+    }
   }
 
   @override
