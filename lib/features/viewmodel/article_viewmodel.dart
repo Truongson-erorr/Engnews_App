@@ -98,4 +98,21 @@ class ArticleViewModel {
 
     return snapshot.docs.length;
   }
+
+  // Fetch ALL articles, ordered by newest first
+  Future<List<ArticleModel>> fetchLatestArticles() async {
+    try {
+      final snapshot = await _firestore
+          .collection('articles')
+          .orderBy('date', descending: true)
+          .get();
+
+      return snapshot.docs
+          .map((doc) => ArticleModel.fromFirestore(doc))
+          .toList();
+    } catch (e) {
+      print('Error fetching latest articles: $e');
+      return [];
+    }
+  }
 }

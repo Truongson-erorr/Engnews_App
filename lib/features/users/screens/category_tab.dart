@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../viewmodel/category_viewmodel.dart';
 import '../../models/category_model.dart';
 import 'articles_by_category_screen.dart';
-import '../../../core/animation';
 
 class CategoryTab extends StatefulWidget {
   const CategoryTab({super.key});
@@ -24,10 +23,10 @@ class _CategoryTabState extends State<CategoryTab> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
       color: theme.scaffoldBackgroundColor,
+      padding: const EdgeInsets.all(12),
       child: FutureBuilder<List<CategoryModel>>(
         future: _futureCategories,
         builder: (context, snapshot) {
@@ -54,56 +53,31 @@ class _CategoryTabState extends State<CategoryTab> {
             return Center(
               child: Text(
                 'Chưa có danh mục nào.',
-                style: TextStyle(color: theme.colorScheme.onBackground.withOpacity(0.6)),
+                style: TextStyle(
+                  color: theme.colorScheme.onBackground.withOpacity(0.6),
+                ),
               ),
             );
           }
 
-          return ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          return GridView.builder(
             itemCount: categories.length,
-            separatorBuilder: (_, __) => Divider(
-              color: theme.dividerColor,
-              thickness: 1,
-              height: 16,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 2.1,
             ),
             itemBuilder: (context, index) {
               final category = categories[index];
 
               return Material(
-                color: Theme.of(context).colorScheme.surface,
-                surfaceTintColor: Colors.transparent, 
-                borderRadius: BorderRadius.circular(12),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  leading: const Icon(
-                    Icons.label_outline,
-                    color: Color(0xFF015E53),
-                  ),
-                  title: Text(
-                    category.title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                  subtitle: Text(
-                    category.description,
-                    style: TextStyle(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(0.7),
-                    ),
-                  ),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: Theme.of(context)
-                        .iconTheme
-                        .color
-                        ?.withOpacity(0.6),
-                  ),
+                color: theme.colorScheme.surface,
+                borderRadius: BorderRadius.circular(14),
+                elevation: theme.brightness == Brightness.dark ? 0 : 2,
+                shadowColor: Colors.black.withOpacity(0.08),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(14),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -115,6 +89,50 @@ class _CategoryTabState extends State<CategoryTab> {
                       ),
                     );
                   },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 14,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                category.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: theme.colorScheme.onSurface,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                category.description,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: theme.colorScheme.onSurface
+                                      .withOpacity(0.6),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          size: 26,
+                          color: theme.colorScheme.onSurface.withOpacity(0.45),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               );
             },
