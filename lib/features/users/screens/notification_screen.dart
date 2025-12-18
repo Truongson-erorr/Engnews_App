@@ -111,11 +111,11 @@ class NotificationScreen extends StatelessWidget {
             ),
             child: ListTile(
               contentPadding: const EdgeInsets.symmetric(vertical: 4),
-              leading: article.image != null && article.image!.isNotEmpty
+              leading: article.image.isNotEmpty
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(
-                        article.image!,
+                        article.image,
                         width: 90,
                         height: 90,
                         fit: BoxFit.cover,

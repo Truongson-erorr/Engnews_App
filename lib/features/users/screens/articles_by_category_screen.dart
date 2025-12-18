@@ -4,7 +4,6 @@ import 'article_detail.dart';
 import '../../viewmodel/category_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../viewmodel/reading_history_viewmodel.dart';
-import '../../../core/animation';
 
 class ArticlesByCategoryScreen extends StatefulWidget {
   final String categoryId;

@@ -4,7 +4,6 @@ import '../../models/article_model.dart';
 import '../../viewmodel/favorite_viewmodel.dart';
 import '../../viewmodel/article_viewmodel.dart';
 import 'article_detail.dart';
-import '../../../core/animation';
 
 class SavedArticlesScreen extends StatefulWidget {
   const SavedArticlesScreen({super.key});

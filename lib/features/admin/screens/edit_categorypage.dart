@@ -25,7 +25,7 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.category.title);
-    _descController = TextEditingController(text: widget.category.description ?? "");
+    _descController = TextEditingController(text: widget.category.description);
   }
 
   @override

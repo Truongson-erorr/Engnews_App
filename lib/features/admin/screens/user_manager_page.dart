@@ -12,11 +12,8 @@ class UserManagerPage extends StatefulWidget {
 }
 
 class _UserManagerPageState extends State<UserManagerPage> {
-  List<UserModel> _users = [];
   List<UserModel> _filteredUsers = [];
   bool _isLoading = true;
-
-  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -31,7 +28,6 @@ class _UserManagerPageState extends State<UserManagerPage> {
 
     final fetched = await vm.fetchAllUsers();
     setState(() {
-      _users = fetched;
       _filteredUsers = fetched;
       _isLoading = false;
     });
@@ -46,10 +42,6 @@ class _UserManagerPageState extends State<UserManagerPage> {
     );
 
     _loadUsers();
-  }
-
-  void _editUser(UserModel user) {
-
   }
 
   @override
@@ -79,10 +71,10 @@ class _UserManagerPageState extends State<UserManagerPage> {
                                 leading: CircleAvatar(
                                   radius: 26,
                                   backgroundColor: Colors.grey.shade300,
-                                  backgroundImage: user.image != null && user.image!.isNotEmpty
-                                      ? NetworkImage(user.image!)
+                                  backgroundImage: user.image.isNotEmpty
+                                      ? NetworkImage(user.image)
                                       : null,
-                                  child: (user.image == null || user.image!.isEmpty)
+                                  child: (user.image.isEmpty)
                                       ? const Icon(Icons.person, size: 28, color: Colors.white)
                                       : null,
                                 ),

@@ -13,10 +13,8 @@ class CategoryManagerPage extends StatefulWidget {
 
 class _CategoryManagerPageState extends State<CategoryManagerPage> {
   final CategoryViewModel _categoryVM = CategoryViewModel();
-  List<CategoryModel> _categories = [];
   List<CategoryModel> _filteredCategories = [];
   bool _isLoading = true;
-  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -28,22 +26,9 @@ class _CategoryManagerPageState extends State<CategoryManagerPage> {
     setState(() => _isLoading = true);
     final fetched = await _categoryVM.fetchCategories();
     setState(() {
-      _categories = fetched;
       _filteredCategories = fetched;
       _isLoading = false;
     });
-  }
-
-  void _searchCategories(String keyword) {
-    if (keyword.isEmpty) {
-      setState(() => _filteredCategories = _categories);
-    } else {
-      setState(() {
-        _filteredCategories = _categories
-            .where((c) => c.title.toLowerCase().contains(keyword.toLowerCase()))
-            .toList();
-      });
-    }
   }
 
   void _deleteCategory(String categoryId) async {
@@ -151,7 +136,6 @@ class _CategoryManagerPageState extends State<CategoryManagerPage> {
               ],
             ),
           ),
-
           Expanded(
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())

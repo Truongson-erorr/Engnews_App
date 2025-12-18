@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../models/reading_history_model.dart';
 import '../../models/article_model.dart';
 import '../../viewmodel/reading_history_viewmodel.dart';
-import '../../../core/animation';
 import '../screens/article_detail.dart';
 
 class ReadingHistoryScreen extends StatelessWidget {

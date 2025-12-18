@@ -4,7 +4,6 @@ import '../../viewmodel/authen_viewmodel.dart';
 import '../screens/login_screen.dart';
 import '../screens/reading_history_screen.dart';
 import '../screens/edit_profile_screen.dart';
-import '../../../core/animation';
 import '../screens/change_password_screen.dart';
 import '../screens/setting_screen.dart';
 
