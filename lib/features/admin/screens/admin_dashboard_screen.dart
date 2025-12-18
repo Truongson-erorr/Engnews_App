@@ -4,7 +4,6 @@ import 'category_manager_page.dart';
 import 'article_manager_page.dart';
 import 'user_manager_page.dart';
 import 'system_settings_page.dart';
-import 'notifications_page.dart'; 
 import 'profile_screen.dart';
 import '../../viewmodel/authen_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +23,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     CategoryManagerPage(), 
     ArticleManagerPage(), 
     UserManagerPage(), 
-    NotificationsPage(), 
     SystemSettingsPage(), 
   ];
 
@@ -110,7 +108,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             _drawerItem(Icons.grid_view, "Quản lý danh mục", 1),
             _drawerItem(Icons.article, "Quản lý bài viết", 2),
             _drawerItem(Icons.person, "Quản lý người dùng", 3),
-            _drawerItem(Icons.notifications, "Thông báo hệ thống", 4),
             _drawerItem(Icons.settings, "Cài đặt hệ thống", 5),
 
             const Spacer(),

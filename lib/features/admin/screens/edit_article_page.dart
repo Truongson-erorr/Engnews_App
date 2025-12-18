@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../models/article_model.dart';
+import '../../models/category_model.dart';
 import '../../viewmodel/article_viewmodel.dart';
+import '../../viewmodel/category_viewmodel.dart';
 
 class EditArticlePage extends StatefulWidget {
   final ArticleModel article;
@@ -16,14 +18,18 @@ class EditArticlePage extends StatefulWidget {
 
 class _EditArticlePageState extends State<EditArticlePage> {
   final _formKey = GlobalKey<FormState>();
-  final ArticleViewModel _viewModel = ArticleViewModel();
+
+  final ArticleViewModel _articleVM = ArticleViewModel();
+  final CategoryViewModel _categoryVM = CategoryViewModel();
 
   late TextEditingController _titleCtrl;
   late TextEditingController _descCtrl;
   late TextEditingController _imageCtrl;
   late TextEditingController _contentImageCtrl;
   late TextEditingController _contentCtrl;
-  late TextEditingController _categoryCtrl;
+
+  List<CategoryModel> _categories = [];
+  String? _selectedCategoryId;
 
   bool _isSaving = false;
 
@@ -37,7 +43,22 @@ class _EditArticlePageState extends State<EditArticlePage> {
     _imageCtrl = TextEditingController(text: a.image);
     _contentImageCtrl = TextEditingController(text: a.contentImage);
     _contentCtrl = TextEditingController(text: a.content);
-    _categoryCtrl = TextEditingController(text: a.categoryId);
+
+    _selectedCategoryId = a.categoryId;
+    _loadCategories();
+  }
+
+  Future<void> _loadCategories() async {
+    final data = await _categoryVM.fetchCategories();
+    if (!mounted) return;
+
+    setState(() {
+      _categories = data;
+      if (!_categories.any((c) => c.id == _selectedCategoryId)) {
+        _selectedCategoryId =
+            _categories.isNotEmpty ? _categories.first.id : null;
+      }
+    });
   }
 
   @override
@@ -47,7 +68,6 @@ class _EditArticlePageState extends State<EditArticlePage> {
     _imageCtrl.dispose();
     _contentImageCtrl.dispose();
     _contentCtrl.dispose();
-    _categoryCtrl.dispose();
     super.dispose();
   }
 
@@ -57,13 +77,13 @@ class _EditArticlePageState extends State<EditArticlePage> {
     setState(() => _isSaving = true);
 
     try {
-      await _viewModel.updateArticle(
+      await _articleVM.updateArticle(
         articleId: widget.article.id,
         title: _titleCtrl.text.trim(),
         description: _descCtrl.text.trim(),
         image: _imageCtrl.text.trim(),
-        categoryId: _categoryCtrl.text.trim(),
         contentImage: _contentImageCtrl.text.trim(),
+        categoryId: _selectedCategoryId,
       );
 
       if (mounted) {
@@ -83,23 +103,18 @@ class _EditArticlePageState extends State<EditArticlePage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.white, 
-        foregroundColor: Colors.black, 
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         title: const Text(
           'Sửa bài viết',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-
       body: Form(
         key: _formKey,
         child: ListView(
@@ -108,9 +123,39 @@ class _EditArticlePageState extends State<EditArticlePage> {
             _section(
               title: 'Thông tin cơ bản',
               children: [
-                _input(_titleCtrl, 'Tiêu đề', minLines: 3),
-                _input(_descCtrl, 'Chi tiết bài viết',
-                    minLines: 3, maxLines: 10),
+                _input(_titleCtrl, 'Tiêu đề', minLines: 2),
+                _input(_descCtrl, 'Nội dung bài viết', minLines: 6),
+              ],
+            ),
+
+            _section(
+              title: 'Danh mục',
+              children: [
+                DropdownButtonFormField<String>(
+                  value: _selectedCategoryId,
+                  items: _categories
+                      .map(
+                        (c) => DropdownMenuItem(
+                          value: c.id,
+                          child: Text(c.title),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() => _selectedCategoryId = value);
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Chọn danh mục',
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  validator: (v) =>
+                      v == null ? 'Vui lòng chọn danh mục' : null,
+                ),
               ],
             ),
 
@@ -135,12 +180,6 @@ class _EditArticlePageState extends State<EditArticlePage> {
                 foregroundColor: Colors.white,
                 minimumSize: const Size.fromHeight(48),
                 elevation: 0,
-
-                side: BorderSide(
-                  color: Colors.white.withOpacity(0.15),
-                  width: 1,
-                ),
-
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../viewmodel/article_viewmodel.dart';
 import '../../models/article_model.dart';
 import 'edit_article_page.dart';
+import '../../admin/screens/add_article_page.dart';
 
 class ArticleManagerPage extends StatefulWidget {
   const ArticleManagerPage({super.key});
@@ -46,10 +47,43 @@ class _ArticleManagerPageState extends State<ArticleManagerPage> {
   }
 
   void _deleteArticle(String articleId) async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Đã xoá bài viết!")),
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Xác nhận xoá"),
+        content: const Text(
+          "Bạn có chắc chắn muốn xoá bài viết này không?\nHành động này không thể hoàn tác.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Huỷ"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.red,
+            ),
+            child: const Text("Xoá"),
+          ),
+        ],
+      ),
     );
-    _loadArticles();
+    if (confirm != true) return;
+    try {
+      await _articleVM.deleteArticle(articleId);
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Đã xoá bài viết")),
+      );
+
+      _loadArticles();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Lỗi khi xoá bài viết")),
+      );
+    }
   }
 
   void _editArticle(ArticleModel article) async {
@@ -65,12 +99,52 @@ class _ArticleManagerPageState extends State<ArticleManagerPage> {
     }
   }
 
+  void _addNewArticle() async {
+    final created = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const AddArticlePage(),
+      ),
+    );
+
+    if (created == true) {
+      _loadArticles();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       body: Column(
         children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: _addNewArticle,
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.green.shade100,
+                foregroundColor: Colors.green.shade800,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
+              ),
+              child: const Text(
+                "+ Thêm bài viết mới",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+        ),
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: TextField(
@@ -89,6 +163,7 @@ class _ArticleManagerPageState extends State<ArticleManagerPage> {
               onChanged: _searchArticles,
             ),
           ),
+          
           Expanded(
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())

@@ -116,6 +116,11 @@ class ArticleViewModel {
     }
   }
 
+  // delete article
+  Future<void> deleteArticle(String articleId) async {
+    await _firestore.collection('articles').doc(articleId).delete();
+  }
+
   // edit article for flow admin
   Future<void> updateArticle({
     required String articleId,
@@ -132,6 +137,27 @@ class ArticleViewModel {
       'contentImage': contentImage,
       if (categoryId != null) 'categoryId': categoryId,
       'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  // add new article
+  Future<void> addArticle({
+    required String title,
+    required String description,
+    required String image,
+    required String contentImage,
+    required String content,
+    required String categoryId,
+  }) async {
+    await _firestore.collection('articles').add({
+      'title': title,
+      'description': description,
+      'image': image,
+      'contentImage': contentImage,
+      'content': content,
+      'comment': '',
+      'categoryId': categoryId,
+      'date': FieldValue.serverTimestamp(),
     });
   }
 

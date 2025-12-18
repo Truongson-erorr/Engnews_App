@@ -205,4 +205,25 @@ class AuthenViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  /// Update user info 
+  Future<void> updateUserByAdmin({
+    required String uid,
+    required String fullName,
+    required String email,
+    required String role,
+  }) async {
+    try {
+      await _firestore.collection('users').doc(uid).update({
+        'fullName': fullName,
+        'email': email,
+        'role': role,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      print('Lỗi khi cập nhật user: $e');
+      throw e;
+    }
+  }
+
 }

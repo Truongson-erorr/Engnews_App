@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodel/user_manager_viewmodel.dart';
 import '../../models/user_model.dart';
+import '../.././admin/screens/edit_user_screen.dart';
 
 class UserManagerPage extends StatefulWidget {
   const UserManagerPage({super.key});
@@ -107,7 +108,17 @@ class _UserManagerPageState extends State<UserManagerPage> {
                                   spacing: 8,
                                   children: [
                                     TextButton(
-                                      onPressed: () => _editUser(user),
+                                      onPressed: () async {
+                                        final result = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => EditUserPage(user: user),
+                                          ),
+                                        );
+                                        if (result == true) {
+                                          _loadUsers(); // Refresh danh sách sau khi chỉnh sửa
+                                        }
+                                      },
                                       style: TextButton.styleFrom(
                                         padding: EdgeInsets.zero,
                                         minimumSize: const Size(50, 32),

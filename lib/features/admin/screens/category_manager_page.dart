@@ -123,27 +123,22 @@ class _CategoryManagerPageState extends State<CategoryManagerPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "Quản lý danh mục",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
+                const Spacer(),
                 TextButton(
-                  onPressed: _addCategory, 
+                  onPressed: _addCategory,
                   style: TextButton.styleFrom(
-                    backgroundColor: Colors.green.shade100, 
+                    backgroundColor: Colors.green.shade100,
                     foregroundColor: Colors.green.shade800,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
                   ),
                   child: const Text(
                     "+ Thêm danh mục mới",
