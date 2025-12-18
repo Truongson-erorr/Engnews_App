@@ -4,8 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../models/article_model.dart';
 import '../../viewmodel/article_viewmodel.dart';
 import '../../viewmodel/reading_history_viewmodel.dart';
+import '../../viewmodel/category_viewmodel.dart';
 import 'article_detail.dart';
 import '../screens/banner_article_.dart';
+import '../../../core/color.dart';
 
 enum ArticleSortType { newest, oldest }
 
@@ -20,15 +22,24 @@ class LatestArticlesScreen extends StatefulWidget {
 class _LatestArticlesScreenState
     extends State<LatestArticlesScreen> {
   final ArticleViewModel _viewModel = ArticleViewModel();
-  late Future<List<ArticleModel>> _futureArticles;
+  final CategoryViewModel _categoryVM = CategoryViewModel();
 
+  late Future<List<ArticleModel>> _futureArticles;
   final String? userId = FirebaseAuth.instance.currentUser?.uid;
+
   ArticleSortType _sortType = ArticleSortType.newest;
 
   @override
   void initState() {
     super.initState();
     _futureArticles = _viewModel.fetchLatestArticles();
+    _categoryVM.preloadCategories();
+  }
+
+  Color _getCategoryColor(String categoryId) {
+    final index =
+        categoryId.hashCode.abs() % categoryColors.length;
+    return categoryColors[index];
   }
 
   List<ArticleModel> _sortArticles(List<ArticleModel> articles) {
@@ -73,8 +84,7 @@ class _LatestArticlesScreenState
                 icon: Icon(
                   Icons.filter_list_alt,
                   size: 22,
-                  color:
-                      theme.colorScheme.onSurface.withOpacity(0.7),
+                  color: theme.colorScheme.onSurface.withOpacity(0.7),
                 ),
                 onSelected: (value) {
                   setState(() => _sortType = value);
@@ -99,7 +109,8 @@ class _LatestArticlesScreenState
                   if (snapshot.connectionState ==
                       ConnectionState.waiting) {
                     return const Center(
-                        child: CircularProgressIndicator());
+                      child: CircularProgressIndicator(),
+                    );
                   }
 
                   final articles =
@@ -132,7 +143,12 @@ class _LatestArticlesScreenState
   }
 
   Widget _buildCompactArticle(
-      ThemeData theme, ArticleModel article) {
+    ThemeData theme,
+    ArticleModel article,
+  ) {
+    final categoryColor =
+        _getCategoryColor(article.categoryId);
+
     return InkWell(
       onTap: () => _openDetail(article),
       child: Container(
@@ -150,6 +166,7 @@ class _LatestArticlesScreenState
               ),
             ),
             const SizedBox(width: 12),
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,9 +208,10 @@ class _LatestArticlesScreenState
                         ),
                       ),
                       const SizedBox(width: 10),
+
                       FutureBuilder<int>(
-                        future: _viewModel
-                            .getCommentCount(article.id),
+                        future:
+                            _viewModel.getCommentCount(article.id),
                         builder: (context, snapshot) {
                           final count = snapshot.data ?? 0;
                           return Row(
@@ -201,8 +219,7 @@ class _LatestArticlesScreenState
                               Icon(
                                 Icons.comment_outlined,
                                 size: 13,
-                                color: theme
-                                    .colorScheme.onSurface
+                                color: theme.colorScheme.onSurface
                                     .withOpacity(0.5),
                               ),
                               const SizedBox(width: 4),
@@ -210,14 +227,37 @@ class _LatestArticlesScreenState
                                 '$count',
                                 style: TextStyle(
                                   fontSize: 11,
-                                  color: theme
-                                      .colorScheme.onSurface
+                                  color: theme.colorScheme.onSurface
                                       .withOpacity(0.5),
                                 ),
                               ),
                             ],
                           );
                         },
+                      ),
+
+                      const Spacer(),
+
+                      /// ===== CATEGORY BADGE =====
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: categoryColor.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          _categoryVM
+                              .getCategoryTitle(article.categoryId),
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: categoryColor,
+                            letterSpacing: 0.2,
+                          ),
+                        ),
                       ),
                     ],
                   ),
