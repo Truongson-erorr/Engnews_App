@@ -144,8 +144,8 @@ class _AddArticlePageState extends State<AddArticlePage> {
               child: TextButton(
                 onPressed: _loading ? null : _submit,
                 style: TextButton.styleFrom(
-                  backgroundColor: Colors.green.shade100,
-                  foregroundColor: Colors.green.shade800,
+                  backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                  foregroundColor: const Color.fromARGB(255, 249, 249, 249),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
@@ -154,7 +154,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
                 child: _loading
                     ? const CircularProgressIndicator()
                     : const Text(
-                        "+ Thêm bài viết",
+                        "Thêm bài viết",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

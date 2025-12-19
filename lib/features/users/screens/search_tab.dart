@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../viewmodel/article_viewmodel.dart';
 import '../../models/article_model.dart';
-import '../../../core/animation';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../viewmodel/reading_history_viewmodel.dart';
 import 'article_detail.dart';
@@ -200,7 +199,9 @@ class _SearchScreenState extends State<SearchScreen> {
             }
             Navigator.push(
               context,
-              createSlideRoute(ArticleDetail(article: article)),
+              MaterialPageRoute(
+                builder: (_) => ArticleDetail(article: article),
+              ),
             );
           },
           child: Container(

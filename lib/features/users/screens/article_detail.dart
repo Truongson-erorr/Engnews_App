@@ -32,6 +32,13 @@ class _ArticleDetailState extends State<ArticleDetail> {
   String? _summary;
   bool _isSummarizing = false;
 
+  @override
+  void dispose() {
+    _speechVM.stopReading(); 
+    _speechVM.dispose();
+    super.dispose();
+  }
+  
   Future<void> _translateContent() async {
     setState(() => _isTranslating = true);
 

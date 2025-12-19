@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'register_screen.dart';
-import 'package:caonientruongson/core/animation';
 import 'forgot_password_screen.dart';
 import 'home_screen.dart';
 import '../../admin/screens/admin_dashboard_screen.dart';
@@ -33,11 +32,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (user != null && user.role == "admin") {
         Navigator.of(context).pushReplacement(
-          createSlideRoute(const AdminDashboardScreen()),
+          MaterialPageRoute(
+            builder: (_) => const AdminDashboardScreen(),
+          ),
         );
       } else {
         Navigator.of(context).pushReplacement(
-          createSlideRoute(const HomeScreen()),
+          MaterialPageRoute(
+            builder: (_) => const HomeScreen(),
+          ),
         );
       }
     }
@@ -49,7 +52,12 @@ class _LoginScreenState extends State<LoginScreen> {
     final authVM = Provider.of<AuthenViewModel>(context, listen: false);
     bool success = await authVM.signInWithGoogle();
     if (success) {
-      Navigator.of(context).pushReplacement(createSlideRoute(const HomeScreen()));
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => const HomeScreen(),
+        ),
+      );
+
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Đăng nhập Google thất bại")),

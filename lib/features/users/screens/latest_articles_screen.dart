@@ -235,10 +235,8 @@ class _LatestArticlesScreenState
                           );
                         },
                       ),
-
                       const Spacer(),
 
-                      /// ===== CATEGORY BADGE =====
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8,

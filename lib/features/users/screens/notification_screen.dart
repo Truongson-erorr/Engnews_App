@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../viewmodel/notification_viewmodel.dart';
 import '../../models/article_model.dart';
 import 'article_detail.dart';
-import '../../../core/animation';
 import 'package:intl/intl.dart';
 
 class NotificationScreen extends StatelessWidget {
@@ -140,7 +139,9 @@ class NotificationScreen extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  createSlideRoute(ArticleDetail(article: article)),
+                  MaterialPageRoute(
+                    builder: (_) => ArticleDetail(article: article),
+                  ),
                 );
               },
             ),

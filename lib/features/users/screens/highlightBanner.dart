@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../models/article_model.dart';
-import '../../../core/animation';
 import '../../viewmodel/reading_history_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../screens/article_detail.dart';
@@ -76,8 +75,11 @@ class _HighlightBannerState extends State<HighlightBanner> {
 
               Navigator.push(
                 context,
-                createSlideRoute(ArticleDetail(article: article)),
+                MaterialPageRoute(
+                  builder: (_) => ArticleDetail(article: article),
+                ),
               );
+
             },
             child: Stack(
               children: [

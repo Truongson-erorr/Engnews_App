@@ -119,7 +119,7 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
                   margin: const EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: theme.cardColor,
+                    color: Colors.transparent, 
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

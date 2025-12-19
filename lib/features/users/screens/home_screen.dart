@@ -8,7 +8,6 @@ import 'profile_tab.dart';
 import 'latest_articles_screen.dart';
 import 'notification_screen.dart';
 import 'saved_articles_screen.dart';
-import '../../../core/animation';
 import '../../viewmodel/authen_viewmodel.dart';
 import 'notification_settings_screen.dart';
 import '../../../core/theme/theme_viewmodel.dart';
@@ -40,7 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<AuthenViewModel>(context, listen: false).currentUser;
 
     if (user == null && (index == 3 || index == 4)) {
-      Navigator.push(context, createSlideRoute(const LoginScreen()));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const LoginScreen(),
+        ),
+      );
       return;
     }
 
