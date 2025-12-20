@@ -4,8 +4,26 @@ import '../models/article_model.dart';
 
 class CategoryViewModel {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final Map<String, String> _categoryTitleCache = {};
 
-  /// Fetch all categories from Firestore
+  Future<void> preloadCategories() async {
+    if (_categoryTitleCache.isNotEmpty) return;
+
+    try {
+      final snapshot = await _firestore.collection('categories').get();
+      for (var doc in snapshot.docs) {
+        _categoryTitleCache[doc.id] = doc['title'] ?? '';
+      }
+    } catch (e) {
+      print('Lỗi preload category: $e');
+    }
+  }
+
+  String getCategoryTitle(String categoryId) {
+    return _categoryTitleCache[categoryId] ?? '';
+  }
+
+  /// get all category
   Future<List<CategoryModel>> fetchCategories() async {
     try {
       final snapshot = await _firestore.collection('categories').get();
@@ -18,7 +36,7 @@ class CategoryViewModel {
     }
   }
 
-  /// Fetch articles by categoryId
+  /// get articles by cateogry
   Future<List<ArticleModel>> fetchArticlesByCategory(String categoryId) async {
     try {
       final snapshot = await _firestore
@@ -35,7 +53,7 @@ class CategoryViewModel {
     }
   }
 
-  /// Add new category 
+  /// add cate
   Future<void> addCategory(String title, {String? description}) async {
     try {
       final newDoc = _firestore.collection('categories').doc();
@@ -44,38 +62,63 @@ class CategoryViewModel {
         'id': newDoc.id,
         'title': title,
         'description': description,
+        'isVisible': true,
         'createdAt': FieldValue.serverTimestamp(),
       });
+
+      /// update 
+      _categoryTitleCache[newDoc.id] = title;
     } catch (e) {
       print("Lỗi khi thêm danh mục: $e");
       rethrow;
     }
   }
 
-  /// Update category (title + description)
+  /// update cate
   Future<void> updateCategory(
-      String categoryId,
-      String newTitle, {
-      String? newDescription,
-    }) async {
+    String categoryId,
+    String newTitle, {
+    String? newDescription,
+  }) async {
     try {
       await _firestore.collection('categories').doc(categoryId).update({
         'title': newTitle,
         'description': newDescription ?? "",
       });
+
+      /// update 
+      _categoryTitleCache[categoryId] = newTitle;
     } catch (e) {
       print('Lỗi khi cập nhật danh mục: $e');
       rethrow;
     }
   }
 
-  /// Delete category by ID
+  /// delete cate
   Future<void> deleteCategory(String categoryId) async {
     try {
       await _firestore.collection('categories').doc(categoryId).delete();
+
+      _categoryTitleCache.remove(categoryId);
     } catch (e) {
       print("Lỗi khi xoá danh mục: $e");
       rethrow;
     }
   }
+
+  /// update visibility 
+  Future<void> updateVisibility(
+    String categoryId,
+    bool isVisible,
+  ) async {
+    try {
+      await _firestore.collection('categories').doc(categoryId).update({
+        'isVisible': isVisible,
+      });
+    } catch (e) {
+      print('Lỗi cập nhật hiển thị category: $e');
+      rethrow;
+    }
+  }
+
 }

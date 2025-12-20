@@ -4,7 +4,6 @@ import 'article_detail.dart';
 import '../../viewmodel/category_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../viewmodel/reading_history_viewmodel.dart';
-import '../../../core/animation';
 
 class ArticlesByCategoryScreen extends StatefulWidget {
   final String categoryId;
@@ -120,7 +119,7 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
                   margin: const EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: theme.cardColor,
+                    color: Colors.transparent, 
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

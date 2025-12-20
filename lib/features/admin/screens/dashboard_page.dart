@@ -19,7 +19,7 @@ class DashboardPage extends StatelessWidget {
                 Expanded(
                   child: _buildStatCard(
                     "Khách",
-                    "1.245",
+                    "125",
                     Icons.people_alt_rounded,
                     Colors.blue,
                   ),
@@ -28,7 +28,7 @@ class DashboardPage extends StatelessWidget {
                 Expanded(
                   child: _buildStatCard(
                     "Bài viết",
-                    "320",
+                    "251",
                     Icons.article_rounded,
                     Colors.deepPurple,
                   ),
@@ -37,7 +37,7 @@ class DashboardPage extends StatelessWidget {
                 Expanded(
                   child: _buildStatCard(
                     "Truy cập",
-                    "5.890",
+                    "74",
                     Icons.show_chart_rounded,
                     Colors.green,
                   ),

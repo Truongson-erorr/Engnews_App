@@ -1,15 +1,13 @@
 import 'package:caonientruongson/features/users/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'home_tab.dart';
 import 'search_tab.dart';
 import 'category_tab.dart';
 import 'profile_tab.dart';
+import 'latest_articles_screen.dart';
 import 'notification_screen.dart';
 import 'saved_articles_screen.dart';
-
-import '../../../core/animation';
 import '../../viewmodel/authen_viewmodel.dart';
 import 'notification_settings_screen.dart';
 import '../../../core/theme/theme_viewmodel.dart';
@@ -25,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
+    const LatestArticlesScreen(key: ValueKey('latest')), // Tab mới
     const HomeTab(key: ValueKey('home')),
     const CategoryTab(key: ValueKey('category')),
     const SavedArticlesScreen(key: ValueKey('saved')),
@@ -39,8 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
     final user =
         Provider.of<AuthenViewModel>(context, listen: false).currentUser;
 
-    if (user == null && (index == 2 || index == 3)) {
-      Navigator.push(context, createSlideRoute(const LoginScreen()));
+    if (user == null && (index == 3 || index == 4)) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const LoginScreen(),
+        ),
+      );
       return;
     }
 
@@ -213,6 +217,11 @@ class _HomeScreenState extends State<HomeScreen> {
         unselectedItemColor: theme.unselectedWidgetColor,
         type: BottomNavigationBarType.fixed,
         items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_work_outlined),
+            activeIcon: Icon(Icons.home_work_rounded),
+            label: "Trang chủ",
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.article_outlined),
             activeIcon: Icon(Icons.article),

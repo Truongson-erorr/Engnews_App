@@ -18,4 +18,11 @@ class UserManagerViewModel extends ChangeNotifier {
   Future<void> deleteUser(String uid) async {
     await _firestore.collection("users").doc(uid).delete();
   }
+
+  // update status user
+  Future<void> updateUserStatus(String uid, bool isActive) async {
+    await _firestore.collection('users').doc(uid).update({
+      'isActive': isActive,
+    });
+  }
 }

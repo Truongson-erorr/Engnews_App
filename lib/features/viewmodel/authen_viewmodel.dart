@@ -8,11 +8,11 @@ class AuthenViewModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  bool isLoading = false;       // Loading state
-  String? errorMessage;         // Store error message
-  UserModel? currentUser;       // Current user info
+  bool isLoading = false;
+  String? errorMessage;
+  UserModel? currentUser;
 
-  /// Register a new account (Firebase Auth + Firestore)
+  /// Register a new user with email and password
   Future<bool> register({
     required String fullName,
     required String email,
@@ -23,27 +23,72 @@ class AuthenViewModel extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-      // Create user in Firebase Authentication
-      UserCredential cred = await _auth.createUserWithEmailAndPassword(
+      final cred = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Create UserModel to store in Firestore
       final user = UserModel(
         uid: cred.user!.uid,
         fullName: fullName,
         phone: phone,
         email: email,
-        image: '', 
-        role: 'user',   
+        image: '',
+        role: 'user',
+        isActive: true,
         createdAt: DateTime.now(),
       );
 
-      // Save user info to Firestore
       await _firestore.collection('users').doc(user.uid).set(user.toMap());
+      currentUser = user;
 
-      // Update current user
+      isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      errorMessage = e.toString();
+      isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  /// Login using email and password, and check if the account is blocked
+  Future<bool> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      isLoading = true;
+      errorMessage = null;
+      notifyListeners();
+
+      final credential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final uid = credential.user!.uid;
+      final doc = await _firestore.collection('users').doc(uid).get();
+
+      if (!doc.exists) {
+        await _auth.signOut();
+        errorMessage = "Tài khoản không tồn tại";
+        isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
+      final user = UserModel.fromMap(doc.data()!);
+
+      if (!user.isActive) {
+        await _auth.signOut();
+        errorMessage = "Tài khoản của bạn đã bị chặn bởi quản trị viên";
+        isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
       currentUser = user;
 
       isLoading = false;
@@ -57,152 +102,138 @@ class AuthenViewModel extends ChangeNotifier {
     }
   }
 
-  /// Fetch current user info from Firebase
-  Future<void> fetchCurrentUser() async {
-    final uid = _auth.currentUser?.uid;
-    if (uid != null) {
+  /// Login with Google account and verify user status
+  Future<bool> signInWithGoogle() async {
+    try {
       isLoading = true;
+      errorMessage = null;
       notifyListeners();
 
-      try {
-        final doc = await _firestore.collection('users').doc(uid).get();
-        if (doc.exists) {
-          currentUser = UserModel.fromMap(doc.data()!); 
+      final googleSignIn = GoogleSignIn();
+      await googleSignIn.signOut();
+
+      final googleUser = await googleSignIn.signIn();
+      if (googleUser == null) {
+        isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
+      final googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential = await _auth.signInWithCredential(credential);
+      final firebaseUser = userCredential.user!;
+
+      final doc =
+          await _firestore.collection('users').doc(firebaseUser.uid).get();
+
+      if (!doc.exists) {
+        final newUser = UserModel(
+          uid: firebaseUser.uid,
+          fullName: firebaseUser.displayName ?? 'Người dùng Google',
+          phone: firebaseUser.phoneNumber ?? '',
+          email: firebaseUser.email ?? '',
+          image: firebaseUser.photoURL ?? '',
+          role: 'user',
+          isActive: true,
+          createdAt: DateTime.now(),
+        );
+
+        await _firestore
+            .collection('users')
+            .doc(firebaseUser.uid)
+            .set(newUser.toMap());
+
+        currentUser = newUser;
+      } else {
+        final user = UserModel.fromMap(doc.data()!);
+
+        if (!user.isActive) {
+          await _auth.signOut();
+          errorMessage = "Tài khoản của bạn đã bị chặn bởi quản trị viên";
+          isLoading = false;
+          notifyListeners();
+          return false;
         }
-      } catch (e) {
-        errorMessage = 'Không thể lấy thông tin người dùng: $e'; 
+
+        currentUser = user;
       }
 
       isLoading = false;
       notifyListeners();
+      return true;
+    } catch (e) {
+      errorMessage = "Đăng nhập Google thất bại";
+      isLoading = false;
+      notifyListeners();
+      return false;
     }
   }
 
-  /// Logout
+  /// Fetch current logged-in user from Firestore
+  Future<void> fetchCurrentUser() async {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return;
+
+    final doc = await _firestore.collection('users').doc(uid).get();
+    if (doc.exists) {
+      currentUser = UserModel.fromMap(doc.data()!);
+      notifyListeners();
+    }
+  }
+
+  /// Sign out the current user
   Future<void> signOut() async {
     await _auth.signOut();
     currentUser = null;
     notifyListeners();
   }
 
-  /// Login with email and password
-  Future<bool> login({
-    required String email,
-    required String password,
-  }) async {
-    try {
-      isLoading = true;
-      notifyListeners();
-
-      // Firebase Auth login
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-
-      // Fetch user info from Firestore
-      await fetchCurrentUser();
-
-      isLoading = false;
-      notifyListeners();
-      return true;
-    } on FirebaseAuthException catch (e) {
-      errorMessage = e.message;
-      isLoading = false;
-      notifyListeners();
-      return false;
-    }
-  }
-
-  /// Sign in with Google
-  Future<bool> signInWithGoogle() async {
-    try {
-      isLoading = true;
-      notifyListeners();
-
-      final googleSignIn = GoogleSignIn();
-
-      // Force sign out to always select a new account
-      await googleSignIn.signOut();
-
-      // Start sign-in process
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-      if (googleUser == null) {
-        isLoading = false;
-        notifyListeners();
-        return false; 
-      }
-
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      UserCredential userCredential = await _auth.signInWithCredential(credential);
-      final user = userCredential.user!;
-
-      // Check Firestore
-      final doc = await _firestore.collection('users').doc(user.uid).get();
-      if (!doc.exists) {
-        final newUser = UserModel(
-          uid: user.uid,
-          fullName: user.displayName ?? 'Người dùng Google',
-          phone: user.phoneNumber ?? '',
-          email: user.email ?? '',
-          image: user.photoURL ?? '',
-          role: 'user',   
-          createdAt: DateTime.now(),
-        );
-        await _firestore.collection('users').doc(user.uid).set(newUser.toMap());
-        currentUser = newUser;
-      } else {
-        currentUser = UserModel.fromMap(doc.data()!);
-      }
-
-      isLoading = false;
-      notifyListeners();
-      return true;
-      
-    } catch (e) {
-      print('🔥 Lỗi đăng nhập Google: $e'); 
-      errorMessage = 'Đăng nhập Google thất bại: $e'; 
-      isLoading = false;
-      notifyListeners();
-      return false;
-    }
-  }
-
-  /// Update user profile info
+  /// Update profile information of the current user
   Future<void> updateUserProfile({
     required String fullName,
     required String phone,
   }) async {
-    try {
-      final uid = _auth.currentUser?.uid;
-      if (uid == null) return;
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return;
 
-      // Update Firestore
-      await _firestore.collection('users').doc(uid).update({
-        'fullName': fullName,
-        'phone': phone,
-      });
+    await _firestore.collection('users').doc(uid).update({
+      'fullName': fullName,
+      'phone': phone,
+    });
 
-      // Update local copy
-      if (currentUser != null) {
-        currentUser = UserModel(
-          uid: currentUser!.uid,
-          fullName: fullName,
-          phone: phone,
-          role: 'user',   
-          email: currentUser!.email,
-          image: currentUser!.image,
-          createdAt: currentUser!.createdAt,
-        );
-      }
-
-      notifyListeners();
-    } catch (e) {
-      errorMessage = 'Lỗi khi cập nhật thông tin: $e'; 
-      notifyListeners();
+    if (currentUser != null) {
+      currentUser = UserModel(
+        uid: currentUser!.uid,
+        fullName: fullName,
+        phone: phone,
+        email: currentUser!.email,
+        image: currentUser!.image,
+        role: currentUser!.role,
+        isActive: currentUser!.isActive,
+        createdAt: currentUser!.createdAt,
+      );
     }
+
+    notifyListeners();
+  }
+
+  /// Update user information by admin
+  Future<void> updateUserByAdmin({
+    required String uid,
+    required String fullName,
+    required String email,
+    required String role,
+  }) async {
+    await _firestore.collection('users').doc(uid).update({
+      'fullName': fullName,
+      'email': email,
+      'role': role,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
   }
 }

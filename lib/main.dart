@@ -1,4 +1,3 @@
-import 'package:caonientruongson/features/users/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +9,7 @@ import 'core/theme/theme_viewmodel.dart';
 import "core/theme/app_theme.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:caonientruongson/features/users/screens/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -50,18 +49,17 @@ class MyApp extends StatelessWidget {
           background: Colors.white,
           surface: Colors.white,
         ),
-        textTheme: GoogleFonts.interTextTheme(),
+        textTheme: GoogleFonts.poppinsTextTheme(),
       ),
 
       darkTheme: AppTheme.darkTheme.copyWith(
-        textTheme: GoogleFonts.interTextTheme(
+        textTheme: GoogleFonts.poppinsTextTheme(
           ThemeData.dark().textTheme,
         ),
       ),
-
       themeMode: themeVM.isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }

@@ -98,4 +98,79 @@ class ArticleViewModel {
 
     return snapshot.docs.length;
   }
+
+  // Fetch ALL articles, ordered by newest first
+  Future<List<ArticleModel>> fetchLatestArticles() async {
+    try {
+      final snapshot = await _firestore
+          .collection('articles')
+          .orderBy('date', descending: true)
+          .get();
+
+      return snapshot.docs
+          .map((doc) => ArticleModel.fromFirestore(doc))
+          .toList();
+    } catch (e) {
+      print('Error fetching latest articles: $e');
+      return [];
+    }
+  }
+
+  // delete article
+  Future<void> deleteArticle(String articleId) async {
+    await _firestore.collection('articles').doc(articleId).delete();
+  }
+
+  // edit article for flow admin
+  Future<void> updateArticle({
+    required String articleId,
+    required String title,
+    required String description,
+    required String image,
+    required String contentImage,
+    String? categoryId,
+  }) async {
+    await _firestore.collection('articles').doc(articleId).update({
+      'title': title,
+      'description': description,
+      'image': image,
+      'contentImage': contentImage,
+      if (categoryId != null) 'categoryId': categoryId,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  // add new article
+  Future<void> addArticle({
+    required String title,
+    required String description,
+    required String image,
+    required String contentImage,
+    required String content,
+    required String categoryId,
+  }) async {
+    await _firestore.collection('articles').add({
+      'title': title,
+      'description': description,
+      'image': image,
+      'contentImage': contentImage,
+      'content': content,
+      'comment': '',
+      'categoryId': categoryId,
+      'date': FieldValue.serverTimestamp(),
+    });
+  }
+
+  // update status article
+  Future<void> updateVisibility(String articleId, bool isVisible) async {
+    try {
+      await _firestore.collection('articles').doc(articleId).update({
+        'isVisible': isVisible,
+      });
+    } catch (e) {
+      print('Lỗi cập nhật hiển thị bài viết: $e');
+      rethrow;
+    }
+  }
+
 }

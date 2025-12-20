@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../viewmodel/notification_viewmodel.dart';
 import '../../models/article_model.dart';
 import 'article_detail.dart';
-import '../../../core/animation';
 import 'package:intl/intl.dart';
 
 class NotificationScreen extends StatelessWidget {
@@ -111,11 +110,11 @@ class NotificationScreen extends StatelessWidget {
             ),
             child: ListTile(
               contentPadding: const EdgeInsets.symmetric(vertical: 4),
-              leading: article.image != null && article.image!.isNotEmpty
+              leading: article.image.isNotEmpty
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(
-                        article.image!,
+                        article.image,
                         width: 90,
                         height: 90,
                         fit: BoxFit.cover,
@@ -140,7 +139,9 @@ class NotificationScreen extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  createSlideRoute(ArticleDetail(article: article)),
+                  MaterialPageRoute(
+                    builder: (_) => ArticleDetail(article: article),
+                  ),
                 );
               },
             ),
