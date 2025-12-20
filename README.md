@@ -3,9 +3,13 @@
 **EngNews** là ứng dụng **đọc báo tiếng Anh thông minh** được phát triển bằng **Flutter**, hướng đến việc giúp người dùng **nâng cao khả năng đọc hiểu tiếng Anh** thông qua các bài báo thực tế, ngắn gọn, dễ hiểu và được hỗ trợ bởi công nghệ **AI tóm tắt nội dung, dịch bài sang tiếng việt, bình luận trực tiếp, chia sẻ bài, và đề xuất bài liên quan**.  
 Ứng dụng không chỉ là nơi để đọc tin tức — mà còn là một **người bạn đồng hành trong hành trình học tiếng Anh** của bạn.
 
----
 
-## 🌟 Giới thiệu chi tiết
+# 🎬 Video Demo
+
+- Xem demo ứng dụng tại: [Engnews_App](https://drive.google.com/drive/folders/1XegvjCYXDEgBsOOnvAMEoq4bZzYowxLA?hl=vi)
+
+
+# 🌟 Giới thiệu chi tiết
 
 Trong bối cảnh tiếng Anh ngày càng quan trọng, việc đọc báo nước ngoài là một trong những phương pháp hiệu quả để nâng cao vốn từ vựng, khả năng diễn đạt và phản xạ ngôn ngữ. Tuy nhiên, nhiều người gặp khó khăn vì bài báo dài, nhiều từ lạ và thiếu động lực học.  
 **EngNews** ra đời để giải quyết những vấn đề đó: mang đến **một không gian đọc báo học tiếng Anh nhẹ nhàng, thú vị và hiệu quả**, với sự hỗ trợ mạnh mẽ từ **AI** và thiết kế hiện đại.
@@ -19,7 +23,6 @@ EngNews được thiết kế với phương châm:
 - Nhân viên văn phòng muốn cập nhật tin tức quốc tế và luyện ngoại ngữ song song.  
 - Người học tự do muốn mở rộng vốn từ, học cách viết tự nhiên qua báo chí.
 
----
 
 # 🚀 Các tính năng chính  
 
@@ -102,7 +105,7 @@ EngNews được thiết kế với phương châm:
 - Thay đổi mật khẩu và thông tin đăng nhập.
 
 
-## 📸 Giao diện các màn hình ứng dụng
+# 📸 Giao diện các màn hình ứng dụng
 
 <table>
 <tr>
@@ -142,7 +145,7 @@ EngNews được thiết kế với phương châm:
 </table>
 
 
-### 📁 Cấu trúc thư mục chính:
+# 📁 Cấu trúc thư mục chính:
 ```
 lib/
 ├── core/
@@ -223,7 +226,7 @@ screenshots/
 test/
 ```
 
-## 🛠️ Công nghệ sử dụng
+# 🛠️ Công nghệ sử dụng
 
 - 🐦 **Flutter** – Framework phát triển ứng dụng đa nền tảng (Android, iOS).  
 - 🎯 **Dart** – Ngôn ngữ lập trình chính của dự án.  
@@ -241,7 +244,7 @@ test/
 - 📊 **FL Chart** – Hiển thị biểu đồ thống kê cho Admin.  
 - 🔐 **Flutter Dotenv** – Quản lý biến môi trường và API Key.
 
-## 🧠 Mục tiêu & định hướng của EngNews
+# 🧠 Mục tiêu & định hướng của EngNews
 
 - 🌟 Học tiếng Anh qua ngữ cảnh thực tế  
   - Nắm bắt từ vựng và cấu trúc câu thực tế  
