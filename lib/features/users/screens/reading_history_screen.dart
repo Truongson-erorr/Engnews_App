@@ -80,6 +80,7 @@ class ReadingHistoryScreen extends StatelessWidget {
                 comment: '',
                 categoryId: '',
                 date: item.readAt,
+                isVisible: true,
               );
 
               return GestureDetector(

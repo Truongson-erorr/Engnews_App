@@ -22,45 +22,79 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
     final authVM = Provider.of<AuthenViewModel>(context, listen: false);
 
-    final success = await authVM.login(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-    );
+    try {
+      final success = await authVM.login(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
 
-    if (success) {
-      final user = authVM.currentUser;
+      if (!mounted) return;
 
-      if (user != null && user.role == "admin") {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => const AdminDashboardScreen(),
-          ),
-        );
+      if (success) {
+        final user = authVM.currentUser;
+
+        if (user != null && user.role == "admin") {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
+          );
+        } else {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const HomeScreen()),
+          );
+        }
       } else {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => const HomeScreen(),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              authVM.errorMessage ?? "Đăng nhập thất bại",
+            ),
+            backgroundColor: Colors.orange,
           ),
         );
       }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.toString().replaceAll('Exception:', '').trim(),
+          ),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
-
-    setState(() => _isLoading = false);
   }
 
   Future<void> _signInWithGoogle() async {
     final authVM = Provider.of<AuthenViewModel>(context, listen: false);
-    bool success = await authVM.signInWithGoogle();
-    if (success) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
-        ),
-      );
+    try {
+      bool success = await authVM.signInWithGoogle();
 
-    } else {
+      if (!mounted) return;
+
+      if (success) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              authVM.errorMessage ?? "Đăng nhập Google thất bại",
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Đăng nhập Google thất bại")),
+        SnackBar(
+          content: Text(
+            e.toString().replaceAll('Exception:', '').trim(),
+          ),
+        ),
       );
     }
   }
@@ -83,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(
                   fontSize: 44,
                   fontWeight: FontWeight.bold,
-                  color: primaryRed, 
+                  color: primaryRed,
                   letterSpacing: 1.5,
                 ),
               ),
@@ -99,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               "Đăng nhập để tiếp tục đọc báo nhé!",
               style: TextStyle(
                 color: Colors.black54,

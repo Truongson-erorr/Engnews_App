@@ -161,4 +161,16 @@ class ArticleViewModel {
     });
   }
 
+  // update status article
+  Future<void> updateVisibility(String articleId, bool isVisible) async {
+    try {
+      await _firestore.collection('articles').doc(articleId).update({
+        'isVisible': isVisible,
+      });
+    } catch (e) {
+      print('Lỗi cập nhật hiển thị bài viết: $e');
+      rethrow;
+    }
+  }
+
 }

@@ -62,6 +62,7 @@ class CategoryViewModel {
         'id': newDoc.id,
         'title': title,
         'description': description,
+        'isVisible': true,
         'createdAt': FieldValue.serverTimestamp(),
       });
 
@@ -104,4 +105,20 @@ class CategoryViewModel {
       rethrow;
     }
   }
+
+  /// update visibility 
+  Future<void> updateVisibility(
+    String categoryId,
+    bool isVisible,
+  ) async {
+    try {
+      await _firestore.collection('categories').doc(categoryId).update({
+        'isVisible': isVisible,
+      });
+    } catch (e) {
+      print('Lỗi cập nhật hiển thị category: $e');
+      rethrow;
+    }
+  }
+
 }
