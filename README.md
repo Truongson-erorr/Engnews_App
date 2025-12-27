@@ -152,18 +152,27 @@ EngNews được thiết kế với phương châm:
 </tr>
 </table>
 
-## 5. Admin Panel – Content Management
-*Content management screen: Dashboard · Menu · Categories · Posts · Users · Admin Profile*
+## 5. Admin Panel
+*Admin screen for system administrators*
+*Admin Dashboard · Admin Menu · Category Management*
+
 <table>
 <tr>
   <td><img src="screenshots/z7347505092202_78ade4dbbfc3f45214c39bd1d4263278.jpg" width="200" alt="Admin Thống kê"></td>
   <td><img src="screenshots/z7347505092169_e80c4541182b3220edcf51f18aeddc32.jpg" width="200" alt="Menu Admin"></td>
   <td><img src="screenshots/z7347505145891_ef9bdef9f5cb4779e7dc8da842fbeedb.jpg" width="200" alt="Quản lý danh mục"></td>
+</tr>
+</table>
+
+*Post Management · User Management · Admin Profile*
+<table>
+<tr>
   <td><img src="screenshots/z7347505198973_5a0790567e63bd3748f869da4b02cc5e.jpg" width="200" alt="Quản lý bài viết"></td>
   <td><img src="screenshots/z7347505145834_ae8b90201df536f4c03e517d8b8f3933.jpg" width="200" alt="Quản lý người dùng"></td>
   <td><img src="screenshots/z7347505092200_a8349af3d53ba8d8252de7ac8de26da4.jpg" width="200" alt="Hồ sơ Admin"></td>
 </tr>
 </table>
+
 
 
 # 📁 Cấu trúc thư mục chính:
