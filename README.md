@@ -104,9 +104,10 @@ EngNews được thiết kế với phương châm:
 - Chỉnh sửa thông tin cá nhân Admin.
 - Thay đổi mật khẩu và thông tin đăng nhập.
 
-
 # 📸 Giao diện các màn hình ứng dụng
 
+## 1. Authentication & Onboarding
+*Welcome screen and user authentication: Welcome, Login, Register, Forgot Password*
 <table>
 <tr>
   <td><img src="screenshots/z7343613689493_60a2e5b3df0302bc1fd125a67c2a6ea7.jpg" width="200" alt="Đăng nhập"></td>
@@ -114,6 +115,11 @@ EngNews được thiết kế với phương châm:
   <td><img src="screenshots/z7343613983340_c01fa433e2a21c832e705f975e83e4ea.jpg" width="200" alt="Quên mật khẩu"></td>
   <td><img src="screenshots/z7343613983080_cbe96797f6c4816860e42edc822d6ecf.jpg" width="200" alt="Xác thực Email"></td>
 </tr>
+</table>
+
+## 2. Main Features – User Screens
+*Main function screens for users: Home, News, Categories, Saved Articles, User Profile*
+<table>
 <tr>
   <td><img src="screenshots/z7343614093790_6fbad0be91f4d014f8e4149e96e412cf.jpg" width="200" alt="Trang chủ"></td>
   <td><img src="screenshots/z7343614075786_1004a5bd8024126b967ced822529b28e.jpg" width="200" alt="Tin tức"></td>
@@ -122,22 +128,37 @@ EngNews được thiết kế với phương châm:
 </tr>
 <tr>
   <td><img src="screenshots/z7343614039382_17b9c6db33d0fe5a139fb05fb568ccc7.jpg" width="200" alt="Hồ sơ cá nhân"></td>
+</tr>
+</table>
+
+## 3. Utilities & Settings
+*Search, notifications and system settings: Search, Notifications, Settings & Dark Mode*
+<table>
+<tr>
   <td><img src="screenshots/z7343613837818_3bdac38babd03789fee2d9811d406037.jpg" width="200" alt="Tìm kiếm"></td>
   <td><img src="screenshots/z7343614075575_f88aa00b682fcb9d419a23dd848406a3.jpg" width="200" alt="Thông báo"></td>
   <td><img src="screenshots/z7343613783220_c5815fef974964790cd51302dc2179f9.jpg" width="200" alt="Cài đặt"></td>
-</tr>
-<tr>
   <td><img src="screenshots/z7343614039378_199f27f0699e3ef1ecab4976ad7cc4f9.jpg" width="200" alt="Dark Mode"></td>
+</tr>
+</table>
+
+## 4. Article Details & Interaction
+*Article details and user interaction: Article Detail, Comments, Reading History*
+<table>
+<tr>
   <td><img src="screenshots/z7343614093791_caa6f0201b11bd12c6726e7fd61b5d6f.jpg" width="200" alt="Chi tiết bài viết"></td>
   <td><img src="screenshots/z7343614056409_064a4a78c7d1db73d6c50cd5b188ec1d.jpg" width="200" alt="Bình luận"></td>
   <td><img src="screenshots/z7343614075787_e18294ba99bf25e3e8b39c61057775fa.jpg" width="200" alt="Lịch sử đọc bài"></td>
 </tr>
+</table>
+
+## 5. Admin Panel – Content Management
+*Content management screen: Dashboard · Menu · Categories · Posts · Users · Admin Profile*
+<table>
 <tr>
   <td><img src="screenshots/z7347505092202_78ade4dbbfc3f45214c39bd1d4263278.jpg" width="200" alt="Admin Thống kê"></td>
   <td><img src="screenshots/z7347505092169_e80c4541182b3220edcf51f18aeddc32.jpg" width="200" alt="Menu Admin"></td>
   <td><img src="screenshots/z7347505145891_ef9bdef9f5cb4779e7dc8da842fbeedb.jpg" width="200" alt="Quản lý danh mục"></td>
-</tr>
-<tr>
   <td><img src="screenshots/z7347505198973_5a0790567e63bd3748f869da4b02cc5e.jpg" width="200" alt="Quản lý bài viết"></td>
   <td><img src="screenshots/z7347505145834_ae8b90201df536f4c03e517d8b8f3933.jpg" width="200" alt="Quản lý người dùng"></td>
   <td><img src="screenshots/z7347505092200_a8349af3d53ba8d8252de7ac8de26da4.jpg" width="200" alt="Hồ sơ Admin"></td>
