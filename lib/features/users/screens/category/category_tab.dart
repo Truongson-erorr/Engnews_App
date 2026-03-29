@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../viewmodel/category_viewmodel.dart';
-import '../../models/category_model.dart';
+import '../../../viewmodel/category_viewmodel.dart';
+import '../../../models/category_model.dart';
 import 'articles_by_category_screen.dart';
 
 class CategoryTab extends StatefulWidget {
@@ -54,7 +54,7 @@ class _CategoryTabState extends State<CategoryTab> {
               child: Text(
                 'Chưa có danh mục nào.',
                 style: TextStyle(
-                  color: theme.colorScheme.onBackground.withOpacity(0.6),
+                  color: theme.colorScheme.onSurface.withOpacity(0.6),
                 ),
               ),
             );

@@ -278,8 +278,9 @@ class _CategoryManagerPageState extends State<CategoryManagerPage> {
                                                 ),
                                               ),
                                             );
-                                            if (result == true)
+                                            if (result == true) {
                                               _loadCategories();
+                                            }
                                           },
                                           style: TextButton.styleFrom(
                                             backgroundColor:

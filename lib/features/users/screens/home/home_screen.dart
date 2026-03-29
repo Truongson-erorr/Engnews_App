@@ -1,16 +1,16 @@
-import 'package:caonientruongson/features/users/screens/login_screen.dart';
+import 'package:caonientruongson/features/authentication/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'home_tab.dart';
-import 'search_tab.dart';
-import 'category_tab.dart';
-import 'profile_tab.dart';
+import '../search/search_tab.dart';
+import '../category/category_tab.dart';
+import '../profile/profile_tab.dart';
 import 'latest_articles_screen.dart';
-import 'notification_screen.dart';
-import 'saved_articles_screen.dart';
-import '../../viewmodel/authen_viewmodel.dart';
-import 'notification_settings_screen.dart';
-import '../../../core/theme/theme_viewmodel.dart';
+import '../notification/notification_screen.dart';
+import '../saved/saved_articles_screen.dart';
+import '../../../viewmodel/authen_viewmodel.dart';
+import '../profile/notification_settings_screen.dart';
+import '../../../../core/theme/theme_viewmodel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const LatestArticlesScreen(key: ValueKey('latest')), // Tab mới
+    const LatestArticlesScreen(key: ValueKey('latest')), 
     const HomeTab(key: ValueKey('home')),
     const CategoryTab(key: ValueKey('category')),
     const SavedArticlesScreen(key: ValueKey('saved')),
@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   "Cài đặt & Hỗ trợ",
                   style: TextStyle(
-                    color: colorScheme.onBackground,
+                    color: colorScheme.onSurface,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -150,11 +150,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ListTile(
                 leading: Icon(
                   Icons.notifications_outlined,
-                  color: colorScheme.onBackground,
+                  color: colorScheme.onSurface,
                 ),
                 title: Text(
                   "Thông báo",
-                  style: TextStyle(color: colorScheme.onBackground),
+                  style: TextStyle(color: colorScheme.onSurface),
                 ),
                 onTap: () {
                   Navigator.push(
@@ -170,10 +170,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: Text(
                   "Chế độ tối",
                   style:
-                      TextStyle(color: colorScheme.onBackground),
+                      TextStyle(color: colorScheme.onSurface),
                 ),
                 secondary: Icon(Icons.dark_mode_outlined,
-                    color: colorScheme.onBackground),
+                    color: colorScheme.onSurface),
                 value:
                     context.watch<ThemeViewModel>().isDarkMode,
                 onChanged: (value) => context
@@ -249,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _drawerItem(IconData icon, String title) {
     final theme = Theme.of(context);
-    final color = theme.colorScheme.onBackground;
+    final color = theme.colorScheme.onSurface;
 
     return ListTile(
       leading: Icon(icon, color: color),

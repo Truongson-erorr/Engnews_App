@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../models/article_model.dart';
-import '../../models/category_model.dart';
-import '../../viewmodel/article_viewmodel.dart';
-import '../../viewmodel/category_viewmodel.dart';
-import '../../viewmodel/reading_history_viewmodel.dart';
-import 'article_detail.dart';
+import '../../../models/article_model.dart';
+import '../../../models/category_model.dart';
+import '../../../viewmodel/article_viewmodel.dart';
+import '../../../viewmodel/category_viewmodel.dart';
+import '../../../viewmodel/reading_history_viewmodel.dart';
+import '../article/article_detail.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});

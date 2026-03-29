@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/notification_settings_screen.dart';
+import '../profile/notification_settings_screen.dart';
 
 class AppSettingsScreen extends StatelessWidget {
   const AppSettingsScreen({super.key});

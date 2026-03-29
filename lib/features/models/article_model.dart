@@ -11,6 +11,7 @@ class ArticleModel {
   final String categoryId;
   final DateTime date;
   final bool isVisible; 
+  
   ArticleModel({
     required this.id,
     required this.title,

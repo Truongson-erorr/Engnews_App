@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../models/article_model.dart';
-import 'article_detail.dart';
-import '../../viewmodel/category_viewmodel.dart';
+import '../../../models/article_model.dart';
+import '../article/article_detail.dart';
+import '../../../viewmodel/category_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../viewmodel/reading_history_viewmodel.dart';
+import '../../../viewmodel/reading_history_viewmodel.dart';
 
 class ArticlesByCategoryScreen extends StatefulWidget {
   final String categoryId;
@@ -82,7 +82,7 @@ class _ArticlesByCategoryScreenState extends State<ArticlesByCategoryScreen> {
               child: Text(
                 'Không có bài viết nào trong danh mục này.',
                 style: TextStyle(
-                  color: theme.colorScheme.onBackground.withOpacity(0.6),
+                  color: theme.colorScheme.onSurface.withOpacity(0.6),
                 ),
               ),
             );

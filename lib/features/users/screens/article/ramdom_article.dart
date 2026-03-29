@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../models/article_model.dart';
-import '../../viewmodel/article_viewmodel.dart';
-import '../screens/article_detail.dart';
+import '../../../models/article_model.dart';
+import '../../../viewmodel/article_viewmodel.dart';
+import 'article_detail.dart';
 
 class RandomArticlesWidget extends StatelessWidget {
   const RandomArticlesWidget({super.key});

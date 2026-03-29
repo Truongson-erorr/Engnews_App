@@ -116,7 +116,7 @@ class _EditUserPageState extends State<EditUserPage> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: DropdownButtonFormField<String>(
-                  value: _role,
+                  initialValue: _role,
                   items: _roles
                       .map((r) => DropdownMenuItem(
                             value: r,

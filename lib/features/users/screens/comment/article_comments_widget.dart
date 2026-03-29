@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../models/article_model.dart';
-import '../../models/comment_model.dart';
-import '../../viewmodel/comment_viewmodel.dart';
+import '../../../models/article_model.dart';
+import '../../../models/comment_model.dart';
+import '../../../viewmodel/comment_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ArticleCommentsWidget extends StatefulWidget {
@@ -24,7 +24,7 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
 
     return Container(
       padding: const EdgeInsets.all(10),
-      color: theme.colorScheme.background,
+      color: theme.colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -33,7 +33,7 @@ class _ArticleCommentsWidgetState extends State<ArticleCommentsWidget> {
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
               fontSize: 20,
-              color: theme.colorScheme.onBackground,
+              color: theme.colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 8),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../models/article_model.dart';
-import '../../viewmodel/reading_history_viewmodel.dart';
+import '../../../models/article_model.dart';
+import '../../../viewmodel/reading_history_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../screens/article_detail.dart';
+import '../article/article_detail.dart';
 
 class HighlightBanner extends StatefulWidget {
   final List<ArticleModel> articles;
@@ -21,7 +21,7 @@ class _HighlightBannerState extends State<HighlightBanner> {
   void initState() {
     super.initState();
     _pageController = PageController();
-    userId = FirebaseAuth.instance.currentUser?.uid; // null-safe
+    userId = FirebaseAuth.instance.currentUser?.uid; 
     _startAutoScroll();
   }
 
