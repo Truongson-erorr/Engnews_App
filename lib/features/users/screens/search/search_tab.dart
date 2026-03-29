@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../viewmodel/article_viewmodel.dart';
-import '../../models/article_model.dart';
+import '../../../viewmodel/article_viewmodel.dart';
+import '../../../models/article_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../viewmodel/reading_history_viewmodel.dart';
-import 'article_detail.dart';
+import '../../../viewmodel/reading_history_viewmodel.dart';
+import '../article/article_detail.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -80,7 +80,7 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
             TextField(
               controller: _searchController,
-              style: TextStyle(color: cs.onBackground),
+              style: TextStyle(color: cs.onSurface),
               decoration: InputDecoration(
                 hintText: 'Nhập từ khóa bài báo...',
                 hintStyle: TextStyle(color: cs.onSurfaceVariant),
@@ -151,7 +151,7 @@ class _SearchScreenState extends State<SearchScreen> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
-            color: cs.onBackground,
+            color: cs.onSurface,
           ),
         ),
         const SizedBox(height: 12),
@@ -166,7 +166,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 leading: const Icon(Icons.search, color: Color(0xFF015E53)),
                 title: Text(
                   keyword,
-                  style: TextStyle(fontSize: 15, color: cs.onBackground),
+                  style: TextStyle(fontSize: 15, color: cs.onSurface),
                 ),
                 onTap: () => _onSuggestionTap(keyword),
               );
@@ -217,7 +217,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       : Container(
                           width: 90,
                           height: 70,
-                          color: cs.surfaceVariant,
+                          color: cs.surfaceContainerHighest,
                           child: const Icon(Icons.article_outlined,
                               color: Colors.white),
                         ),
@@ -234,7 +234,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
-                          color: cs.onBackground,
+                          color: cs.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../models/reading_history_model.dart';
-import '../../models/article_model.dart';
-import '../../viewmodel/reading_history_viewmodel.dart';
-import '../screens/article_detail.dart';
+import '../../../models/reading_history_model.dart';
+import '../../../models/article_model.dart';
+import '../../../viewmodel/reading_history_viewmodel.dart';
+import '../article/article_detail.dart';
 
 class ReadingHistoryScreen extends StatelessWidget {
   final String userId;
@@ -120,7 +120,7 @@ class ReadingHistoryScreen extends StatelessWidget {
                             : Container(
                                 width: 100,
                                 height: 80,
-                                color: theme.colorScheme.surfaceVariant,
+                                color: theme.colorScheme.surfaceContainerHighest,
                                 child: Icon(
                                   Icons.article_outlined,
                                   color: theme.colorScheme.onSurfaceVariant,

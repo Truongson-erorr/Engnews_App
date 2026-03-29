@@ -10,10 +10,12 @@ class TranslateViewModel {
     if (_cache.containsKey(text)) return _cache[text]!; 
 
     final translator = GoogleTranslator(); 
+    
     try {
       final translated = await translator.translate(text, to: 'vi');
       _cache[text] = translated.text;
       return translated.text;
+
     } catch (e) {
       print('Translation error: $e'); 
       return "Lỗi dịch bài viết.";

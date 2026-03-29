@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import '../../models/article_model.dart';
-import '../../viewmodel/article_viewmodel.dart';
+import '../../../models/article_model.dart';
+import '../../../viewmodel/article_viewmodel.dart';
 
 class FeaturedArticleCarousel extends StatefulWidget {
   final List<ArticleModel> articles;

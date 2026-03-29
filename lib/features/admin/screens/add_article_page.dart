@@ -111,7 +111,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: DropdownButtonFormField<String>(
-                value: _selectedCategoryId,
+                initialValue: _selectedCategoryId,
                 items: _categories
                     .map(
                       (c) => DropdownMenuItem(

@@ -132,7 +132,7 @@ class _EditArticlePageState extends State<EditArticlePage> {
               title: 'Danh mục',
               children: [
                 DropdownButtonFormField<String>(
-                  value: _selectedCategoryId,
+                  initialValue: _selectedCategoryId,
                   items: _categories
                       .map(
                         (c) => DropdownMenuItem(

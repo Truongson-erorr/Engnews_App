@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../models/article_model.dart';
-import '../../viewmodel/translateViewModel.dart';
-import '../../viewmodel/favorite_viewmodel.dart';
-import '../../viewmodel/ai_viewmodel.dart';
+import '../../../models/article_model.dart';
+import '../../../viewmodel/translateViewModel.dart';
+import '../../../viewmodel/favorite_viewmodel.dart';
+import '../../../viewmodel/ai_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../screens/article_comments_widget.dart';
-import '../screens/related_articles_widget.dart';
-import '../screens/ramdom_article.dart';
-import '../screens/article_detail_bottom_menu.dart';
-import '../../viewmodel/speech_viewmodel.dart';
+import '../comment/article_comments_widget.dart';
+import 'related_articles_widget.dart';
+import 'ramdom_article.dart';
+import 'article_detail_bottom_menu.dart';
+import '../../../viewmodel/speech_viewmodel.dart';
 import 'article_speech_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -64,7 +64,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
   ${article.title}
   ${article.description}
-  ${article.content.isNotEmpty ? article.content.substring(0, article.content.length > 500 ? 500 : article.content.length) + '...' : ''}
+  ${article.content.isNotEmpty ? '${article.content.substring(0, article.content.length > 500 ? 500 : article.content.length)}...' : ''}
 
   Nguồn: EngNews
   ''';

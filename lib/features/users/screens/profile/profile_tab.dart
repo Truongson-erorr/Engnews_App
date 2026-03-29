@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../viewmodel/authen_viewmodel.dart';
-import '../screens/login_screen.dart';
-import '../screens/reading_history_screen.dart';
-import '../screens/edit_profile_screen.dart';
-import '../screens/change_password_screen.dart';
-import '../screens/setting_screen.dart';
+import '../../../viewmodel/authen_viewmodel.dart';
+import '../../../authentication/login_screen.dart';
+import '../history_reading/reading_history_screen.dart';
+import 'edit_profile_screen.dart';
+import 'change_password_screen.dart';
+import '../setting/setting_screen.dart';
 
 class ProfileTab extends StatelessWidget {
   const ProfileTab({super.key});
@@ -28,13 +28,13 @@ class ProfileTab extends StatelessWidget {
       return Center(
         child: Text(
           "Không có thông tin người dùng",
-          style: textTheme.bodyMedium?.copyWith(color: colors.onBackground),
+          style: textTheme.bodyMedium?.copyWith(color: colors.onSurface),
         ),
       );
     }
 
     return Scaffold(
-      backgroundColor: colors.background,
+      backgroundColor: colors.surface,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -46,7 +46,7 @@ class ProfileTab extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 55,
-                      backgroundColor: colors.surfaceVariant,
+                      backgroundColor: colors.surfaceContainerHighest,
                       backgroundImage:
                           user.image.isNotEmpty ? NetworkImage(user.image) : null,
                       child: user.image.isEmpty
@@ -89,7 +89,7 @@ class ProfileTab extends StatelessWidget {
                   user.fullName,
                   style: textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: colors.onBackground,
+                    color: colors.onSurface,
                   ),
                 ),
 

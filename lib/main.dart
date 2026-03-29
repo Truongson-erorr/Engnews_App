@@ -9,7 +9,8 @@ import 'core/theme/theme_viewmodel.dart';
 import "core/theme/app_theme.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:caonientruongson/features/users/screens/splash_screen.dart';
+import 'package:caonientruongson/features/users/screens/intro/splash_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -46,7 +47,6 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme.copyWith(
         scaffoldBackgroundColor: Colors.white,
         colorScheme: AppTheme.lightTheme.colorScheme.copyWith(
-          background: Colors.white,
           surface: Colors.white,
         ),
         textTheme: GoogleFonts.poppinsTextTheme(),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../viewmodel/speech_viewmodel.dart';
+import '../../../viewmodel/speech_viewmodel.dart';
 
 class ArticleSpeechWidget extends StatelessWidget {
   final SpeechViewModel speechVM;

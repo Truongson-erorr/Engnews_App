@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../models/article_model.dart';
-import '../../viewmodel/favorite_viewmodel.dart';
-import '../../viewmodel/article_viewmodel.dart';
-import 'article_detail.dart';
+import '../../../models/article_model.dart';
+import '../../../viewmodel/favorite_viewmodel.dart';
+import '../../../viewmodel/article_viewmodel.dart';
+import '../article/article_detail.dart';
 
 class SavedArticlesScreen extends StatefulWidget {
   const SavedArticlesScreen({super.key});
@@ -85,19 +85,19 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
 
     if (user == null) {
       return Scaffold(
-        backgroundColor: colors.background,
+        backgroundColor: colors.surface,
         body: Center(
           child: Text(
             "Vui lòng đăng nhập để xem bài đã lưu",
             style: textTheme.bodyMedium
-                ?.copyWith(color: colors.onBackground),
+                ?.copyWith(color: colors.onSurface),
           ),
         ),
       );
     }
 
     return Scaffold(
-      backgroundColor: colors.background,
+      backgroundColor: colors.surface,
       body: StreamBuilder<List<String>>(
         stream: _favoriteVM.getFavorites(user.uid),
         builder: (context, favSnap) {
@@ -185,7 +185,7 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
                                 : Container(
                                     width: 100,
                                     height: 80,
-                                    color: colors.surfaceVariant,
+                                    color: colors.surfaceContainerHighest,
                                     child: Icon(
                                       Icons.article_outlined,
                                       color: colors.onSurfaceVariant,
@@ -210,7 +210,7 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen> {
                                             .titleMedium
                                             ?.copyWith(
                                           color:
-                                              colors.onBackground,
+                                              colors.onSurface,
                                           fontWeight:
                                               FontWeight.bold,
                                         ),
